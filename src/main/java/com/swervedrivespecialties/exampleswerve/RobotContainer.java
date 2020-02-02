@@ -50,7 +50,7 @@ public class RobotContainer {
         primary_right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
         // primary_left_bumper.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(180));
         primary_left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
-        primary_x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
+        primary_x.whenPressed(DriveSubsystemCommands.getChameleonTrackPowercellCommand());
     }
 
     private void bindSecondaryJoystickButtons(){

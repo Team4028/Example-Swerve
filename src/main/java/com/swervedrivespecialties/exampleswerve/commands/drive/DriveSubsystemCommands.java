@@ -9,6 +9,7 @@ package com.swervedrivespecialties.exampleswerve.commands.drive;
 
 import java.util.function.Supplier;
 
+import com.swervedrivespecialties.exampleswerve.subsystems.Chameleon;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.util.InertiaGain;
@@ -99,5 +100,8 @@ public class DriveSubsystemCommands {
     
     public static CommandBase getLLRotateToTargetCommand(){
         return new LLRotateToTarget(Limelight.getInstance(), drivetrainSubsystem).withTimeout(2.5);
+    }
+    public static CommandBase getChameleonTrackPowercellCommand(){
+        return new TrackPowercell(Chameleon.getInstance(), drivetrainSubsystem).withTimeout(3.0);
     }
 }
