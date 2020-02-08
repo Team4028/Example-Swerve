@@ -14,19 +14,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ShooterSubsystemCommands {
     public static Shooter shooter = Shooter.getInstance();
 
-    public static CommandBase getFeedFeederCommand(){
-        return new FeedFeeder(shooter);
-    }
-
     public static CommandBase getRunShooterFromVisionCommand(){
         return new RunShooterFromVision(shooter);
     }
-    public static CommandBase getRunConveyorMotors()
-    {
-        return new runConveyorMotors(shooter);
-    }
-    public static CommandBase getTriggerCommand()
-    {
-        return new Trigger(shooter);
-    }
+    
 }

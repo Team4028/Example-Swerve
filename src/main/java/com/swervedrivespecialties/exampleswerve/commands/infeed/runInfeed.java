@@ -5,45 +5,40 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.swervedrivespecialties.exampleswerve.commands.shooter;
-
-import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
+package com.swervedrivespecialties.exampleswerve.commands.infeed;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 
-public class runConveyorMotors extends CommandBase {
-  private static Infeed _infeed = Infeed.get_instance();
+public class runInfeed extends CommandBase {
+  
+  Infeed _infeed = Infeed.get_instance();
 
-  /**
-   * Creates a new runConveyorMotors.
-   */
-  public runConveyorMotors(Subsystem subsystem) {
-    subsystem = _infeed;
-    addRequirements(subsystem);
-    // Use addRequirements() here to declare subsystem dependencies.
+  public runInfeed(Infeed infeed) {
+    _infeed = infeed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    _infeed.setDefault();
+    _infeed.runInfeed();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _infeed.conveyorPhases();
+    _infeed.runInfeed();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    _infeed.stopInfeed();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return _infeed.isConveyorFinished();
+    return false;
   }
 }

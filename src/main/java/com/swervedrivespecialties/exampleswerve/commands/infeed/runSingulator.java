@@ -5,46 +5,48 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.swervedrivespecialties.exampleswerve.commands.shooter;
-
-import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
+package com.swervedrivespecialties.exampleswerve.commands.infeed;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 
-public class FeedFeeder extends CommandBase {
-  
-  Shooter _shooter;
+public class runSingulator extends CommandBase {
 
-  public FeedFeeder(Shooter shooter) {
-    _shooter = shooter;
+  Infeed _infeed;
+
+  public runSingulator(Infeed infeed) {
+    _infeed = infeed;
   }
-
-  int kMaxCycles = 10;
-  int numCycles;
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    numCycles = 0;
-    _shooter.runFeeder(true);
+    runSing();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    numCycles++;
-    _shooter.runFeeder(true);
+    runSing();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    _shooter.runFeeder(false);
+    _infeed.stopSingulator();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return numCycles > kMaxCycles;
+    return _infeed.getPostSingulatorSensor() && _infeed.getPreShooterSensor();
+  }
+
+  private void runSing(){
+    if (!_infeed.getPreConveyorSensor()){
+      _infeed.runSingulator();
+    } else {
+      _infeed.stopSingulator();
+    }
   }
 }
