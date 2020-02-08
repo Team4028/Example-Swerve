@@ -15,6 +15,8 @@ import java.util.function.Supplier;
 
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 
+import org.frcteam2910.common.math.Vector2;
+
 /**
  * Add your docs here.
  */
@@ -81,4 +83,7 @@ public class util {
 	public static double feetToInches(double feet){
 		return feet * 12.;
 	}
+
+	public static Vector2 i_hat = new Vector2(1, 0);
+	public static Vector2 j_hat = new Vector2(0, 1);
 }
