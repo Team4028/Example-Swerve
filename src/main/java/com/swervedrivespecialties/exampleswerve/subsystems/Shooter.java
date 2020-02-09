@@ -20,6 +20,7 @@ import com.swervedrivespecialties.exampleswerve.subsystems.Limelight.Target;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.ShooterTable;
 import com.swervedrivespecialties.exampleswerve.util.ShooterTableEntry;
+import com.swervedrivespecialties.exampleswerve.util.util;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -30,9 +31,11 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Shooter implements Subsystem{
 
-    double kFeederDefaultVBus = 0.8;
-    double kShooterTalonDefaultVBus = -.5;
     double kMaxSpeed = 5440.0; //Native Units
+    double kShooterTolerance = 20;
+
+    double kServoHome = .55;
+    double kServoHomeEpsilon = .02;
 
     private static Shooter _instance = new Shooter();
     private static ShooterTable _shooterTable = ShooterTable.getInstance();
@@ -55,8 +58,6 @@ public class Shooter implements Subsystem{
     double _F = 0.000201897;
     double minOutput = -1;
     double maxOutput = 1;
-    double maxRPM = 4885;
-//1/4953
     int _MtrTargetRPM;
    
     private Shooter(){
@@ -91,7 +92,7 @@ public class Shooter implements Subsystem{
         SmartDashboard.putNumber("ActuatorVal", actuatorVal); 
         double talonSpeed = spd > 0 ? spd / kMaxSpeed : 0.0;
         _kickerTalon.set(ControlMode.PercentOutput, -talonSpeed);
-        if (spd > 20){
+        if (spd > kShooterTolerance){
             _pidController.setReference(spd, ControlType.kVelocity);
         } else {
             _shooterNEO.set(0.0);
@@ -104,6 +105,13 @@ public class Shooter implements Subsystem{
     }
 
     public void updateLogData(LogDataBE logData){  
-       
+    }
+
+    public void resetServo(){
+        _linearActuator.set(kServoHome);
+    }
+
+    public boolean isServoReset(){
+        return Math.abs(_linearActuator.get() - kServoHome) <= kServoHomeEpsilon;
     }
 }

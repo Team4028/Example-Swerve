@@ -70,7 +70,7 @@ public class RobotContainer {
         final JoystickButton secondary_y = new JoystickButton(secondaryJoystick, 4);
         // final JoystickButton secondary_left_bumper = new JoystickButton(primaryJoystick, 5);
         // final JoystickButton secondary_right_bumber= new JoystickButton(primaryJoystick, 6);
-        // final JoystickButton secondary_back = new JoystickButton(primaryJoystick, 7);
+        final JoystickButton secondary_back = new JoystickButton(secondaryJoystick, 7);
         // final JoystickButton secondary_start = new JoystickButton(primaryJoystick, 8);
 
         //secondary_a.whileHeld(ShooterSubsystemCommands.getTriggerCommand());
@@ -79,6 +79,7 @@ public class RobotContainer {
        secondary_y.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
        secondary_x.toggleWhenPressed(InfeedSubsystemCommands.getRunInfeedCommand());
        secondary_b.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
+       secondary_back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
     }
 
     public RobotContainer(){
