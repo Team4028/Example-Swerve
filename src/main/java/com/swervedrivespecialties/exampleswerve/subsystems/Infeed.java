@@ -14,7 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
-
+ 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,12 +23,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Infeed extends SubsystemBase {
 
-  public static final double kEncoderCountsPerBall = 6000;
-  private static final double kConveyorTalonConstantVBus = -0.3;
+  public static final double kEncoderCountsPerBall = 7500;
+  private static final double kConveyorTalonConstantVBus = -0.35 ;
   private static final double kConveyToShootConstantVBUS = -.7;
-  private static final double kInfeedVBus = -.4;
+  private static final double kInfeedVBus = 1;
   private static final double kSingulatorVBus = -.45;
   private static final double kSingulateToShootVBus = -.5;
+
+  private static final boolean kPreConveyorNormal = false;
+  private static final boolean kPreShooterNormal = false;
+  private static final boolean kPostSingulatorNormal = false;
 
   private static Infeed _instance = new Infeed();
 
@@ -105,11 +109,15 @@ public class Infeed extends SubsystemBase {
   }
 
   public boolean getPreConveyorSensor(){
-    return !_preConveyorSensor.get();
+    return _preConveyorSensor.get() == kPreConveyorNormal;
   }
 
   public boolean getPreShooterSensor() {
-    return !_preShooterSensor.get();
+    return _preShooterSensor.get() == kPreShooterNormal;
+  }
+
+  public boolean getPostSingulatorSensor(){
+    return _postSingulatorSensor.get() == kPostSingulatorNormal;
   }
 
   public void runInfeed(){
@@ -130,10 +138,6 @@ public class Infeed extends SubsystemBase {
 
   public void stopSingulator(){
     _singulatorTalon.set(ControlMode.PercentOutput, 0.0);
-  }
-
-  public boolean getPostSingulatorSensor(){
-    return !_postSingulatorSensor.get();
   }
 
   @Override
