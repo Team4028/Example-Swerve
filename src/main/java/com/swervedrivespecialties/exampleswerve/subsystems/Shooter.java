@@ -91,18 +91,23 @@ public class Shooter implements Subsystem{
 
     public void runShooter(double spd, double actuatorVal){
         SmartDashboard.putNumber("spd", spd);
-        SmartDashboard.putNumber("Target RPM", 4200);
+        SmartDashboard.putNumber("Target RPM", 4000);
         SmartDashboard.putNumber("velo", _encoder.getVelocity());
         SmartDashboard.putNumber("Vello", _encoder.getVelocity());
         SmartDashboard.putNumber("ActuatorVal", actuatorVal); 
         double talonSpeed = spd > 0 ? spd / kMaxSpeed : 0.0;
 
         _shooterTalon.set(ControlMode.PercentOutput, -talonSpeed);
- 
 
-      
+        if(spd <= 20)
+      {
+          _shooterNEO.set(0);
+      }
+else{
+    _pidController.setReference(4200, ControlType.kVelocity);
+}
        
-       _pidController.setReference(4200, ControlType.kVelocity);
+       
       }
     
 
