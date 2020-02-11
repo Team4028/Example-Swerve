@@ -30,7 +30,6 @@ public class Robot extends TimedRobot{
             robotContainer.logAllData();
             robotContainer.outputToSDB();
         }
-        _infeed.PrintSmartDash();
     }
 
     @Override

@@ -117,7 +117,7 @@ public class ShooterTable {
 	
 	public Boolean get_IsAtUpperEntry() {
 		if (_currentIndex == _Table.size() - 1){
-			return true;
+			return true; 
 		} else {
 			return false;
 		}
@@ -144,10 +144,9 @@ public class ShooterTable {
 		//									Position	feet Stg1  
 		//======================================================================================
 		
-		table.add(new ShooterTableEntry(_indexCounter++,  11.83, 2000, 0));
-        table.add(new ShooterTableEntry(_indexCounter++, 23.85, 3700, 1));
+		table.add(new ShooterTableEntry(_indexCounter++,  11.83, 4028, .6));
+        table.add(new ShooterTableEntry(_indexCounter++, 23.85, 4028, .6));
         //table.add(new ShooterTableEntry(_indexCounter++, 30,  -4264));
-		
 		return table;
 	}
 

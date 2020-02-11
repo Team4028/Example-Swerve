@@ -10,41 +10,28 @@ package com.swervedrivespecialties.exampleswerve.commands.shooter;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class FeedFeeder extends CommandBase {
-  
+public class ResetServo extends CommandBase {
+
   Shooter _shooter;
 
-  public FeedFeeder(Shooter shooter) {
+  public ResetServo(Shooter shooter) {
     _shooter = shooter;
   }
 
-  int kMaxCycles = 10;
-  int numCycles;
-
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    numCycles = 0;
-    _shooter.runFeeder(true);
+    _shooter.resetServo();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    numCycles++;
-    _shooter.runFeeder(true);
+  public void execute(){
+    _shooter.resetServo();
   }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    _shooter.runFeeder(false);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return numCycles > kMaxCycles;
+  @Override 
+  public boolean isFinished(){
+    return _shooter.isServoReset();
   }
 }
