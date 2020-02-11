@@ -14,6 +14,8 @@ public class Robot extends TimedRobot{
 
     static RobotContainer robotContainer;
     static Infeed _infeed = Infeed.get_instance();
+    Shooter _shooter = Shooter.getInstance();
+
 
     @Override
     public void robotInit() {
@@ -44,6 +46,7 @@ public class Robot extends TimedRobot{
     @Override
     public void teleopInit() {
         robotContainer.setupLogging(false);
+        _shooter.runShooter(0, 0);
         CommandScheduler.getInstance().cancelAll();
     }
     @Override
