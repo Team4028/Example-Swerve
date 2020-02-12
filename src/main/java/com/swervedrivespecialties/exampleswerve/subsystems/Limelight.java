@@ -91,6 +91,20 @@ public class Limelight implements Subsystem {
     return tv.getDouble(0.0) != 0.0;
   }
 
+  public void setZoom(boolean force){
+    if (force){
+      setPipeline(0);
+    } else if (getHasTarget()){
+      if (Math.abs(getAngle1()) <= 11.5 && getYAng() <= 11.7){
+        setPipeline(1);
+      } else{
+        setPipeline(0);
+      }
+    } else{
+      setPipeline(0);
+    }
+  }
+
   //This will always have you pointed at the vector currently to your target, getting the angle for a pinpoint target is much harder and not done here
   public RigidTransform2 getToTarget(Target target){
     return new RigidTransform2(Vector2.fromAngle(Rotation2.fromDegrees(getAngle1())).scale(getDistanceToTarget(target)), Rotation2.fromDegrees(getAngle1()));
