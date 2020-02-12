@@ -51,8 +51,6 @@ public class Robot extends TimedRobot{
     }
     @Override
     public void teleopPeriodic(){
-        SmartDashboard.putNumber("Distance", _limelight.getDistanceToTarget(Target.HIGH));
-        SmartDashboard.putNumber("Y angle", _limelight.getYAng());
     }
 
     public static RobotContainer getRobotContainer(){
