@@ -1,7 +1,10 @@
 package com.swervedrivespecialties.exampleswerve;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
+import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight.Target;
@@ -14,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot{
 
     static RobotContainer robotContainer;
-    static Limelight _limelight = Limelight.getInstance();
+    static Infeed _infeed = Infeed.get_instance();
 
     @Override
     public void robotInit() {
@@ -27,6 +30,7 @@ public class Robot extends TimedRobot{
         CommandScheduler.getInstance().run();
         if (!isDisabled()){
             robotContainer.logAllData();
+            robotContainer.outputToSDB();
         }
     }
 
@@ -37,13 +41,13 @@ public class Robot extends TimedRobot{
 
     @Override
     public void autonomousPeriodic() {
-        DrivetrainSubsystem.getInstance().drive(new Translation2d(0., 0), 0, true);
+        //DrivetrainSubsystem.getInstance().drive(new Translation2d(0., 0), 0, true);
     }
 
     @Override
     public void teleopInit() {
         robotContainer.setupLogging(false);
-        _limelight.setPipeline(0);
+        CommandScheduler.getInstance().cancelAll();
     }
     @Override
     public void teleopPeriodic(){

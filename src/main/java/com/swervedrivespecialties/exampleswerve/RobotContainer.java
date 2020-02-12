@@ -10,8 +10,11 @@ package com.swervedrivespecialties.exampleswerve;
 import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
 import com.swervedrivespecialties.exampleswerve.commands.drive.DriveSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.shooter.ShooterSubsystemCommands;
+import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
+import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
+import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 import com.swervedrivespecialties.exampleswerve.util.DataLogger;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.util;
@@ -27,15 +30,19 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
 
     private DrivetrainSubsystem drive = DrivetrainSubsystem.getInstance();
+    private Shooter shooter = Shooter.getInstance();
     private Limelight _limelight = Limelight.getInstance();
 
     private Joystick primaryJoystick = new Joystick(0);
     private Joystick secondaryJoystick = new Joystick(1);
 
+    private final Infeed infeed = Infeed.get_instance();
+
+
     private DataLogger _dataLogger = null;
 
     private void bindPrimaryJoystickButtons(){
-        // final JoystickButton primary_a = new JoystickButton(primaryJoystick, 1);
+        final JoystickButton primary_a = new JoystickButton(primaryJoystick, 1);
         final JoystickButton primary_b = new JoystickButton(primaryJoystick, 2);
         final JoystickButton primary_x = new JoystickButton(primaryJoystick, 3);
         final JoystickButton primary_y = new JoystickButton(primaryJoystick, 4);
@@ -44,27 +51,35 @@ public class RobotContainer {
         final JoystickButton primary_back = new JoystickButton(primaryJoystick, 7);
         final JoystickButton primary_start = new JoystickButton(primaryJoystick, 8);
 
+        //primary_a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
+        //primary_b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
         primary_back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
         primary_start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
         primary_y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
         primary_right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
         // primary_left_bumper.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(180));
         primary_left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
-        primary_x.whenPressed(DriveSubsystemCommands.getChameleonTrackPowercellCommand());
+        primary_x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
+        
     }
 
     private void bindSecondaryJoystickButtons(){
         final JoystickButton secondary_a = new JoystickButton(secondaryJoystick, 1);
         final JoystickButton secondary_b = new JoystickButton(secondaryJoystick, 2);
-        // final JoystickButton secondary_x = new JoystickButton(primaryJoystick, 3);
-        // final JoystickButton secondary_y = new JoystickButton(primaryJoystick, 4);
+        final JoystickButton secondary_x = new JoystickButton(secondaryJoystick, 3);
+        final JoystickButton secondary_y = new JoystickButton(secondaryJoystick, 4);
         // final JoystickButton secondary_left_bumper = new JoystickButton(primaryJoystick, 5);
         // final JoystickButton secondary_right_bumber= new JoystickButton(primaryJoystick, 6);
-        // final JoystickButton secondary_back = new JoystickButton(primaryJoystick, 7);
+        final JoystickButton secondary_back = new JoystickButton(secondaryJoystick, 7);
         // final JoystickButton secondary_start = new JoystickButton(primaryJoystick, 8);
 
-        secondary_a.whenPressed(ShooterSubsystemCommands.getFeedFeederCommand());
-        secondary_b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterCommand());
+        //secondary_a.whileHeld(ShooterSubsystemCommands.getTriggerCommand());
+       // secondary_b.whenPressed(ShooterSubsystemCommands.getRunConveyorMotors());
+       secondary_a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
+       secondary_y.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
+       secondary_x.toggleWhenPressed(InfeedSubsystemCommands.getRunInfeedCommand());
+       secondary_b.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
+       secondary_back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
     }
 
     public RobotContainer(){
@@ -124,5 +139,10 @@ public class RobotContainer {
 
     public static void configureDrive(){
         DrivetrainSubsystem.getInstance().setCurrentLimit(40);
+    }
+
+    public void outputToSDB(){
+        shooter.outputToSDB();
+        infeed.outputToSDB();
     }
 }

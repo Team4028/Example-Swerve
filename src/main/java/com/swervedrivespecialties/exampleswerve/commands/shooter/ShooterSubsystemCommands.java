@@ -14,15 +14,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ShooterSubsystemCommands {
     public static Shooter shooter = Shooter.getInstance();
 
-    public static CommandBase getRunShooterCommand(double speed){
-        return new RunShooter(shooter, speed);
+    public static CommandBase getRunShooterFromVisionCommand(){
+        return new RunShooterFromVision(shooter);
     }
 
-    public static CommandBase getRunShooterCommand(){
-        return new RunShooter(shooter);
+    public static CommandBase getResetServoCommand(){
+        return new ResetServo(shooter);
     }
-
-    public static CommandBase getFeedFeederCommand(){
-        return new FeedFeeder(shooter);
-    }
+    
 }

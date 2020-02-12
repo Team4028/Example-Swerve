@@ -5,44 +5,35 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.swervedrivespecialties.exampleswerve.commands.shooter;
-
-import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
+package com.swervedrivespecialties.exampleswerve.commands.infeed;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 
-public class RunShooter extends CommandBase {
+public class runInfeed extends CommandBase {
+  
+  Infeed _infeed = Infeed.get_instance();
 
-  private static final double kDefaultShooterSpeed = .5;
-
-  Shooter _shooter;
-  double spd;
-
-  public RunShooter(Shooter shooter, double speed) {
-    _shooter = shooter;
-    spd = speed;
-    addRequirements(_shooter);
+  public runInfeed(Infeed infeed) {
+    _infeed = infeed;
   }
 
-  public RunShooter(Shooter shooter){
-    this(shooter, kDefaultShooterSpeed);
-  }
-
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    _shooter.runShooter(spd);
+    _infeed.runInfeed();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _shooter.runShooter(spd);
+    _infeed.runInfeed();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    _shooter.runShooter(0.);
+    _infeed.stopInfeed();
   }
 
   // Returns true when the command should end.
