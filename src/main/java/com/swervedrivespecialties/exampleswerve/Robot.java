@@ -1,5 +1,7 @@
 package com.swervedrivespecialties.exampleswerve;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
@@ -37,7 +39,7 @@ public class Robot extends TimedRobot{
 
     @Override
     public void autonomousPeriodic() {
-        DrivetrainSubsystem.getInstance().drive(new Translation2d(0., 0), 0, true);
+        //DrivetrainSubsystem.getInstance().drive(new Translation2d(0., 0), 0, true);
     }
 
     @Override

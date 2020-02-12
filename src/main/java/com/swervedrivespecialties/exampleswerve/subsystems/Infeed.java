@@ -26,7 +26,7 @@ public class Infeed extends SubsystemBase {
   public static final double kEncoderCountsPerBall = 7500;
   private static final double kConveyorTalonConstantVBus = -0.35 ;
   private static final double kConveyToShootConstantVBUS = -.7;
-  private static final double kInfeedVBus = 1;
+  private static final double kInfeedVBus = .5;
   private static final double kSingulatorVBus = -.45;
   private static final double kSingulateToShootVBus = -.5;
 
