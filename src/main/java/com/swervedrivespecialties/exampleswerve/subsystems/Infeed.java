@@ -55,7 +55,7 @@ public class Infeed extends SubsystemBase {
   private TalonSRX _singulatorTalon;
   private VictorSPX _infeedVictor;
   private DigitalInput _postSingulatorSensor;
-  private DoubleSolenoid _testSolenoid;
+  private DoubleSolenoid _infeedSolenoid;
 
   /**
    * Creates a new Infeed.
@@ -70,7 +70,7 @@ public class Infeed extends SubsystemBase {
     _singulatorTalon = new TalonSRX(RobotMap.SINGULATOR_MOTOR);
     _infeedVictor = new VictorSPX(RobotMap.INFEED_MOTOR);
     _postSingulatorSensor = new DigitalInput(RobotMap.POST_SINGULATOR_SENSOR);
-    _testSolenoid = new DoubleSolenoid(5, 6);
+    _infeedSolenoid = new DoubleSolenoid(2, 3);
   }
 
   public void zeroEcnoder(){
@@ -150,11 +150,11 @@ public class Infeed extends SubsystemBase {
 
   public void setSolenoidOut(boolean out) {
     Value setVal = out ? SOLENOID_OUT_POSITION : SOLENOID_UP_POSITION;
-    _testSolenoid.set(setVal);
+    _infeedSolenoid.set(setVal);
   }
 
   public boolean getIsSolenoidOut(){
-    return _testSolenoid.get() == SOLENOID_OUT_POSITION;
+    return _infeedSolenoid.get() == SOLENOID_OUT_POSITION;
   }
 
   @Override

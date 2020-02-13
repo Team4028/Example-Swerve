@@ -8,6 +8,7 @@ import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -16,6 +17,8 @@ public class Robot extends TimedRobot{
 
     static RobotContainer robotContainer;
     static Infeed _infeed = Infeed.get_instance();
+
+    Compressor _compressor = new Compressor(0);
 
     @Override
     public void robotInit() {
