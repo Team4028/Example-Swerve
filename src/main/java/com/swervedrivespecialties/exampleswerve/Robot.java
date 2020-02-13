@@ -35,6 +35,7 @@ public class Robot extends TimedRobot{
             robotContainer.logAllData();
             robotContainer.outputToSDB();
         }
+        SmartDashboard.putNumber("Distance LL", Limelight.getInstance().getDistanceToTarget(Target.HIGH));
     }
 
     @Override
