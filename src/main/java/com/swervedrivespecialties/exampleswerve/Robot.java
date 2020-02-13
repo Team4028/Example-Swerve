@@ -35,6 +35,7 @@ public class Robot extends TimedRobot{
     @Override
     public void autonomousInit() {
         robotContainer.setupLogging(true);
+        RobotContainer.configureInfeed();
     }
 
     @Override
@@ -46,6 +47,7 @@ public class Robot extends TimedRobot{
     public void teleopInit() {
         robotContainer.setupLogging(false);
         CommandScheduler.getInstance().cancelAll();
+        RobotContainer.configureInfeed();
     }
     @Override
     public void teleopPeriodic(){
