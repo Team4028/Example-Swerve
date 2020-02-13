@@ -92,17 +92,7 @@ public class Limelight implements Subsystem {
   }
 
   public void setZoom(boolean force){
-    if (force){
-      setPipeline(0);
-    } else if (getHasTarget()){
-      if (Math.abs(getAngle1()) <= 11.5 && getYAng() <= 11.7){
-        setPipeline(1);
-      } else{
-        setPipeline(0);
-      }
-    } else{
-      setPipeline(0);
-    }
+    setPipeline( !force && getHasTarget() && Math.abs(getAngle1()) <= 11.5 && getYAng() <= 11.7 ? 1:0); 
   }
 
   //This will always have you pointed at the vector currently to your target, getting the angle for a pinpoint target is much harder and not done here
