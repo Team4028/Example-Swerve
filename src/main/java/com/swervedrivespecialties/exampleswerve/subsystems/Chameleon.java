@@ -21,12 +21,14 @@ public class Chameleon implements Subsystem {
     return _instance;
   }
 
-  public Chameleon() {
-
-  }
+  public Chameleon() {}
 
   public double getAngle1(){
     return _theta.getDouble(0.0);
+  }
+  public double getDistanceToPowerCell(){
+    double distance = 0;
+    return distance;
   }
 
   @Override
