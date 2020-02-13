@@ -50,7 +50,7 @@ public class Infeed extends SubsystemBase {
   private boolean _isFirstCycle;
 
   private final Value SOLENOID_OUT_POSITION = Value.kReverse;
-  private final Value SOLENOID_UP_POSITION = SOLENOID_OUT_POSITION == Value.kForward ? Value.kReverse : Value.kForward;
+  private final Value SOLENOID_UP_POSITION = SOLENOID_OUT_POSITION == Value.kReverse ? Value.kForward : Value.kReverse;
 
   private TalonSRX _singulatorTalon;
   private VictorSPX _infeedVictor;
@@ -70,7 +70,8 @@ public class Infeed extends SubsystemBase {
     _singulatorTalon = new TalonSRX(RobotMap.SINGULATOR_MOTOR);
     _infeedVictor = new VictorSPX(RobotMap.INFEED_MOTOR);
     _postSingulatorSensor = new DigitalInput(RobotMap.POST_SINGULATOR_SENSOR);
-    _infeedSolenoid = new DoubleSolenoid(2, 3);
+    _infeedSolenoid = new DoubleSolenoid(0, 1);
+    _infeedSolenoid.set(SOLENOID_OUT_POSITION);
   }
 
   public void zeroEcnoder(){
@@ -97,6 +98,8 @@ public class Infeed extends SubsystemBase {
     SmartDashboard.putBoolean("PRE-SHOOTER SENSOR", _preShooterSensor.get());
     SmartDashboard.putNumber("CONVEYOR TALON ENCODER", _conveyorTalon.getSelectedSensorPosition());
     SmartDashboard.putBoolean("PRE-CONVEYOR SENSOR", _preConveyorSensor.get());
+    SmartDashboard.putBoolean("INFEED SOLENOID OUT JIMBO", getIsSolenoidOut());
+    System.out.println(_infeedSolenoid.get());
   }
 
   public boolean getHasBallConveyedBallLength(){
@@ -151,6 +154,7 @@ public class Infeed extends SubsystemBase {
   public void setSolenoidOut(boolean out) {
     Value setVal = out ? SOLENOID_OUT_POSITION : SOLENOID_UP_POSITION;
     _infeedSolenoid.set(setVal);
+    System.out.println("Solenoid set value: " + setVal);
   }
 
   public boolean getIsSolenoidOut(){
