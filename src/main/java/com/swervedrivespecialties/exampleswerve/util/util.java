@@ -81,4 +81,8 @@ public class util {
 	public static double feetToInches(double feet){
 		return feet * 12.;
 	}
+
+	public double iversonBrackets(boolean bool){
+		return bool ? 1: 0;
+	}
 }

@@ -16,6 +16,7 @@ public class Chameleon implements Subsystem {
   
   private NetworkTable nt = NetworkTableInstance.getDefault().getTable("chameleon-vision").getSubTable("CellCam");
   private NetworkTableEntry _theta = nt.getEntry("targetYaw");
+  
   private static Chameleon _instance = new Chameleon();
   public static Chameleon getInstance(){
     return _instance;
