@@ -75,7 +75,8 @@ public class Limelight implements Subsystem {
       // distance = 214.81 * Math.pow(ta.getDouble(0), -0.418);
       // distance = Math.sqrt(Math.pow(9448.3 * Math.pow(tshort.getDouble(0), -0.904),
       // 2) - Math.pow(94, 2));
-      distance = 86.25 / Math.tan(Math.toRadians(6.42 + ty.getDouble(0)));
+      //distance = 86.25 / Math.tan(Math.toRadians(6.42 + ty.getDouble(0)));
+      distance = 74.25 / Math.tan(Math.toRadians(17 + ty.getDouble(0.0)));
       break;
     case LOW:
       distance = 0;

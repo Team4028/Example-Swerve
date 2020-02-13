@@ -10,12 +10,13 @@ package com.swervedrivespecialties.exampleswerve.commands.drive;
 import com.swervedrivespecialties.exampleswerve.Robot;
 import com.swervedrivespecialties.exampleswerve.subsystems.Chameleon;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
+import com.swervedrivespecialties.exampleswerve.util.util;
 
 import org.frcteam2910.common.control.PidConstants;
 import org.frcteam2910.common.control.PidController;
-import org.frcteam2910.common.robot.Utilities;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -28,6 +29,7 @@ public class TrackPowercell extends CommandBase {
   PidController _rotController = new PidController(new PidConstants(0.012, 0.01, 0.0008));
 
   private double _prevTime, error, prevError, prevGyro;
+  private double kSpeed = 0.2;
 
   public TrackPowercell(Chameleon chameleon, DrivetrainSubsystem subsystem) {
     _chameleon = chameleon;
@@ -52,30 +54,14 @@ public class TrackPowercell extends CommandBase {
   public void execute() {
     double dt = Timer.getFPGATimestamp() - _prevTime;
     _prevTime = Timer.getFPGATimestamp();
-    double minSS = DrivetrainSubsystem.getInstance().getMinControllerSpeed();
-    double additionalSS =  Robot.getRobotContainer().getPrimaryRightTrigger();
-    double speedScale = minSS + (1 - minSS) * additionalSS * additionalSS;
-    if (_chameleon.getAngle1() != prevError){
-      error = _chameleon.getAngle1();
-      prevGyro = _drive.getGyroAngle().toDegrees();
-      prevError = error;
-    } else{
-      error = prevError - (_drive.getGyroAngle().toDegrees() - prevGyro);
-      prevGyro = _drive.getGyroAngle().toDegrees();
-    }
-    double forward = -Robot.getRobotContainer().getPrimaryLeftYAxis();
-    forward = Utilities.deadband(forward);
-    // Square the forward stick
-    forward = speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
 
-    double strafe = -Robot.getRobotContainer().getPrimaryLeftXAxis();
-    strafe = Utilities.deadband(strafe);
-    // Square the strafe stick
-    strafe = speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
+    error = _chameleon.getAngle1() == prevError ? prevError - (_drive.getGyroAngle().toDegrees() - prevGyro) : _chameleon.getAngle1();
+    prevGyro = _drive.getGyroAngle().toDegrees();
+    prevError = error;
 
     double rot = _rotController.calculate(error, dt);
 
-    _drive.drive(new Translation2d(0, 0), rot, true);
+    _drive.drive(util.transFromAngle(-error).times(kSpeed), rot, false);
   }
 
   // Called once the command ends or is interrupted.

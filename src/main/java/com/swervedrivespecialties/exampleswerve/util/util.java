@@ -15,6 +15,8 @@ import java.util.function.Supplier;
 
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+
 /**
  * Add your docs here.
  */
@@ -82,7 +84,11 @@ public class util {
 		return feet * 12.;
 	}
 
-	public double iversonBrackets(boolean bool){
+	public static double iversonBrackets(boolean bool){
 		return bool ? 1: 0;
+	}
+
+	public static Translation2d transFromAngle(double angDegrees){
+		return new Translation2d(Math.cos(Math.toRadians(angDegrees)), Math.sin(Math.toRadians(angDegrees)));
 	}
 }
