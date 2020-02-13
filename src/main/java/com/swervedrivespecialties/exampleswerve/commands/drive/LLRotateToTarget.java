@@ -7,11 +7,13 @@
 
 package com.swervedrivespecialties.exampleswerve.commands.drive;
 
+import com.swervedrivespecialties.exampleswerve.Robot;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 
 import org.frcteam2910.common.control.PidConstants;
 import org.frcteam2910.common.control.PidController;
+import org.frcteam2910.common.robot.Utilities;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -50,7 +52,20 @@ public class LLRotateToTarget extends CommandBase {
   public void execute() {
     double dt = Timer.getFPGATimestamp() - _prevTime;
     _prevTime = Timer.getFPGATimestamp();
+    double minSS = DrivetrainSubsystem.getInstance().getMinControllerSpeed();
+    double additionalSS =  Robot.getRobotContainer().getPrimaryRightTrigger();
+    double speedScale = minSS + (1 - minSS) * additionalSS * additionalSS;
+    
+    double forward = -Robot.getRobotContainer().getPrimaryLeftYAxis();
+    forward = Utilities.deadband(forward);
+    // Square the forward stick
+    forward = speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
 
+    double strafe = -Robot.getRobotContainer().getPrimaryLeftXAxis();
+    strafe = Utilities.deadband(strafe);
+    // Square the strafe stick
+    strafe = speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
+    
     error = _limelight.getAngle1();
     double rot = _rotController.calculate(error, dt);
     _drive.drive(new Translation2d(0, 0), rot, true);
