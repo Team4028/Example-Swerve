@@ -56,7 +56,7 @@ public class RobotContainer {
         primary_back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
         primary_start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
         primary_y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
-        primary_right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
+        //primary_right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
         // primary_left_bumper.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(180));
         primary_left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
         primary_x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
@@ -137,8 +137,9 @@ public class RobotContainer {
         }
     }
 
-    public static void configureDrive(){
-        DrivetrainSubsystem.getInstance().setCurrentLimit(40);
+    public void configureDrive(){
+        drive.reset();
+        drive.setCurrentLimit(40);
     }
 
     public void outputToSDB(){

@@ -10,6 +10,7 @@ package com.swervedrivespecialties.exampleswerve.commands.infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 /**
  * Add your docs here.
@@ -32,5 +33,9 @@ public class InfeedSubsystemCommands {
 
     public static CommandBase getRunSingulatorCommand(){
         return new runSingulator(infeed);
+    }
+
+    public static CommandBase getAutonInfeedCommand(double ifTime, double singTime){
+        return new ParallelCommandGroup(getRunInfeedCommand().withTimeout(ifTime), getRunSingulatorCommand().withTimeout(singTime));
     }
 }
