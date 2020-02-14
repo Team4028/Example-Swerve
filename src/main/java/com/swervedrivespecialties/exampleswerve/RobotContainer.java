@@ -68,7 +68,7 @@ public class RobotContainer {
         final JoystickButton secondary_b = new JoystickButton(secondaryJoystick, 2);
         final JoystickButton secondary_x = new JoystickButton(secondaryJoystick, 3);
         final JoystickButton secondary_y = new JoystickButton(secondaryJoystick, 4);
-        // final JoystickButton secondary_left_bumper = new JoystickButton(primaryJoystick, 5);
+        final JoystickButton secondary_left_bumper = new JoystickButton(secondaryJoystick, 5);
         // final JoystickButton secondary_right_bumber= new JoystickButton(primaryJoystick, 6);
         final JoystickButton secondary_back = new JoystickButton(secondaryJoystick, 7);
         // final JoystickButton secondary_start = new JoystickButton(primaryJoystick, 8);
@@ -80,6 +80,7 @@ public class RobotContainer {
        secondary_x.toggleWhenPressed(InfeedSubsystemCommands.getRunInfeedCommand());
        secondary_b.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
        secondary_back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
+       secondary_left_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
     }
 
     public RobotContainer(){
@@ -139,6 +140,10 @@ public class RobotContainer {
 
     public static void configureDrive(){
         DrivetrainSubsystem.getInstance().setCurrentLimit(40);
+    }
+
+    public static void configureInfeed(){
+        Infeed.get_instance().setSolenoidOut(true);
     }
 
     public void outputToSDB(){

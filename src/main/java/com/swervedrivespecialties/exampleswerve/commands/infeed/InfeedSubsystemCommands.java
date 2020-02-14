@@ -33,4 +33,8 @@ public class InfeedSubsystemCommands {
     public static CommandBase getRunSingulatorCommand(){
         return new runSingulator(infeed);
     }
+
+    public static CommandBase getToggleInfeedSolenoidCommand(){
+        return new ToggleInfeedSolenoid(infeed);
+    }
 }

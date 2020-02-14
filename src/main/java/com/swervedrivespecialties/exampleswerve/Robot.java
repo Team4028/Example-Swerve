@@ -1,11 +1,14 @@
 package com.swervedrivespecialties.exampleswerve;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -16,6 +19,8 @@ public class Robot extends TimedRobot{
     static Infeed _infeed = Infeed.get_instance();
     Shooter _shooter = Shooter.getInstance();
 
+
+    Compressor _compressor = new Compressor(0);
 
     @Override
     public void robotInit() {
@@ -35,11 +40,12 @@ public class Robot extends TimedRobot{
     @Override
     public void autonomousInit() {
         robotContainer.setupLogging(true);
+        RobotContainer.configureInfeed();
     }
 
     @Override
     public void autonomousPeriodic() {
-        DrivetrainSubsystem.getInstance().drive(new Translation2d(0., 0), 0, true);
+        //DrivetrainSubsystem.getInstance().drive(new Translation2d(0., 0), 0, true);
     }
 
     @Override
@@ -47,6 +53,7 @@ public class Robot extends TimedRobot{
         robotContainer.setupLogging(false);
         _shooter.runShooter(0, 0);
         CommandScheduler.getInstance().cancelAll();
+        RobotContainer.configureInfeed();
     }
     @Override
     public void teleopPeriodic(){
