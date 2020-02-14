@@ -19,7 +19,6 @@ public class Robot extends TimedRobot{
     static Infeed _infeed = Infeed.get_instance();
     Shooter _shooter = Shooter.getInstance();
 
-
     Compressor _compressor = new Compressor(0);
 
     @Override
@@ -35,7 +34,9 @@ public class Robot extends TimedRobot{
             robotContainer.logAllData();
             robotContainer.outputToSDB();
         }
+       // _shooter.setShooterCOnstant();
     }
+
 
     @Override
     public void autonomousInit() {
@@ -45,7 +46,7 @@ public class Robot extends TimedRobot{
 
     @Override
     public void autonomousPeriodic() {
-        //DrivetrainSubsystem.getInstance().drive(new Translation2d(0., 0), 0, true);
+       // DrivetrainSubsystem.getInstance().drive(new Translation2d(1., 0), 0, true);
     }
 
     @Override

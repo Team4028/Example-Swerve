@@ -33,13 +33,13 @@ public class RunShooterFromVision extends CommandBase {
   public void initialize() {
     System.out.println("SHOOTER INITIALIZING");
     getSpeed();
-    _shooter.runShooter(_curTargVelo, _actuatorVal);
+    _shooter.runShooter(3000, _actuatorVal);
   }
 
   @Override 
   public void execute(){
     getSpeed();
-    _shooter.runShooter(_curTargVelo, _actuatorVal);
+    _shooter.runShooter(3000, _actuatorVal);
     //System.out.println("hudghfhew");
   }
 

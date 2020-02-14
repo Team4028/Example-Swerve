@@ -35,7 +35,9 @@ public class Shooter implements Subsystem{
     double kShooterTolerance = 20;
 
     double kServoHome = .55;
-    double kServoHomeEpsilon = .02;
+    double kServoTolerance = .02;
+    //4880 12.5
+    //5040 fresh 
 
     private static Shooter _instance = new Shooter();
     private static ShooterTable _shooterTable = ShooterTable.getInstance();
@@ -52,10 +54,10 @@ public class Shooter implements Subsystem{
 
     CANPIDController _pidController;
     CANEncoder _encoder;
-    double _P = 0.00014;
+    double _P = 0.000015;
     double _I = 0;
-    double _D = 0.002;
-    double _F = 0.000201897;
+    double _D = 0;
+    double _F = 0.0001870532;
     double minOutput = -1;
     double maxOutput = 1;
     int _MtrTargetRPM;
@@ -85,8 +87,9 @@ public class Shooter implements Subsystem{
     } 
 
     public void runShooter(double spd, double actuatorVal){
+        
         SmartDashboard.putNumber("spd", spd);
-        SmartDashboard.putNumber("Target RPM", 4000);
+        SmartDashboard.putNumber("Target RPM", spd);
         SmartDashboard.putNumber("velo", _encoder.getVelocity());
         SmartDashboard.putNumber("Vello", _encoder.getVelocity());
         SmartDashboard.putNumber("ActuatorVal", actuatorVal); 
@@ -99,6 +102,7 @@ public class Shooter implements Subsystem{
         }
         _linearActuator.set(actuatorVal);
       }
+ 
 
     public void outputToSDB(){
         SmartDashboard.putNumber("Distance to Target", Limelight.getInstance().getDistanceToTarget(Target.HIGH));
@@ -112,6 +116,6 @@ public class Shooter implements Subsystem{
     }
 
     public boolean isServoReset(){
-        return Math.abs(_linearActuator.get() - kServoHome) <= kServoHomeEpsilon;
+        return Math.abs(_linearActuator.get() - kServoHome) <= kServoTolerance;
     }
 }
