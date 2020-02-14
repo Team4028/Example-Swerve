@@ -30,30 +30,51 @@ public class Trajectories {
     private static final double kDefaultMaxSpeed = 10 * 12;
     private static final double kMaxAccel = 13. * 12;
     private static final double kMaxCentripedalAccel = 25. * 12;
+    //////////////////////////////////////////////////////
 
 
-    public static class steallBallAuton {
-        private static final Vector2 startingPos = new Vector2(11, 23); //The origin is a theoretical point in the back right corner of the field. 
-        private static final Vector2 shootPos = new Vector2(100, 200);
-        private static final double stealBallX = 120;
-        private static final double ly = 47.5;
-        private static final double stealBallSpeed = 10.0;
-        private static final double goToShootSpeed = 10.0;
+    public static class steallBallAuton { 
+        private static final Vector2 goalPoint = Vector2.ZERO;
+        private static final Rotation2 startRot = Rotation2.ZERO;
+        private static final Vector2 shootPoint = new Vector2(45, 120); //must have that |y| > |x - 88|
+        private static final double stealBallSpeed = 11;
+        private static final double goShootSpeed = 11;
 
-        private static final double lx = stealBallX - startingPos.x;
-        private static final double lambda = (lx * lx + ly * ly)  / (2.0 * ly);
-
-        private static final ITrajectoryConstraint[] toStealBallConstraints = getConstraint(stealBallSpeed);
+        private static final double rad = 88 - shootPoint.x;
+        private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint);
         
-        
+        private static Trajectory toStealBalls;
+        private static Trajectory toShootFirstBatch;
 
+        private static void generateToStealBall(){
+            ITrajectoryConstraint[] stealBallConstraints = getConstraint(stealBallSpeed);
+            Path stealBallPath = new Path(startRot);
+            stealBallPath.addSegment(new PathLineSegment(Vector2.ZERO, new Vector2(88, 0)), startRot);
+            stealBallPath.subdivide(kSubdivideIterations);
+            toStealBalls = new Trajectory(0.0, 0.0, stealBallPath, stealBallConstraints);
+        }
 
+        private static void generateToShootFirstBatch(){
+            ITrajectoryConstraint[] toShootFirstBatchConstraints = getConstraint(goShootSpeed);
+            Path toShootFirstBatchPath = new Path(startRot);
+            toShootFirstBatchPath.addSegment(new PathArcSegment(new Vector2(88, 0), new Vector2(88 - rad, rad), new Vector2(88, rad)), firstShotRotation);
+            toShootFirstBatchPath.addSegment(new PathLineSegment(new Vector2(88 - rad, rad), shootPoint), firstShotRotation);
+            toShootFirstBatchPath.subdivide(8);
+            toShootFirstBatch = new Trajectory(0.0, 0.0, toShootFirstBatchPath, toShootFirstBatchConstraints);
+        }     
 
+        private static void generate(){
+            generateToStealBall();
+            generateToShootFirstBatch();
+        }
 
+        public static Supplier<Trajectory> toStealBallsTrajectorySupplier = () -> toStealBalls;
+        public static Supplier<Trajectory> toShootFirstBatchTrajectorySupplier = () -> toShootFirstBatch;
     }
 
 
     public static void generateAllTrajectories(){
+        steallBallAuton.generate();
     }
 
 
@@ -82,4 +103,9 @@ public class Trajectories {
         ITrajectoryConstraint[] res = {new MaxVelocityConstraint(spd), new MaxAccelerationConstraint(kMaxAccel), new CentripetalAccelerationConstraint(kMaxCentripedalAccel)};
         return res;
     }
+
+    private static Rotation2 getAngleToPointAt(Vector2 self, Vector2 target){
+        return target.subtract(self).getAngle();
+    }
 }
+

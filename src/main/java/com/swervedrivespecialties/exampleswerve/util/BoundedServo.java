@@ -5,21 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.swervedrivespecialties.exampleswerve.commands.shooter;
+package com.swervedrivespecialties.exampleswerve.util;
 
-import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
+import edu.wpi.first.wpilibj.Servo;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+public class BoundedServo {
+    Servo servo;
+    double lower;
+    double upper;
 
-public class ShooterSubsystemCommands {
-    public static Shooter shooter = Shooter.getInstance();
-
-    public static CommandBase getRunShooterFromVisionCommand(){
-        return new RunShooterFromVision(shooter);
+    public BoundedServo(int port, double lowerBound, double upperBound){
+        servo = new Servo(port);
+        lower = lowerBound;
+        upper = upperBound;
     }
 
-    public static CommandBase getResetServoCommand(){
-        return new ResetServo(shooter);
+    public void set(double val){
+        servo.set(Math.min(upper, Math.max(val, lower)));
     }
-    
+
+    public double get(){
+        return servo.get();
+    }
 }

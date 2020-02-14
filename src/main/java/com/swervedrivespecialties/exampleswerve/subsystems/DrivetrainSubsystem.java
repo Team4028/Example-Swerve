@@ -30,16 +30,18 @@ import org.frcteam2910.common.robot.drivers.NavX;
 import org.frcteam2910.common.robot.drivers.Mk2SwerveModuleBuilder.MotorType;
 
 public class DrivetrainSubsystem implements Subsystem {
-    private static final double TRACKWIDTH = 21.5;
-    private static final double WHEELBASE = 23.5;
+    private static final double TRACKWIDTH = 22.5;
+    private static final double WHEELBASE = 24.41;
 
-    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(357.16);
-    private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(359.11);
-    private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(238.53);
-    private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(140.59);
+    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(278.06);
+    private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(45.48);
+    private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(93.51);
+    private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(300.77);
 
-    private static final PidConstants ANGLE_CONSTANTS = new PidConstants(1.5, 0.0, 0.0001);
-    private static final double STANDARD_REDUCTION = 18.0 / 1.0;
+    private static final PidConstants ANGLE_CONSTANTS = new PidConstants(1.5, 0.0, 0.5);
+    private static final double ANGLE_REDUCTION = 18.0 / 1.0;
+    private static final double WHEEL_DIAMETER = 4;
+    private static final double DRIVE_REDUCTION = 6.92 / 1.0;
 
     boolean isFieldOriented = true;
     double curMinControllerSpeed = .25;
@@ -58,27 +60,26 @@ public class DrivetrainSubsystem implements Subsystem {
     private final SwerveModule frontLeftModule = new Mk2SwerveModuleBuilder(
             new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0))
             .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER), FRONT_LEFT_ANGLE_OFFSET)
-            .angleMotor(frontLeftSteer, Mk2SwerveModuleBuilder.MotorType.NEO)
-            .driveMotor(frontLeftDrive,
-                    Mk2SwerveModuleBuilder.MotorType.NEO)
+            .angleMotor(frontLeftSteer, ANGLE_CONSTANTS, ANGLE_REDUCTION)
+            .driveMotor(frontLeftDrive , DRIVE_REDUCTION, WHEEL_DIAMETER)
             .build();
     private final SwerveModule frontRightModule = new Mk2SwerveModuleBuilder(
             new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
             .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER), FRONT_RIGHT_ANGLE_OFFSET)
-            .angleMotor(frontRightSteer, Mk2SwerveModuleBuilder.MotorType.NEO)
-            .driveMotor(frontRightDrive, Mk2SwerveModuleBuilder.MotorType.NEO)
+            .angleMotor(frontRightSteer, ANGLE_CONSTANTS, ANGLE_REDUCTION)
+            .driveMotor(frontRightDrive, DRIVE_REDUCTION, WHEEL_DIAMETER)
             .build();
     private final SwerveModule backLeftModule = new Mk2SwerveModuleBuilder(
             new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0))
             .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER), BACK_LEFT_ANGLE_OFFSET)
-            .angleMotor(backLeftSteer, Mk2SwerveModuleBuilder.MotorType.NEO)
-            .driveMotor(backLeftDrive, Mk2SwerveModuleBuilder.MotorType.NEO)
+            .angleMotor(backLeftSteer, ANGLE_CONSTANTS, ANGLE_REDUCTION)
+            .driveMotor(backLeftDrive, DRIVE_REDUCTION, WHEEL_DIAMETER)
             .build();
     private final SwerveModule backRightModule = new Mk2SwerveModuleBuilder(
             new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
             .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER), BACK_RIGHT_ANGLE_OFFSET)
-            .angleMotor(backRightSteer, Mk2SwerveModuleBuilder.MotorType.NEO)
-            .driveMotor(backRightDrive, Mk2SwerveModuleBuilder.MotorType.NEO)
+            .angleMotor(backRightSteer, ANGLE_CONSTANTS, ANGLE_REDUCTION)
+            .driveMotor(backRightDrive, DRIVE_REDUCTION, WHEEL_DIAMETER)
             .build();
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -94,7 +95,7 @@ public class DrivetrainSubsystem implements Subsystem {
 
     public DrivetrainSubsystem() {
         gyroscope.calibrate();
-        gyroscope.setInverted(true); // You might not need to invert the gyro
+        gyroscope.setInverted(false); // You might not need to invert the gyro
 
         frontLeftModule.setName("Front Left");
         frontRightModule.setName("Front Right");

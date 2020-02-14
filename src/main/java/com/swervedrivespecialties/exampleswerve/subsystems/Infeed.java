@@ -9,9 +9,12 @@ package com.swervedrivespecialties.exampleswerve.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.swervedrivespecialties.exampleswerve.commands.shooter.runConveyorMotors;
-
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.swervedrivespecialties.exampleswerve.RobotMap;
+import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
+ 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,6 +23,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Infeed extends SubsystemBase {
 
+  public static final double kEncoderCountsPerBall = 7500;
+  private static final double kConveyorTalonConstantVBus = -0.35 ;
+  private static final double kConveyToShootConstantVBUS = -.7;
+  private static final double kInfeedVBus = .5;
+  private static final double kSingulatorVBus = -.45;
+  private static final double kSingulateToShootVBus = -.5;
+
+  private static final boolean kPreConveyorNormal = false;
+  private static final boolean kPreShooterNormal = false;
+  private static final boolean kPostSingulatorNormal = false;
+
   private static Infeed _instance = new Infeed();
 
   public static Infeed get_instance() {
@@ -27,88 +41,109 @@ public class Infeed extends SubsystemBase {
   }
 
   private TalonSRX _conveyorTalon;
-  private DigitalInput _beamSensor;
-  private boolean _isFinished = false;
-  private boolean _sensorlast;
-  private boolean _sensorthis;
+  private DigitalInput _preConveyorSensor;
+  private DigitalInput _preShooterSensor;
+  private boolean _preConveyorSensorLastCycle;
+  private boolean _preConveyorSensorThisCycle;
   private boolean _isFirstCycle;
 
-  public enum CONVEYORPHASES {
-    PHASE1, PHASE2;
-  }
-
-  CONVEYORPHASES phase = CONVEYORPHASES.PHASE1;
+  private TalonSRX _singulatorTalon;
+  private VictorSPX _infeedVictor;
+  private DigitalInput _postSingulatorSensor;
 
   /**
    * Creates a new Infeed.
    */
-  public Infeed() {
-    _conveyorTalon = new TalonSRX(12);
+  private Infeed() {
+    _conveyorTalon = new TalonSRX(RobotMap.CONVEYOR_MOTOR);
     _conveyorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    _beamSensor = new DigitalInput(0);
+    _preConveyorSensor = new DigitalInput(RobotMap.PRE_CONVEYOR_SENSOR);
+    _preShooterSensor = new DigitalInput(RobotMap.PRE_SHOOTER_SENSOR);
+    _conveyorTalon.setNeutralMode(NeutralMode.Brake);
+
+    _singulatorTalon = new TalonSRX(RobotMap.SINGULATOR_MOTOR);
+    _infeedVictor = new VictorSPX(RobotMap.INFEED_MOTOR);
+    _postSingulatorSensor = new DigitalInput(RobotMap.POST_SINGULATOR_SENSOR);
   }
 
-  public void setDefault() {
-    phase = CONVEYORPHASES.PHASE1;
-    _isFinished = false;
+  public void zeroEcnoder(){
     _conveyorTalon.setSelectedSensorPosition(0);
   }
 
-  public void vbusFeederWheel(){
-    _conveyorTalon.set(ControlMode.PercentOutput, -0.5);
+  public double getConveyorPosiiton(){
+    return _conveyorTalon.getSelectedSensorPosition();
   }
-  public void setConveyorZero()
-  {
+
+  public void conveyConveyor(){
+    _conveyorTalon.set(ControlMode.PercentOutput, kConveyorTalonConstantVBus);
+  }
+
+  public void conveyConveyorToShoot(){
+    _conveyorTalon.set(ControlMode.PercentOutput, kConveyToShootConstantVBUS);
+  }
+
+  public void stopConveyor(){
     _conveyorTalon.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public void conveyorPhases() {
-    if (_conveyorTalon.getSelectedSensorPosition() <= 7500) {
-      _conveyorTalon.set(ControlMode.PercentOutput, -0.3);
-      _isFinished = false;
-      phase = CONVEYORPHASES.PHASE2;
-    }
-
-    else if (phase == CONVEYORPHASES.PHASE2) {
-      _conveyorTalon.set(ControlMode.PercentOutput, 0);
-      _isFinished = true;
-    }
-
-    else {
-      System.out.println("you're bad");
-    }
+  public void outputToSDB() {
+    SmartDashboard.putBoolean("PRE-SHOOTER SENSOR", _preShooterSensor.get());
+    SmartDashboard.putNumber("CONVEYOR TALON ENCODER", _conveyorTalon.getSelectedSensorPosition());
+    SmartDashboard.putBoolean("PRE-CONVEYOR SENSOR", _preConveyorSensor.get());
   }
 
-  
-
-  public void PrintSmartDash()
-  {
-    SmartDashboard.putBoolean("SensorVAl", _beamSensor.get());
-  }
-  public void endConveyorPhases() {
-    _conveyorTalon.set(ControlMode.PercentOutput, 0);
+  public boolean getHasBallConveyedBallLength(){
+    return _conveyorTalon.getSelectedSensorPosition() > kEncoderCountsPerBall;
   }
 
-  public boolean isSensorTrue() {
+  public boolean preConveyorSensorPressed() {
     if (_isFirstCycle) {
-      _sensorthis = _beamSensor.get();
+      _preConveyorSensorThisCycle = getPreConveyorSensor();
+      _isFirstCycle = false;
       return false;
     } else {
-      _sensorlast = _sensorthis;
-      _sensorthis = _beamSensor.get();
-      return !_sensorthis && _sensorlast;
+      _preConveyorSensorLastCycle = _preConveyorSensorThisCycle;
+      _preConveyorSensorThisCycle = getPreConveyorSensor();
+      return _preConveyorSensorThisCycle && !_preConveyorSensorLastCycle;
     }
   }
 
-  public boolean isConveyorFinished() {
-    return _isFinished;
+  public boolean getPreConveyorSensor(){
+    return _preConveyorSensor.get() == kPreConveyorNormal;
+  }
+
+  public boolean getPreShooterSensor() {
+    return _preShooterSensor.get() == kPreShooterNormal;
+  }
+
+  public boolean getPostSingulatorSensor(){
+    return _postSingulatorSensor.get() == kPostSingulatorNormal;
+  }
+
+  public void runInfeed(){
+    _infeedVictor.set(ControlMode.PercentOutput, kInfeedVBus);
+  }
+
+  public void stopInfeed(){
+    _infeedVictor.set(ControlMode.PercentOutput, 0.0);
+  }
+
+  public void runSingulator(){
+    _singulatorTalon.set(ControlMode.PercentOutput, kSingulatorVBus);
+  }
+
+  public void runSingulatorToShoot(){
+    _singulatorTalon.set(ControlMode.PercentOutput, kSingulateToShootVBus);
+  }
+
+  public void stopSingulator(){
+    _singulatorTalon.set(ControlMode.PercentOutput, 0.0);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    if (isSensorTrue()) {
-      CommandBase conveyorCommand = new runConveyorMotors(_instance);
+    if (preConveyorSensorPressed()) {
+      CommandBase conveyorCommand = InfeedSubsystemCommands.getConveyCommand();
       conveyorCommand.schedule();
     }
   }

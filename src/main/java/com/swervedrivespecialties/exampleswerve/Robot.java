@@ -1,5 +1,7 @@
 package com.swervedrivespecialties.exampleswerve;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
@@ -13,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot{
 
     static RobotContainer robotContainer;
-    static Infeed _infeed = Infeed.get_instance();
 
     @Override
     public void robotInit() {
@@ -28,17 +29,16 @@ public class Robot extends TimedRobot{
             robotContainer.logAllData();
             robotContainer.outputToSDB();
         }
-        _infeed.PrintSmartDash();
     }
 
     @Override
     public void autonomousInit() {
         robotContainer.setupLogging(true);
+        robotContainer.configureDrive();
     }
 
     @Override
     public void autonomousPeriodic() {
-        DrivetrainSubsystem.getInstance().drive(new Translation2d(0., 0), 0, true);
     }
 
     @Override
