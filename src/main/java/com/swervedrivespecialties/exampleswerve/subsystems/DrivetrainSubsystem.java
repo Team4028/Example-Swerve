@@ -248,7 +248,7 @@ public class DrivetrainSubsystem implements Subsystem {
         //   logData.AddData("Forward Velocity", Double.toString(getKinematicVelocity().x));
         //   logData.AddData("Strafe Velocity", Double.toString(getKinematicVelocity().y));
         //   logData.AddData("Angular Velocity", Double.toString(gyroscope.getRate()));  
-        logData.AddData("Velocity", Double.toString(getKinematicVelocity().length));
+        //logData.AddData("Velocity", Double.toString(getKinematicVelocity().length));
     }
 
     public void setCurrentLimit(int curLim){

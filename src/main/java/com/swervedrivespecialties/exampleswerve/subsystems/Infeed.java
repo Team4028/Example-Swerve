@@ -99,7 +99,6 @@ public class Infeed extends SubsystemBase {
     SmartDashboard.putNumber("CONVEYOR TALON ENCODER", _conveyorTalon.getSelectedSensorPosition());
     SmartDashboard.putBoolean("PRE-CONVEYOR SENSOR", _preConveyorSensor.get());
     SmartDashboard.putBoolean("INFEED SOLENOID OUT JIMBO", getIsSolenoidOut());
-    System.out.println(_infeedSolenoid.get());
   }
 
   public boolean getHasBallConveyedBallLength(){

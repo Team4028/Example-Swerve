@@ -100,4 +100,8 @@ public class DriveSubsystemCommands {
     public static CommandBase getLLRotateToTargetCommand(){
         return new LLRotateToTarget(Limelight.getInstance(), drivetrainSubsystem).withTimeout(2.5);
     }
+
+    public static CommandBase getToggleLEDMode(){
+        return new SetLLLEDMode();
+    }
 }

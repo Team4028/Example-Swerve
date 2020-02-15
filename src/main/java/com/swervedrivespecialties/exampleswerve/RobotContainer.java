@@ -40,7 +40,7 @@ public class RobotContainer {
     private Infeed infeed = Infeed.get_instance();
 
     private BeakXBoxController primary = new BeakXBoxController(0);
-    private BeakXBoxController secondary = new BeakXBoxController(0);
+    private BeakXBoxController secondary = new BeakXBoxController(1);
 
     private DataLogger _dataLogger = null;
 
@@ -50,22 +50,23 @@ public class RobotContainer {
         primary.x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
         primary.y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
         primary.left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
-        primary.right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
+       // primary.right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
         primary.back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
         primary.start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
     }
 
     private void bindSecondaryJoystickButtons(){
        secondary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
-       secondary.b.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
+       secondary.y.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
        secondary.x.toggleWhenPressed(InfeedSubsystemCommands.getRunInfeedCommand());
-       secondary.y.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
+       secondary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
        secondary.left_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
        secondary.back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
        secondary.dpad_left.whenPressed(ShooterSubsystemCommands.getResetDistanceCommand());
        secondary.dpad_right.whenPressed(ShooterSubsystemCommands.getClearDistanceOffsetCommand());
        secondary.dpad_up.whenPressed(ShooterSubsystemCommands.getIncremenetDistanceCommand());
        secondary.dpad_down.whenPressed(ShooterSubsystemCommands.getDecremenetDistanceCommand());
+       secondary.back.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
     }
 
     public RobotContainer(){
@@ -117,9 +118,13 @@ public class RobotContainer {
             if (drive != null){
                 drive.updateLogData(logData);
             }
+            if (shooter != null )
+            {
+                shooter.updateLogData(logData);
+            }
 
             _dataLogger.WriteDataLine(logData);
-
+            
         }
     }
 
