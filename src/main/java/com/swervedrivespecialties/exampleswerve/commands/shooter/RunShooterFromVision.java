@@ -31,16 +31,12 @@ public class RunShooterFromVision extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("SHOOTER INITIALIZING");
-    getSpeed();
-    _shooter.runShooter(3000, _actuatorVal);
+    run();
   }
 
   @Override 
   public void execute(){
-    getSpeed();
-    _shooter.runShooter(3000, _actuatorVal);
-    //System.out.println("hudghfhew");
+    run();
   }
 
   @Override
@@ -50,18 +46,10 @@ public class RunShooterFromVision extends CommandBase {
 
   @Override 
   public void end(boolean interrupted){
-    _shooter.runShooter(0.0, 0);
+    _shooter.runShooter(Shooter.Shot.zeroShot);
   }
 
-  private void getSpeed(){
-    //if (_ll.getDistanceToTarget(Target.HIGH) > 0 && _ll.getDistanceToTarget(Target.HIGH) < 420){
-      //double dist = util.inchesToFeet(_ll.getDistanceToTarget(Target.HIGH));
-      double dist = 22;
-      double targetSpeed = ShooterTable.getInstance().CalcShooterValues(dist).MotorTargetRPM;
-      double targetActuatorVal = ShooterTable.getInstance().CalcShooterValues(dist).ActuatorVal;
-      _curTargVelo = targetSpeed;
-      _actuatorVal = targetActuatorVal;
-
-    }
- // }
+  private void run(){
+    _shooter.runShooter(_shooter.getShot());
+  }
 }

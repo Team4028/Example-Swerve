@@ -15,9 +15,13 @@ import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
+import com.swervedrivespecialties.exampleswerve.util.BeakXBoxController;
 import com.swervedrivespecialties.exampleswerve.util.DataLogger;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.util;
+
+import org.frcteam2910.common.robot.input.DPadButton;
+import org.frcteam2910.common.robot.input.DPadButton.Direction;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,61 +30,42 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
 
     private DrivetrainSubsystem drive = DrivetrainSubsystem.getInstance();
     private Shooter shooter = Shooter.getInstance();
     private Limelight _limelight = Limelight.getInstance();
+    private Infeed infeed = Infeed.get_instance();
 
-    private Joystick primaryJoystick = new Joystick(0);
-    private Joystick secondaryJoystick = new Joystick(1);
-
-    private final Infeed infeed = Infeed.get_instance();
-
+    private BeakXBoxController primary = new BeakXBoxController(0);
+    private BeakXBoxController secondary = new BeakXBoxController(0);
 
     private DataLogger _dataLogger = null;
 
     private void bindPrimaryJoystickButtons(){
-        final JoystickButton primary_a = new JoystickButton(primaryJoystick, 1);
-        final JoystickButton primary_b = new JoystickButton(primaryJoystick, 2);
-        final JoystickButton primary_x = new JoystickButton(primaryJoystick, 3);
-        final JoystickButton primary_y = new JoystickButton(primaryJoystick, 4);
-        final JoystickButton primary_left_bumper = new JoystickButton(primaryJoystick, 5);
-        final JoystickButton primary_right_bumper = new JoystickButton(primaryJoystick, 6);
-        final JoystickButton primary_back = new JoystickButton(primaryJoystick, 7);
-        final JoystickButton primary_start = new JoystickButton(primaryJoystick, 8);
-
-        //primary_a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
-        //primary_b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
-        primary_back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
-        primary_start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
-        primary_y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
-        primary_right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
-        // primary_left_bumper.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(180));
-        primary_left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
-        primary_x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
-        
+        //primary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
+        //primary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
+        primary.x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
+        primary.y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
+        primary.left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
+        primary.right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
+        primary.back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
+        primary.start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
     }
 
     private void bindSecondaryJoystickButtons(){
-        final JoystickButton secondary_a = new JoystickButton(secondaryJoystick, 1);
-        final JoystickButton secondary_b = new JoystickButton(secondaryJoystick, 2);
-        final JoystickButton secondary_x = new JoystickButton(secondaryJoystick, 3);
-        final JoystickButton secondary_y = new JoystickButton(secondaryJoystick, 4);
-        final JoystickButton secondary_left_bumper = new JoystickButton(secondaryJoystick, 5);
-        // final JoystickButton secondary_right_bumber= new JoystickButton(primaryJoystick, 6);
-        final JoystickButton secondary_back = new JoystickButton(secondaryJoystick, 7);
-        // final JoystickButton secondary_start = new JoystickButton(primaryJoystick, 8);
-
-        //secondary_a.whileHeld(ShooterSubsystemCommands.getTriggerCommand());
-       // secondary_b.whenPressed(ShooterSubsystemCommands.getRunConveyorMotors());
-       secondary_a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
-       secondary_y.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
-       secondary_x.toggleWhenPressed(InfeedSubsystemCommands.getRunInfeedCommand());
-       secondary_b.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
-       secondary_back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
-       secondary_left_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
+       secondary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
+       secondary.b.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
+       secondary.x.toggleWhenPressed(InfeedSubsystemCommands.getRunInfeedCommand());
+       secondary.y.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
+       secondary.left_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
+       secondary.back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
+       secondary.dpad_left.whenPressed(ShooterSubsystemCommands.getResetDistanceCommand());
+       secondary.dpad_right.whenPressed(ShooterSubsystemCommands.getClearDistanceOffsetCommand());
+       secondary.dpad_up.whenPressed(ShooterSubsystemCommands.getIncremenetDistanceCommand());
+       secondary.dpad_down.whenPressed(ShooterSubsystemCommands.getDecremenetDistanceCommand());
     }
 
     public RobotContainer(){
@@ -90,27 +75,27 @@ public class RobotContainer {
     }
 
     public double getPrimaryLeftXAxis(){
-        return primaryJoystick.getRawAxis(0);
+        return primary.getLeftXAxis();
     }
 
     public double getPrimaryLeftYAxis(){
-        return primaryJoystick.getRawAxis(1);
+        return primary.getLeftYAxis();
     }
 
     public double getPrimaryLeftTrigger(){
-        return primaryJoystick.getRawAxis(2);
+        return primary.getLeftTrigger();
     }
 
     public double getPrimaryRightTrigger(){
-        return primaryJoystick.getRawAxis(3);
+        return primary.getRightTrigger();
     }
 
     public double getPrimaryRightXAxis(){
-        return primaryJoystick.getRawAxis(4);
+        return primary.getRighXAxis();
     }
 
     public double getPrimaryRightYAxis(){
-        return primaryJoystick.getRawAxis(5);
+        return primary.getRightYAxis();
     }
 
     public void initDefaultCommands(){

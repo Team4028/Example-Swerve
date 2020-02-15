@@ -10,7 +10,6 @@ import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot{
@@ -34,7 +33,6 @@ public class Robot extends TimedRobot{
             robotContainer.logAllData();
             robotContainer.outputToSDB();
         }
-       // _shooter.setShooterCOnstant();
     }
 
 
@@ -52,7 +50,7 @@ public class Robot extends TimedRobot{
     @Override
     public void teleopInit() {
         robotContainer.setupLogging(false);
-        _shooter.runShooter(0, 0);
+        _shooter.runShooter(Shooter.Shot.getStopShot());
         CommandScheduler.getInstance().cancelAll();
         RobotContainer.configureInfeed();
     }
