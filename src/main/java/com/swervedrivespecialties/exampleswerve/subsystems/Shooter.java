@@ -17,9 +17,9 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight.Target;
+import com.swervedrivespecialties.exampleswerve.util.BoundedServo;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.ShooterTable;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,6 +33,9 @@ public class Shooter extends SubsystemBase{
     private static final double kServoTolerance = .02;
     private static final double kShooterDistanceDelta = .8; //feet
     private static final double kShooterDefaultDistance = 27; 
+
+    private static final double kServoLowerLimit = .1;
+    private static final double kServoUpperLimit = .7;
 
     private boolean isAlternateShot = false;
 
@@ -56,7 +59,7 @@ public class Shooter extends SubsystemBase{
     private CANSparkMax _shooterNEO = new CANSparkMax(RobotMap.SHOOTER_MASTER_NEO, MotorType.kBrushless);
     private CANSparkMax _shooterSlave = new CANSparkMax(RobotMap.SHOOTER_SLAVE_NEO, MotorType.kBrushless);
     private TalonSRX _feederTalon = new TalonSRX(RobotMap.KICKER_TALON);
-    private Servo _linearActuator = new Servo(0);
+    private BoundedServo _linearActuator = new BoundedServo(0, kServoLowerLimit, kServoUpperLimit);
 
     private CANPIDController _pidController;
     private CANEncoder _encoder;
