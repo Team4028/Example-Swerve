@@ -29,6 +29,7 @@ public class Limelight implements Subsystem {
   private NetworkTableEntry tvert = nt.getEntry("tvert");
   private NetworkTableEntry ty = nt.getEntry("ty");
   private NetworkTableEntry ts = nt.getEntry("ts");
+  private NetworkTableEntry ledMode = nt.getEntry("ledMode");
   private NetworkTableEntry pipeline = nt.getEntry("pipeline");
 
   private double distance;
@@ -48,6 +49,12 @@ public class Limelight implements Subsystem {
 
   public double getAngle1() {
     return tx.getDouble(0);
+  }
+  public void setLedMode(double mode){
+    ledMode.forceSetDouble(mode);
+  }
+  public double getLedMode(){
+    return ledMode.getDouble(0);
   }
 
   public double getTA() {

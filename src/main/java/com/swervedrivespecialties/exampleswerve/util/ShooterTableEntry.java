@@ -7,6 +7,8 @@
 
 package com.swervedrivespecialties.exampleswerve.util;
 
+import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
+
 /**
  * Add your docs here.
  */
@@ -26,11 +28,9 @@ public class ShooterTableEntry {
 		DistanceInFeet = distanceInFeet;
 		MotorTargetRPM = MotorRPM;
 		ActuatorVal = ActuatorValue;
-		
-   
-    }
-
-
-
+	}
 	
+	public Shooter.Shot getShot(){
+		return new Shooter.Shot(MotorTargetRPM, ActuatorVal);
+	}	
 }

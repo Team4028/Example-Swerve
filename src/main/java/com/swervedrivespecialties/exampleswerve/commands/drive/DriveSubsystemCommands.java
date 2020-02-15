@@ -104,4 +104,8 @@ public class DriveSubsystemCommands {
     public static CommandBase getChameleonTrackPowercellCommand(){
         return new TrackPowercell(Chameleon.getInstance(), drivetrainSubsystem).withTimeout(3.0);
     }
+
+    public static CommandBase getToggleLEDMode(){
+        return new SetLLLEDMode();
+    }
 }

@@ -16,28 +16,34 @@ import java.util.LinkedList;
  */
 public class ShooterTable {
 
-    private static ShooterTable _instance = new ShooterTable();
+    private static ShooterTable _primary = new ShooterTable(true);
+    private static ShooterTable _secondary = new ShooterTable(false);
 	
-	public static ShooterTable getInstance() {
-		return _instance;
+	public static ShooterTable getPrimaryTable() {
+		return _primary;
     }
+
+    public static ShooterTable getSecondaryTable(){
+        return _secondary;
+    }
+
     private int _indexCounter;
     private int _currentIndex = 0;
     private ShooterTableEntry ste;
 
     private LinkedList<ShooterTableEntry> _Table = null;
-    private ShooterTable()
+
+    private ShooterTable(boolean isPrimary)
     {
-        _Table = LoadTable();
+        _Table = isPrimary ? LoadPrimaryTable() : LoadSecondaryTable();
         _currentIndex = 1;
 
 		Iterator<ShooterTableEntry> itr = _Table.iterator();
 		while(itr.hasNext()) {
             ste = itr.next();
         }	
-
-
     }
+    
     public ShooterTableEntry CalcShooterValues (double distanceInFeet)
 	{
 		ShooterTableEntry steBelow = null;
@@ -135,23 +141,34 @@ public class ShooterTable {
 	// helpers follow
 	//============================================================================================
 	// create a linked list
-	private LinkedList<ShooterTableEntry> LoadTable() {
+	private LinkedList<ShooterTableEntry> LoadPrimaryTable() {
 
-		LinkedList<ShooterTableEntry> table = new LinkedList<ShooterTableEntry>();
+		LinkedList<ShooterTableEntry> primarytable = new LinkedList<ShooterTableEntry>();
 		
 		_indexCounter = 0;
 		//======================================================================================
 		//									Position	feet Stg1  
 		//======================================================================================
 		
-		table.add(new ShooterTableEntry(_indexCounter++,  11.83, 4028, .6));
-        table.add(new ShooterTableEntry(_indexCounter++, 23.85, 4028, .6));
-        //table.add(new ShooterTableEntry(_indexCounter++, 30,  -4264));
-		return table;
-	}
+		primarytable.add(new ShooterTableEntry(_indexCounter++,  11.83, 3300, .6));
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 23.85, 3300, .6));
+		return primarytable;
+    }
+    
+    private LinkedList<ShooterTableEntry> LoadSecondaryTable() {
 
-	
+		LinkedList<ShooterTableEntry> secondarytable = new LinkedList<ShooterTableEntry>();
+		
+		_indexCounter = 0;
+		//======================================================================================
+		//									Position	feet Stg1  
+		//======================================================================================
+		
+		secondarytable.add(new ShooterTableEntry(_indexCounter++,  11.83, 4028, .52));
+        secondarytable.add(new ShooterTableEntry(_indexCounter++, 23.85, 4028, .52));
+		return secondarytable;
 	}
+}
 
 
 

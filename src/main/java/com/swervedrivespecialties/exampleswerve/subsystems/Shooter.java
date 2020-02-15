@@ -19,46 +19,54 @@ import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight.Target;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.ShooterTable;
-import com.swervedrivespecialties.exampleswerve.util.ShooterTableEntry;
-import com.swervedrivespecialties.exampleswerve.util.util;
-
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Shooter implements Subsystem{
+public class Shooter extends SubsystemBase{
 
-    double kMaxSpeed = 5440.0; //Native Units
-    double kShooterTolerance = 20;
+    private double kMaxSpeed = 5440.0; //Native Units
+    private double kShooterTolerance = 20;
 
-    double kServoHome = .55;
-    double kServoHomeEpsilon = .02;
+    private static final double kServoHome = .55;
+    private static final double kServoTolerance = .02;
+    private static final double kShooterDistanceDelta = .8; //feet
+    private static final double kShooterDefaultDistance = 27; 
+
+    private boolean isAlternateShot = false;
+
+    //4880 12.5
+    //5040 fresh 
 
     private static Shooter _instance = new Shooter();
-    private static ShooterTable _shooterTable = ShooterTable.getInstance();
+
+    private static final ShooterTable primaryTable = ShooterTable.getPrimaryTable();
+    private static final ShooterTable secondaryTable = ShooterTable.getSecondaryTable();
+
+    private double _shooterShootDistance;
+    private double _shooterSensorDistance = 0;
+    private double _shooterDistanceOffset = 0;
 
     public static Shooter getInstance(){
         return _instance;
     }
 
-    TalonSRX _kickerTalon = new TalonSRX(RobotMap.KICKER_TALON);
-    CANSparkMax _shooterNEO = new CANSparkMax(RobotMap.SHOOTER_MASTER_NEO, MotorType.kBrushless);
-    CANSparkMax _shooterSlave = new CANSparkMax(RobotMap.SHOOTER_SLAVE_NEO, MotorType.kBrushless);
-    TalonSRX _feederTalon = new TalonSRX(RobotMap.KICKER_TALON);
-    Servo _linearActuator = new Servo(0);
+    private TalonSRX _kickerTalon = new TalonSRX(RobotMap.KICKER_TALON);
+    private CANSparkMax _shooterNEO = new CANSparkMax(RobotMap.SHOOTER_MASTER_NEO, MotorType.kBrushless);
+    private CANSparkMax _shooterSlave = new CANSparkMax(RobotMap.SHOOTER_SLAVE_NEO, MotorType.kBrushless);
+    private TalonSRX _feederTalon = new TalonSRX(RobotMap.KICKER_TALON);
+    private Servo _linearActuator = new Servo(0);
 
-    CANPIDController _pidController;
-    CANEncoder _encoder;
-    double _P = 0.00014;
-    double _I = 0;
-    double _D = 0.002;
-    double _F = 0.000201897;
-    double minOutput = -1;
-    double maxOutput = 1;
-    int _MtrTargetRPM;
+    private CANPIDController _pidController;
+    private CANEncoder _encoder;
+    private double _P = 0.000505; //.00045 //0.0005
+    private double _I = 0;
+    private double _D = 0.000053; //.000045 //0.000053
+    private double _F = 0.00019656543; // 00019656543
+    private double minOutput = -1;
+    private double maxOutput = 1;
+    private int _MtrTargetRPM;
    
     private Shooter(){
 
@@ -84,13 +92,15 @@ public class Shooter implements Subsystem{
         
     } 
 
-    public void runShooter(double spd, double actuatorVal){
+    public void runShooter(Shot s){
+        double spd = s.speed;
+        double actuatorVal = s.actuatorPosition;
         SmartDashboard.putNumber("spd", spd);
-        SmartDashboard.putNumber("Target RPM", 4200);
+        SmartDashboard.putNumber("Target RPM", spd);
         SmartDashboard.putNumber("velo", _encoder.getVelocity());
         SmartDashboard.putNumber("Vello", _encoder.getVelocity());
         SmartDashboard.putNumber("ActuatorVal", actuatorVal); 
-        double talonSpeed = spd > 0 ? spd / kMaxSpeed : 0.0;
+        double talonSpeed = spd > 0 ? spd / kMaxSpeed: 0.0;
         _kickerTalon.set(ControlMode.PercentOutput, -talonSpeed);
         if (spd > kShooterTolerance){
             _pidController.setReference(spd, ControlType.kVelocity);
@@ -98,13 +108,25 @@ public class Shooter implements Subsystem{
             _shooterNEO.set(0.0);
         }
         _linearActuator.set(actuatorVal);
-      }
+    }
+
+    public Shot getShot(){
+    
+        ShooterTable curTable = isAlternateShot ? secondaryTable : primaryTable;
+        return curTable.CalcShooterValues(_shooterShootDistance).getShot();
+    }
+ 
+    
 
     public void outputToSDB(){
         SmartDashboard.putNumber("Distance to Target", Limelight.getInstance().getDistanceToTarget(Target.HIGH));
+        SmartDashboard.putNumber("Shooter Distance: ", _shooterShootDistance);
+        SmartDashboard.putNumber("Shooter Offset: ", _shooterDistanceOffset);
+        SmartDashboard.putNumber("Shooter Sensor Distance", _shooterSensorDistance);
     }
 
     public void updateLogData(LogDataBE logData){  
+        logData.AddData("Vello", Double.toString(_encoder.getVelocity()));
     }
 
     public void resetServo(){
@@ -112,6 +134,57 @@ public class Shooter implements Subsystem{
     }
 
     public boolean isServoReset(){
-        return Math.abs(_linearActuator.get() - kServoHome) <= kServoHomeEpsilon;
+        return Math.abs(_linearActuator.get() - kServoHome) <= kServoTolerance;
+    }
+
+    public void updateShooterDistance(){
+        updateSensorDistance();
+        _shooterShootDistance = _shooterSensorDistance+ _shooterDistanceOffset;
+    }
+
+    public void incrementShooterDistance(){
+        _shooterDistanceOffset += kShooterDistanceDelta;
+    }
+
+    public void decrementShooterDistance(){
+        _shooterDistanceOffset -= kShooterDistanceDelta;
+    }
+
+    public void resetShooterDistance(){
+        _shooterDistanceOffset = kShooterDefaultDistance - _shooterSensorDistance;
+    }
+
+    public void clearShooterDistanceOffset(){
+        _shooterDistanceOffset = 0;
+    }
+
+    private void updateSensorDistance(){
+        _shooterSensorDistance= 22;
+    }
+    
+    public void toggleIsAlternateShot(){
+        isAlternateShot = !isAlternateShot;
+    }
+
+    public static class Shot{
+        public double speed;
+        public double actuatorPosition;
+
+        public Shot(double spd, double actPos){
+            speed = spd;
+            actuatorPosition = actPos;
+        }
+
+        public static Shot zeroShot = new Shot(0, kServoHome);
+
+        public static Shot getStopShot(){
+            return new Shot(0, getInstance()._linearActuator.get());
+        }
+    }
+
+    @Override
+    public void periodic()
+    {
+        updateShooterDistance();
     }
 }
