@@ -112,10 +112,11 @@ public class Shooter extends SubsystemBase{
 
     public Shot getShot(){
     
-        ShooterTable curTable = isAlternateShot ? primaryTable : secondaryTable;
+        ShooterTable curTable = isAlternateShot ? secondaryTable : primaryTable;
         return curTable.CalcShooterValues(_shooterShootDistance).getShot();
     }
  
+    
 
     public void outputToSDB(){
         SmartDashboard.putNumber("Distance to Target", Limelight.getInstance().getDistanceToTarget(Target.HIGH));

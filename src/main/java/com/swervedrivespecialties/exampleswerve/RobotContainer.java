@@ -10,6 +10,7 @@ package com.swervedrivespecialties.exampleswerve;
 import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
 import com.swervedrivespecialties.exampleswerve.commands.drive.DriveSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.shooter.ShooterSubsystemCommands;
+import com.swervedrivespecialties.exampleswerve.commands.shooter.ToggleAlternateShot;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
@@ -67,6 +68,7 @@ public class RobotContainer {
        secondary.dpad_up.whenPressed(ShooterSubsystemCommands.getIncremenetDistanceCommand());
        secondary.dpad_down.whenPressed(ShooterSubsystemCommands.getDecremenetDistanceCommand());
        secondary.back.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
+       secondary.start.whenPressed(ShooterSubsystemCommands.getTogggleAlternateShotCommand());
     }
 
     public RobotContainer(){
