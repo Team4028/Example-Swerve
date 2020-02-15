@@ -43,7 +43,7 @@ public class runSingulator extends CommandBase {
   }
 
   private void runSing(){
-    if (!_infeed.getPreConveyorSensor()){
+    if (!_infeed.getPreConveyorSensor() && !isFinished()){
       _infeed.runSingulator();
     } else {
       _infeed.stopSingulator();
