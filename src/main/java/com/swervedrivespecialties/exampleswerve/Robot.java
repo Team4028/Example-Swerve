@@ -10,13 +10,13 @@ import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot{
 
     static RobotContainer robotContainer;
     static Infeed _infeed = Infeed.get_instance();
+    Shooter _shooter = Shooter.getInstance();
 
     Compressor _compressor = new Compressor(0);
 
@@ -35,6 +35,7 @@ public class Robot extends TimedRobot{
         }
     }
 
+
     @Override
     public void autonomousInit() {
         robotContainer.setupLogging(true);
@@ -43,12 +44,13 @@ public class Robot extends TimedRobot{
 
     @Override
     public void autonomousPeriodic() {
-        //DrivetrainSubsystem.getInstance().drive(new Translation2d(0., 0), 0, true);
+       // DrivetrainSubsystem.getInstance().drive(new Translation2d(1., 0), 0, true);
     }
 
     @Override
     public void teleopInit() {
         robotContainer.setupLogging(false);
+        _shooter.runShooter(Shooter.Shot.getStopShot());
         CommandScheduler.getInstance().cancelAll();
         RobotContainer.configureInfeed();
     }

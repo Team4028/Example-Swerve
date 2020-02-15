@@ -7,6 +7,7 @@
 
 package com.swervedrivespecialties.exampleswerve.commands.shooter;
 
+import com.swervedrivespecialties.exampleswerve.commands.shooter.distance.*;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -21,5 +22,24 @@ public class ShooterSubsystemCommands {
     public static CommandBase getResetServoCommand(){
         return new ResetServo(shooter);
     }
-    
+
+    public static CommandBase getTogggleAlternateShotCommand(){
+        return new ToggleAlternateShot(shooter);
+    }    
+
+    public static CommandBase getIncremenetDistanceCommand(){
+        return new IncrementDistance(shooter);
+    }
+
+    public static CommandBase getDecremenetDistanceCommand(){
+        return new DecrementDistance(shooter);
+    }
+
+    public static CommandBase getResetDistanceCommand(){
+        return new ResetDistance(shooter);
+    }
+
+    public static CommandBase getClearDistanceOffsetCommand(){
+        return new ClearDistanceOffset(shooter);
+    }
 }
