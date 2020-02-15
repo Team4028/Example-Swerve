@@ -17,6 +17,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight.Target;
+import com.swervedrivespecialties.exampleswerve.util.BeakSubsystem;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.ShooterTable;
 import com.swervedrivespecialties.exampleswerve.util.ShooterTableEntry;
@@ -29,12 +30,12 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public class Shooter implements Subsystem{
+public class Shooter extends BeakSubsystem{
 
     double kMaxSpeed = 5440.0; //Native Units
     double kShooterTolerance = 20;
 
-    double kServoHome = .55;
+    double kServoHome = .36;
     double kServoHomeEpsilon = .02;
 
     private static Shooter _instance = new Shooter();
@@ -100,18 +101,27 @@ public class Shooter implements Subsystem{
         _linearActuator.set(actuatorVal);
       }
 
-    public void outputToSDB(){
-        SmartDashboard.putNumber("Distance to Target", Limelight.getInstance().getDistanceToTarget(Target.HIGH));
-    }
-
-    public void updateLogData(LogDataBE logData){  
-    }
-
     public void resetServo(){
         _linearActuator.set(kServoHome);
     }
 
     public boolean isServoReset(){
         return Math.abs(_linearActuator.get() - kServoHome) <= kServoHomeEpsilon;
+    }
+
+    public void updateLogData(LogDataBE logData){  
+    }
+
+    public void teleopInit(){
+    }
+
+    public void autonInit(){
+    }
+
+    public void outputToSDB(){
+        SmartDashboard.putNumber("Distance to Target", Limelight.getInstance().getDistanceToTarget(Target.HIGH));
+    }
+
+    public void stop(){
     }
 }

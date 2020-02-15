@@ -26,22 +26,23 @@ import org.frcteam2910.common.math.Vector2;
 public class Trajectories {
 
     ////////// UNIVERSAL TRAJECTORY CONSTANTS /////////////
-    private static final int kSubdivideIterations = 8;
+    private static final int kSubdivideIterations = 10;
     private static final double kDefaultMaxSpeed = 10 * 12;
-    private static final double kMaxAccel = 13. * 12;
+    private static final double kMaxAccel = 10 * 12; //13*12
     private static final double kMaxCentripedalAccel = 25. * 12;
     //////////////////////////////////////////////////////
 
 
     public static class steallBallAuton { 
-        private static final Vector2 goalPoint = Vector2.ZERO;
+        private static final Vector2 goalPoint = new Vector2(-150, 230);
         private static final Rotation2 startRot = Rotation2.ZERO;
-        private static final Vector2 shootPoint = new Vector2(45, 120); //must have that |y| > |x - 88|
-        private static final double stealBallSpeed = 11;
-        private static final double goShootSpeed = 11;
+        private static final double travelDist = 78;
+        private static final Vector2 shootPoint = new Vector2(45, 155); //must have that |y| > |x - travelDist|
+        private static final double stealBallSpeed = 10 * 12;
+        private static final double goShootSpeed = 11.5 * 12;
 
-        private static final double rad = 88 - shootPoint.x;
-        private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint);
+        private static final double rad = travelDist - shootPoint.x;
+        private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint).rotateBy(Rotation2.fromDegrees(90));
         
         private static Trajectory toStealBalls;
         private static Trajectory toShootFirstBatch;
@@ -49,17 +50,17 @@ public class Trajectories {
         private static void generateToStealBall(){
             ITrajectoryConstraint[] stealBallConstraints = getConstraint(stealBallSpeed);
             Path stealBallPath = new Path(startRot);
-            stealBallPath.addSegment(new PathLineSegment(Vector2.ZERO, new Vector2(88, 0)), startRot);
+            stealBallPath.addSegment(new PathLineSegment(Vector2.ZERO, new Vector2(travelDist, 0)), startRot);
             stealBallPath.subdivide(kSubdivideIterations);
-            toStealBalls = new Trajectory(0.0, 0.0, stealBallPath, stealBallConstraints);
+            toStealBalls = new Trajectory(0.0, 36.0, stealBallPath, stealBallConstraints);
         }
 
         private static void generateToShootFirstBatch(){
             ITrajectoryConstraint[] toShootFirstBatchConstraints = getConstraint(goShootSpeed);
             Path toShootFirstBatchPath = new Path(startRot);
-            toShootFirstBatchPath.addSegment(new PathArcSegment(new Vector2(88, 0), new Vector2(88 - rad, rad), new Vector2(88, rad)), firstShotRotation);
-            toShootFirstBatchPath.addSegment(new PathLineSegment(new Vector2(88 - rad, rad), shootPoint), firstShotRotation);
-            toShootFirstBatchPath.subdivide(8);
+            toShootFirstBatchPath.addSegment(new PathArcSegment(new Vector2(travelDist, 0), new Vector2(travelDist - rad, rad), new Vector2(travelDist, rad)), firstShotRotation);
+            toShootFirstBatchPath.addSegment(new PathLineSegment(new Vector2(travelDist - rad, rad), shootPoint), firstShotRotation);
+            toShootFirstBatchPath.subdivide(kSubdivideIterations);
             toShootFirstBatch = new Trajectory(0.0, 0.0, toShootFirstBatchPath, toShootFirstBatchConstraints);
         }     
 

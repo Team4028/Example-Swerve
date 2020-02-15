@@ -8,6 +8,7 @@
 package com.swervedrivespecialties.exampleswerve;
 
 import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
+import com.swervedrivespecialties.exampleswerve.commands.auton.autons.opponentball.OpponentBallAuton;
 import com.swervedrivespecialties.exampleswerve.commands.drive.DriveSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.shooter.ShooterSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
@@ -56,7 +57,8 @@ public class RobotContainer {
         primary_back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
         primary_start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
         primary_y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
-        //primary_right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
+        primary_right_bumper.whenPressed(new OpponentBallAuton());
+        //primary_right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toStealBallsTrajectorySupplier));
         // primary_left_bumper.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(180));
         primary_left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
         primary_x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
