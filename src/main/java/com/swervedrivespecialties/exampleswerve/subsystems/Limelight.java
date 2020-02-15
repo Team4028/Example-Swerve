@@ -7,6 +7,8 @@
 
 package com.swervedrivespecialties.exampleswerve.subsystems;
 
+import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
+
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
@@ -22,6 +24,9 @@ public class Limelight implements Subsystem {
   private NetworkTableEntry ta = nt.getEntry("ta");
   private NetworkTableEntry tv = nt.getEntry("tv");
   private NetworkTableEntry tshort = nt.getEntry("tshort");
+  private NetworkTableEntry tlong = nt.getEntry("tlong");
+  private NetworkTableEntry thor = nt.getEntry("thor");
+  private NetworkTableEntry tvert = nt.getEntry("tvert");
   private NetworkTableEntry ty = nt.getEntry("ty");
   private NetworkTableEntry ts = nt.getEntry("ts");
   private NetworkTableEntry pipeline = nt.getEntry("pipeline");
@@ -53,6 +58,18 @@ public class Limelight implements Subsystem {
     return tshort.getDouble(0);
   }
 
+  public double getBoxLongLength(){
+    return tlong.getDouble(0);
+  }
+
+  public double getHorBoxLength(){
+    return thor.getDouble(0);
+  }
+
+  public double getVertBoxLength(){
+    return tvert.getDouble(0);
+  }
+
   public double getSkew() {
     return ts.getDouble(0);
   }
@@ -76,7 +93,7 @@ public class Limelight implements Subsystem {
       // distance = Math.sqrt(Math.pow(9448.3 * Math.pow(tshort.getDouble(0), -0.904),
       // 2) - Math.pow(94, 2));
       //distance = 86.25 / Math.tan(Math.toRadians(6.42 + ty.getDouble(0)));
-      distance = 74.25 / Math.tan(Math.toRadians(17 + ty.getDouble(0.0)));
+      distance = 73.25 / Math.tan(Math.toRadians(18 + ty.getDouble(0)));
       break;
     case LOW:
       distance = 0;
@@ -100,5 +117,19 @@ public class Limelight implements Subsystem {
   //This will always have you pointed at the vector currently to your target, getting the angle for a pinpoint target is much harder and not done here
   public RigidTransform2 getToTarget(Target target){
     return new RigidTransform2(Vector2.fromAngle(Rotation2.fromDegrees(getAngle1())).scale(getDistanceToTarget(target)), Rotation2.fromDegrees(getAngle1()));
+  }
+
+  public void updateLogData(LogDataBE logData){
+    if (getHasTarget()){
+      logData.AddData("Distance", Double.toString(getDistanceToTarget(Target.HIGH)));
+      logData.AddData("Y Angle", Double.toString(getYAng()));
+      logData.AddData("Skew", Double.toString(getSkew()));
+      logData.AddData("Angle 1", Double.toString(getAngle1()));
+      logData.AddData("Box Short Length", Double.toString(getBoxShortLength()));
+      logData.AddData("Box Long Length", Double.toString(getBoxLongLength()));
+      logData.AddData("Horizontal Box Length", Double.toString(getHorBoxLength()));
+      logData.AddData("Vertical Box Length", Double.toString(getVertBoxLength()));
+      logData.AddData("Area", Double.toString(getTA()));
+    }
   }
 }

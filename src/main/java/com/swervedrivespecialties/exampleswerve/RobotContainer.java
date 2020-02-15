@@ -31,7 +31,7 @@ public class RobotContainer {
 
     private DrivetrainSubsystem drive = DrivetrainSubsystem.getInstance();
     private Shooter shooter = Shooter.getInstance();
-    private Limelight _limelight = Limelight.getInstance();
+    private Limelight limelight = Limelight.getInstance();
 
     private Joystick primaryJoystick = new Joystick(0);
     private Joystick secondaryJoystick = new Joystick(1);
@@ -128,12 +128,9 @@ public class RobotContainer {
         if(_dataLogger != null) {    	
 	    	// create a new, empty logging class
             LogDataBE logData = new LogDataBE();
-            if (drive != null){
-                drive.updateLogData(logData);
-            }
-
+            if (drive != null){ drive.updateLogData(logData); }
+            if (limelight != null){ limelight.updateLogData(logData); }
             _dataLogger.WriteDataLine(logData);
-
         }
     }
 

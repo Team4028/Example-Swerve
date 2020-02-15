@@ -99,7 +99,7 @@ public class DriveSubsystemCommands {
     }
     
     public static CommandBase getLLRotateToTargetCommand(){
-        return new LLRotateToTarget(drivetrainSubsystem).withTimeout(2.5);
+        return new LLRotateToTarget(drivetrainSubsystem);//.withTimeout(2.5);
     }
     public static CommandBase getChameleonTrackPowercellCommand(){
         return new TrackPowercell(Chameleon.getInstance(), drivetrainSubsystem).withTimeout(3.0);

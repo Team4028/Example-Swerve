@@ -16,6 +16,7 @@ import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
  
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -50,6 +51,7 @@ public class Infeed extends SubsystemBase {
   private TalonSRX _singulatorTalon;
   private VictorSPX _infeedVictor;
   private DigitalInput _postSingulatorSensor;
+  private DoubleSolenoid sol;
 
   /**
    * Creates a new Infeed.
@@ -64,6 +66,7 @@ public class Infeed extends SubsystemBase {
     _singulatorTalon = new TalonSRX(RobotMap.SINGULATOR_MOTOR);
     _infeedVictor = new VictorSPX(RobotMap.INFEED_MOTOR);
     _postSingulatorSensor = new DigitalInput(RobotMap.POST_SINGULATOR_SENSOR);
+    sol = new DoubleSolenoid(0, 1);
   }
 
   public void zeroEcnoder(){

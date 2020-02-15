@@ -86,6 +86,6 @@ public class LLRotateToTarget extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(error) <= 0.5;
+    return false;//Math.abs(error) <= 0.5;
   }
 }

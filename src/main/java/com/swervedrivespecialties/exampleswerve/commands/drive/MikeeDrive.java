@@ -9,6 +9,7 @@ package com.swervedrivespecialties.exampleswerve.commands.drive;
 
 import com.swervedrivespecialties.exampleswerve.Robot;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
+import com.swervedrivespecialties.exampleswerve.util.util;
 
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -22,38 +23,25 @@ public class MikeeDrive extends CommandBase {
   boolean shouldFinish = false;
   
   public MikeeDrive(DrivetrainSubsystem drive) {
-    // Use addRequirements() here to declare subsystem dependencies.
     _drive = drive;
     addRequirements(_drive);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double rotVal = -Robot.getRobotContainer().getPrimaryRightXAxis();
-    if (rotVal > kDeadBand){
-      _drive.drive(new Translation2d(), kRot, true);
-    } else if (rotVal < -kDeadBand){
-      _drive.drive(new Translation2d(), -kRot, true);
-    } else {
-      _drive.stop();
-    }
+    _drive.drive(new Translation2d(), Math.abs(rotVal) > kDeadBand ? Math.copySign(kRot, rotVal) : 0.0, true);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     _drive.drive(new Translation2d(), 0, true);
   }
 
-
-
-  // Returns true when the command should end.
   @Override
   public boolean isFinished(){
     return false;
