@@ -29,13 +29,13 @@ public class Shooter extends SubsystemBase{
     private double kMaxSpeed = 5440.0; //Native Units
     private double kShooterTolerance = 20;
 
-    private static final double kServoHome = .55;
+    private static final double kServoHome = .35;
     private static final double kServoTolerance = .02;
     private static final double kShooterDistanceDelta = .8; //feet
     private static final double kShooterDefaultDistance = 27; 
 
-    private static final double kServoLowerLimit = .1;
-    private static final double kServoUpperLimit = .7;
+    private static final double kServoLowerLimit = .3;
+    private static final double kServoUpperLimit = .55;
 
     private boolean isAlternateShot = false;
 
@@ -79,8 +79,8 @@ public class Shooter extends SubsystemBase{
         _shooterNEO.setIdleMode(IdleMode.kCoast);
 
 
-        _shooterNEO.setInverted(true);
-        _shooterSlave.setInverted(false);
+        _shooterNEO.setInverted(false);
+        _shooterSlave.setInverted(true);
         _shooterSlave.follow(_shooterNEO, true);
         _encoder = _shooterNEO.getEncoder();
         _pidController = new CANPIDController(_shooterNEO);

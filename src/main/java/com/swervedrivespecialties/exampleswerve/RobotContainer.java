@@ -54,6 +54,7 @@ public class RobotContainer {
        // primary.right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
         primary.back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
         primary.start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
+        primary.a.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
     }
 
     private void bindSecondaryJoystickButtons(){
@@ -67,7 +68,7 @@ public class RobotContainer {
        secondary.dpad_right.whenPressed(ShooterSubsystemCommands.getClearDistanceOffsetCommand());
        secondary.dpad_up.whenPressed(ShooterSubsystemCommands.getIncremenetDistanceCommand());
        secondary.dpad_down.whenPressed(ShooterSubsystemCommands.getDecremenetDistanceCommand());
-       secondary.back.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
+       //secondary.back.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
        secondary.start.whenPressed(ShooterSubsystemCommands.getTogggleAlternateShotCommand());
     }
 
