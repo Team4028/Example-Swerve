@@ -257,4 +257,12 @@ public class DrivetrainSubsystem implements Subsystem {
         backLeftDrive.setSmartCurrentLimit(curLim);
         backRightDrive.setSmartCurrentLimit(curLim);
     }
+
+    public SwerveDriveOdometry getShooterOdometry(Translation2d current){
+        return new SwerveDriveOdometry(kinematics, getGyroRotation());
+    }
+
+    public void updateShooterOdometry(SwerveDriveOdometry odom){
+        odom.update(getGyroRotation(), getModuleStates());
+    }
 }

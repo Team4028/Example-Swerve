@@ -19,7 +19,10 @@ import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight.Target;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.ShooterTable;
+import com.swervedrivespecialties.exampleswerve.util.util;
+
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,7 +37,14 @@ public class Shooter extends SubsystemBase{
     private static final double kShooterDistanceDelta = .8; //feet
     private static final double kShooterDefaultDistance = 27; 
 
+    private Limelight _ll = Limelight.getInstance();
+    private DrivetrainSubsystem _dt = DrivetrainSubsystem.getInstance();
+
+    //reset in init
     private boolean isAlternateShot = false;
+    private boolean hasHadOdometry = false;
+
+    private SwerveDriveOdometry curOdom;
 
     //4880 12.5
     //5040 fresh 
@@ -55,7 +65,6 @@ public class Shooter extends SubsystemBase{
     private TalonSRX _kickerTalon = new TalonSRX(RobotMap.KICKER_TALON);
     private CANSparkMax _shooterNEO = new CANSparkMax(RobotMap.SHOOTER_MASTER_NEO, MotorType.kBrushless);
     private CANSparkMax _shooterSlave = new CANSparkMax(RobotMap.SHOOTER_SLAVE_NEO, MotorType.kBrushless);
-    private TalonSRX _feederTalon = new TalonSRX(RobotMap.KICKER_TALON);
     private Servo _linearActuator = new Servo(0);
 
     private CANPIDController _pidController;
@@ -111,7 +120,6 @@ public class Shooter extends SubsystemBase{
     }
 
     public Shot getShot(){
-    
         ShooterTable curTable = isAlternateShot ? secondaryTable : primaryTable;
         return curTable.CalcShooterValues(_shooterShootDistance).getShot();
     }
@@ -159,7 +167,18 @@ public class Shooter extends SubsystemBase{
     }
 
     private void updateSensorDistance(){
-        _shooterSensorDistance= 22;
+        if (_ll.hasOdom()){
+            hasHadOdometry = true;
+            curOdom = _dt.getShooterOdometry(_ll.getTargetToBot());
+            _shooterSensorDistance = _ll.getDistanceToTarget(Target.HIGH);
+        } else if (_ll.hasRange()){
+            if (hasHadOdometry){
+                _dt.updateShooterOdometry(curOdom);
+            }
+            _shooterSensorDistance = _ll.getDistanceToTarget(Target.HIGH);
+        } else if (hasHadOdometry){
+            _shooterSensorDistance = util.metersToInches(curOdom.getPoseMeters().getTranslation().getNorm());
+        }
     }
     
     public void toggleIsAlternateShot(){

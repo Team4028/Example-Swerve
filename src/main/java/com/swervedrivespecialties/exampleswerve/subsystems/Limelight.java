@@ -8,6 +8,7 @@
 package com.swervedrivespecialties.exampleswerve.subsystems;
 
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
+import com.swervedrivespecialties.exampleswerve.util.util;
 
 import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Rotation2;
@@ -16,6 +17,8 @@ import org.frcteam2910.common.math.Vector2;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Limelight implements Subsystem {
@@ -100,7 +103,7 @@ public class Limelight implements Subsystem {
       // distance = Math.sqrt(Math.pow(9448.3 * Math.pow(tshort.getDouble(0), -0.904),
       // 2) - Math.pow(94, 2));
       //distance = 86.25 / Math.tan(Math.toRadians(6.42 + ty.getDouble(0)));
-      distance = 73.25 / Math.tan(Math.toRadians(18 + ty.getDouble(0)));
+      distance = getDist(ty.getDouble(0));
       break;
     case LOW:
       distance = 0;
@@ -121,6 +124,15 @@ public class Limelight implements Subsystem {
     setPipeline(!force && getHasTarget() && Math.abs(getAngle1()) <= 11.5 && getYAng() <= 11.7 ? 1:0); 
   }
 
+  //be sure to change this method and the next one as distance changes
+  private static double getDist(double tyVal){
+    return 73.25 / Math.tan(Math.toRadians(18 + tyVal));
+  }
+
+  private static double inverseDist(double dist){
+    return Math.toDegrees(Math.atan(73.25 / dist)) - 18;
+  }
+
   //This will always have you pointed at the vector currently to your target, getting the angle for a pinpoint target is much harder and not done here
   public RigidTransform2 getToTarget(Target target){
     return new RigidTransform2(Vector2.fromAngle(Rotation2.fromDegrees(getAngle1())).scale(getDistanceToTarget(target)), Rotation2.fromDegrees(getAngle1()));
@@ -138,5 +150,80 @@ public class Limelight implements Subsystem {
       logData.AddData("Vertical Box Length", Double.toString(getVertBoxLength()));
       logData.AddData("Area", Double.toString(getTA()));
     }
+  }
+
+  private static class ConfidenceData{
+    boolean hasTarget;
+    double vert_ang;
+    double horiz_ang;
+    double box_ratio;
+    double skew;
+
+    public ConfidenceData(boolean ht, double va, double ha, double br, double sk){
+      hasTarget = ht;
+      vert_ang = va;
+      horiz_ang = ha;
+      box_ratio = br;
+      skew = sk;
+    }
+  }
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+   //////////////////////         CONFIDENCE CODE         ////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////
+
+  private static final double kRangeLowDistance = 8.5; //feet
+  private static final double kRangeHighDistance = 41; //feet
+  private static final double kRangeMinExcludedSkew = -75;
+  private static final double kRangeMaxExcludedSkew = -25;
+
+  private static final double kRangeMinVerticalAngle = inverseDist(kRangeHighDistance);
+  private static final double kRangeMaxVerticalAngle = inverseDist(kRangeLowDistance);
+  
+  private static final double kOdometryLowDistance = 12; //feet
+  private static final double kOdometryHighDistance = 32.5; //feet
+  private static final double kOdometryMinExcludedSkew = -80;
+  private static final double kOdometryMaxExcludedSkew = -20;
+  private static final double kOdometryMinBoxRatio = 2.1;
+  private static final double kOdometryMaxBoxRatio = 2.4;
+  private static final double kOdometryMinHorizontalAngle = -18;
+  private static final double kOdometryMaxHorizontalAngle = 18;
+
+  private static final double kOdometryMinVerticalAngle = inverseDist(kOdometryHighDistance);
+  private static final double kOdometryMaxVerticalAngle = inverseDist(kOdometryLowDistance);
+
+  private boolean getHasRange(ConfidenceData cd){
+    return cd.hasTarget && util.isInRange(cd.vert_ang, kRangeMinVerticalAngle, kRangeMaxVerticalAngle) && ! util.isInRange(cd.skew, kRangeMinExcludedSkew, kRangeMaxExcludedSkew);
+  }
+
+  private boolean getHasOdom(ConfidenceData cd){
+    return cd.hasTarget && util.isInRange(cd.vert_ang, kOdometryMinVerticalAngle, kOdometryMaxVerticalAngle) && util.isInRange(cd.horiz_ang, kOdometryMinHorizontalAngle, kOdometryMaxHorizontalAngle)
+    && util.isInRange(cd.box_ratio, kOdometryMinBoxRatio, kOdometryMaxBoxRatio) && !util.isInRange(cd.skew, kOdometryMinExcludedSkew, kOdometryMaxExcludedSkew);
+  }
+
+  private ConfidenceData getConfidenceData(){
+    return new ConfidenceData(getHasTarget(), getYAng(), getAngle1(), getBoxShortLength() != 0 ? getBoxLongLength()/getBoxShortLength() : 0, getSkew());
+  }
+
+  public boolean hasRange(){
+    return getHasRange(getConfidenceData());
+  }
+
+  public boolean hasOdom(){
+    return getHasOdom(getConfidenceData());
+  }
+
+  private static final Translation2d BOT_TO_LL = new Translation2d(0, 0);
+
+  private Translation2d getTargetToLL(){
+    return util.transFromAngle(-getAngle1()).rotateBy(Rotation2d.fromDegrees(270)).rotateBy(Rotation2d.fromDegrees(-DrivetrainSubsystem.getInstance().getGyroAngle().toDegrees()));
+  }
+
+  private Translation2d getLLToBot(){
+    return BOT_TO_LL.rotateBy(Rotation2d.fromDegrees(180).rotateBy(DrivetrainSubsystem.getInstance().getGyroRotation()));
+  }
+
+  public Translation2d getTargetToBot(){
+    return getTargetToLL().plus(getLLToBot());
   }
 }

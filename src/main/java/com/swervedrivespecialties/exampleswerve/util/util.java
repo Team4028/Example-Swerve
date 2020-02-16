@@ -91,4 +91,8 @@ public class util {
 	public static Translation2d transFromAngle(double angDegrees){
 		return new Translation2d(Math.cos(Math.toRadians(angDegrees)), Math.sin(Math.toRadians(angDegrees)));
 	}
+
+	public static boolean isInRange(double val, double lower, double upper){
+		return (val >= lower) && (val <= upper);
+	}
 }
