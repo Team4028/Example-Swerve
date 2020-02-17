@@ -28,7 +28,7 @@ public class LLRotateToTarget extends CommandBase {
 
   PidController _rotController = new PidController(new PidConstants(0.012, 0.01, 0.0008));
 
-  private double _prevTime, _initTime, error, forward, strafe;
+  private double _prevTime, error, forward, strafe;
   private boolean _translate;
 
   public LLRotateToTarget(DrivetrainSubsystem drive, boolean canTranslate) {
@@ -49,7 +49,6 @@ public class LLRotateToTarget extends CommandBase {
   @Override
   public void initialize() {
     _prevTime = Timer.getFPGATimestamp();
-    _initTime = Timer.getFPGATimestamp();
     error = _limelight.getAngle1();
   }
 

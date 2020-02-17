@@ -7,7 +7,6 @@
 
 package com.swervedrivespecialties.exampleswerve.commands.drive;
 
-import com.swervedrivespecialties.exampleswerve.Robot;
 import com.swervedrivespecialties.exampleswerve.subsystems.Chameleon;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.util.util;
@@ -16,8 +15,6 @@ import org.frcteam2910.common.control.PidConstants;
 import org.frcteam2910.common.control.PidController;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class TrackPowercell extends CommandBase {

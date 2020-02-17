@@ -11,7 +11,6 @@ import java.util.function.Supplier;
 
 import com.swervedrivespecialties.exampleswerve.subsystems.Chameleon;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
-import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.util.InertiaGain;
 
 import org.frcteam2910.common.control.Trajectory;

@@ -9,8 +9,6 @@ package com.swervedrivespecialties.exampleswerve.auton;
 
 import java.util.function.Supplier;
 
-import com.swervedrivespecialties.exampleswerve.util.util;
-
 import org.frcteam2910.common.control.CentripetalAccelerationConstraint;
 import org.frcteam2910.common.control.ITrajectoryConstraint;
 import org.frcteam2910.common.control.MaxAccelerationConstraint;
@@ -18,7 +16,6 @@ import org.frcteam2910.common.control.MaxVelocityConstraint;
 import org.frcteam2910.common.control.Path;
 import org.frcteam2910.common.control.PathArcSegment;
 import org.frcteam2910.common.control.PathLineSegment;
-import org.frcteam2910.common.control.PathSegment;
 import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;

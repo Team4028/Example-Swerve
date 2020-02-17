@@ -7,10 +7,8 @@
 
 package com.swervedrivespecialties.exampleswerve;
 
-import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
 import com.swervedrivespecialties.exampleswerve.commands.drive.DriveSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.shooter.ShooterSubsystemCommands;
-import com.swervedrivespecialties.exampleswerve.commands.shooter.ToggleAlternateShot;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
@@ -20,18 +18,7 @@ import com.swervedrivespecialties.exampleswerve.util.BeakXBoxController;
 import com.swervedrivespecialties.exampleswerve.util.DataLogger;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.util;
-
-import org.frcteam2910.common.robot.input.DPadButton;
-import org.frcteam2910.common.robot.input.DPadButton.Direction;
-
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.command.ConditionalCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
 
