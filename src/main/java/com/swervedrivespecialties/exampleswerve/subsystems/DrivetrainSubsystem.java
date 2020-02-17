@@ -224,7 +224,7 @@ public class DrivetrainSubsystem implements Subsystem {
     public Vector2 getKinematicVelocity(){
         ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(getModuleStates());
         double x_dot = util.metersToInches(chassisSpeeds.vxMetersPerSecond);
-        double y_dot = util.metersToInches(chassisSpeeds.vxMetersPerSecond);
+        double y_dot = util.metersToInches(chassisSpeeds.vyMetersPerSecond);
         return new Vector2(x_dot, y_dot);
     }
 
