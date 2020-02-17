@@ -43,12 +43,11 @@ public class Robot extends TimedRobot{
     @Override
     public void autonomousInit() {
         robotContainer.setupLogging(true);
-        RobotContainer.configureInfeed();
+        robotContainer.configureDrive();
     }
 
     @Override
     public void autonomousPeriodic() {
-       // DrivetrainSubsystem.getInstance().drive(new Translation2d(1., 0), 0, true);
     }
 
     @Override

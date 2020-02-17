@@ -125,8 +125,9 @@ public class RobotContainer {
         }
     }
 
-    public static void configureDrive(){
-        DrivetrainSubsystem.getInstance().setCurrentLimit(40);
+    public void configureDrive(){
+        drive.reset();
+        drive.setCurrentLimit(40);
     }
 
     public static void configureInfeed(){
