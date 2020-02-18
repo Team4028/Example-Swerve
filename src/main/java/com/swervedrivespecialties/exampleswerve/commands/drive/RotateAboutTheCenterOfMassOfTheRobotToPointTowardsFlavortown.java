@@ -71,9 +71,9 @@ public class RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown extend
     double deltaTime = localTime - _currentTime;
     _currentTime = localTime;
 
-    double err = getMinAngleDiff(_drive.getGyroAngle().toDegrees(), Limelight.getInstance().locateFlavortownUSA().toDegrees());
-    double rot =  _pidController.calculate(err, deltaTime);
-    _drive.drive(new Translation2d(forward, strafe), 0, true); //because the angle is continually changing, it's assumed if you drive while calling this you intend to drive field oriented
+    double err = -getMinAngleDiff(_drive.getGyroAngle().toDegrees(), Limelight.getInstance().locateFlavortownUSA().toDegrees());
+    double rot =  -_pidController.calculate(err, deltaTime);
+    _drive.drive(new Translation2d(forward, strafe), rot, true); //because the angle is continually changing, it's assumed if you drive while calling this you intend to drive field oriented
     
     SmartDashboard.putNumber("AngleError", err);
     SmartDashboard.putNumber("Rotation Value", rot);

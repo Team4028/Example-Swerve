@@ -233,6 +233,6 @@ public class Limelight implements Subsystem {
   }
 
   public Rotation2 locateFlavortownUSA(){
-    return Vector2.fromAngle(DrivetrainSubsystem.getInstance().getGyroAngle().rotateBy(Rotation2.fromDegrees(-90)).rotateBy(Rotation2.fromDegrees(-getAngle1()))).scale(getDistanceToTarget(Target.HIGH)).add(-29.25, 0).getAngle();
+    return Vector2.fromAngle(DrivetrainSubsystem.getInstance().getGyroAngle().rotateBy(Rotation2.fromDegrees(-90)).rotateBy(Rotation2.fromDegrees(-getAngle1()))).scale(getDistanceToTarget(Target.HIGH)).add(-28.5, 0).getAngle().rotateBy(Rotation2.fromDegrees(90));
   }
 }
