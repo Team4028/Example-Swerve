@@ -95,11 +95,12 @@ public class Infeed extends SubsystemBase {
   }
 
   public void outputToSDB() {
-    SmartDashboard.putBoolean("PRE-SHOOTER SENSOR", _preShooterSensor.get());
-    SmartDashboard.putNumber("CONVEYOR TALON ENCODER", _conveyorTalon.getSelectedSensorPosition());
-    SmartDashboard.putBoolean("PRE-CONVEYOR SENSOR", _preConveyorSensor.get());
-    SmartDashboard.putBoolean("INFEED SOLENOID OUT JIMBO", getIsSolenoidOut());
-    System.out.println(_infeedSolenoid.get());
+    SmartDashboard.putBoolean("PRE-SHOOTER:SENSOR", _preShooterSensor.get());
+    SmartDashboard.putBoolean("PRE-CONVEYOR:SENSOR", _preConveyorSensor.get());
+    SmartDashboard.putBoolean("CONVEYOR:SENSOR", _midConveyorSensor.get());
+    SmartDashboard.putBoolean("Singulator:Sensor", _postSingulatorSensor.get());
+    SmartDashboard.putBoolean("INFEED:SONOIDOULET", getIsSolenoidOut());
+    //System.out.println(_infeedSolenoid.get()); he will come back
   }
 
   public boolean getHasBallConveyedBallLength(){
