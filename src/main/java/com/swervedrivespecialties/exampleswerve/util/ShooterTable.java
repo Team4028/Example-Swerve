@@ -150,8 +150,8 @@ public class ShooterTable {
 		//									Position	feet Stg1  
 		//======================================================================================
 		
-		primarytable.add(new ShooterTableEntry(_indexCounter++,  11.83, 3300, .6));
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 23.85, 3300, .6));
+		primarytable.add(new ShooterTableEntry(_indexCounter++,  11.83, 3300, .5));
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 23.85, 3300, .5));
 		return primarytable;
     }
     
@@ -164,8 +164,8 @@ public class ShooterTable {
 		//									Position	feet Stg1  
 		//======================================================================================
 		
-		secondarytable.add(new ShooterTableEntry(_indexCounter++,  11.83, 4028, .52));
-        secondarytable.add(new ShooterTableEntry(_indexCounter++, 23.85, 4028, .52));
+		secondarytable.add(new ShooterTableEntry(_indexCounter++,  11.83, 4028, .5));
+        secondarytable.add(new ShooterTableEntry(_indexCounter++, 23.85, 4028, .5));
 		return secondarytable;
 	}
 }

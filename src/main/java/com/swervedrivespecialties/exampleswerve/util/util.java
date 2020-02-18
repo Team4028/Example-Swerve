@@ -95,4 +95,8 @@ public class util {
 	public static boolean isInRange(double val, double lower, double upper){
 		return (val >= lower) && (val <= upper);
 	}
+
+	public static double getAngleDegrees(Translation2d t){
+		return Math.toDegrees(Math.atan2(t.getY(), t.getX()));
+	}
 }

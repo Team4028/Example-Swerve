@@ -98,7 +98,7 @@ public class DriveSubsystemCommands {
     }
     
     public static CommandBase getLLRotateToTargetCommand(){
-        return new LLRotateToTarget(drivetrainSubsystem);//.withTimeout(2.5);
+        return new LLRotateToTarget(drivetrainSubsystem).withTimeout(2.5);
     }
     public static CommandBase getChameleonTrackPowercellCommand(){
         return new TrackPowercell(Chameleon.getInstance(), drivetrainSubsystem).withTimeout(3.0);
@@ -106,5 +106,8 @@ public class DriveSubsystemCommands {
 
     public static CommandBase getToggleLEDMode(){
         return new SetLLLEDMode();
+    }
+    public static CommandBase getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown(){
+        return new RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown(drivetrainSubsystem);
     }
 }

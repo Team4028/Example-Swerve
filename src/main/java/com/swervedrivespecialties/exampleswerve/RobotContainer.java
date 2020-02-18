@@ -8,6 +8,7 @@
 package com.swervedrivespecialties.exampleswerve;
 
 import com.swervedrivespecialties.exampleswerve.commands.drive.DriveSubsystemCommands;
+import com.swervedrivespecialties.exampleswerve.commands.drive.printTargetToLL;
 import com.swervedrivespecialties.exampleswerve.commands.shooter.ShooterSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
@@ -35,12 +36,13 @@ public class RobotContainer {
     private void bindPrimaryJoystickButtons(){
         //primary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
         //primary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
-        primary.x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
+        primary.x.whenPressed(DriveSubsystemCommands.getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown());
         primary.y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
         primary.left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
        // primary.right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
         primary.back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
         primary.start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
+        primary.a.whenPressed(new printTargetToLL());
     }
 
     private void bindSecondaryJoystickButtons(){

@@ -28,7 +28,7 @@ public class LLRotateToTarget extends CommandBase {
 
   PidController _rotController = new PidController(new PidConstants(0.012, 0.01, 0.0008));
 
-  private double _prevTime, error, forward, strafe;
+  private double _prevTime,  error, forward, strafe;
   private boolean _translate;
 
   public LLRotateToTarget(DrivetrainSubsystem drive, boolean canTranslate) {
@@ -85,6 +85,6 @@ public class LLRotateToTarget extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;//Math.abs(error) <= 0.5;
+    return Math.abs(_limelight.getAngle1()) <= 0.5;
   }
 }

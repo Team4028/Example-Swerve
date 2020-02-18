@@ -47,6 +47,7 @@ public class Limelight implements Subsystem {
     return _instance;
   }
 
+
   private Limelight() {
   }
 
@@ -126,11 +127,11 @@ public class Limelight implements Subsystem {
 
   //be sure to change this method and the next one as distance changes
   private static double getDist(double tyVal){
-    return 73.25 / Math.tan(Math.toRadians(18 + tyVal));
+    return 72.75 / Math.tan(Math.toRadians(21 + tyVal));
   }
 
   private static double inverseDist(double dist){
-    return Math.toDegrees(Math.atan(73.25 / dist)) - 18;
+    return Math.toDegrees(Math.atan(72.75 / dist)) - 21;
   }
 
   //This will always have you pointed at the vector currently to your target, getting the angle for a pinpoint target is much harder and not done here
@@ -215,8 +216,8 @@ public class Limelight implements Subsystem {
 
   private static final Translation2d BOT_TO_LL = new Translation2d(0, 0);
 
-  private Translation2d getTargetToLL(){
-    return util.transFromAngle(-getAngle1()).rotateBy(Rotation2d.fromDegrees(270)).rotateBy(Rotation2d.fromDegrees(-DrivetrainSubsystem.getInstance().getGyroAngle().toDegrees()));
+  public Translation2d getTargetToLL(){
+    return util.transFromAngle(-getAngle1()).rotateBy(Rotation2d.fromDegrees(270)).rotateBy(Rotation2d.fromDegrees(-DrivetrainSubsystem.getInstance().getGyroAngle().toDegrees())).times(getDistanceToTarget(Target.HIGH));
   }
 
   private Translation2d getLLToBot(){
@@ -225,5 +226,13 @@ public class Limelight implements Subsystem {
 
   public Translation2d getTargetToBot(){
     return getTargetToLL().plus(getLLToBot());
+  }
+
+  public Translation2d getBotAngleToTarget(){
+    return getTargetToBot().minus(new Translation2d( 0, 31.25)).rotateBy(Rotation2d.fromDegrees(180));
+  }
+
+  public Rotation2 locateFlavortownUSA(){
+    return Vector2.fromAngle(DrivetrainSubsystem.getInstance().getGyroAngle().rotateBy(Rotation2.fromDegrees(-90)).rotateBy(Rotation2.fromDegrees(-getAngle1()))).scale(getDistanceToTarget(Target.HIGH)).add(-29.25, 0).getAngle();
   }
 }
