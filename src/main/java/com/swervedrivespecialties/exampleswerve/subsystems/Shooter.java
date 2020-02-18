@@ -34,10 +34,12 @@ public class Shooter extends SubsystemBase{
     private static final double kShooterDistanceDelta = .8; //feet
     private static final double kShooterDefaultDistance = 27; 
 
+
     private static final double kServoLowerLimit = .3;
     private static final double kServoUpperLimit = .55;
 
     private boolean isAlternateShot = false;
+    public boolean isShooting = false;
 
     //4880 12.5
     //5040 fresh 
@@ -129,6 +131,7 @@ public class Shooter extends SubsystemBase{
     }
 
     public void updateLogData(LogDataBE logData){  
+        logData.AddData("Heyo", Boolean.toString(isShooting));
         logData.AddData("Vello", Double.toString(_encoder.getVelocity()));
     }
 

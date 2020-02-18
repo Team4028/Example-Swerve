@@ -31,6 +31,7 @@ public class RunShooterFromVision extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    _shooter.isShooting = true;
     run();
   }
 
@@ -46,6 +47,7 @@ public class RunShooterFromVision extends CommandBase {
 
   @Override 
   public void end(boolean interrupted){
+    _shooter.isShooting = false;
     _shooter.runShooter(Shooter.Shot.zeroShot);
   }
 
