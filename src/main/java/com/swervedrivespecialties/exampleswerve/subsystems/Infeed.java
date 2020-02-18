@@ -55,6 +55,7 @@ public class Infeed extends SubsystemBase {
   private TalonSRX _singulatorTalon;
   private VictorSPX _infeedVictor;
   private DigitalInput _postSingulatorSensor;
+  private DigitalInput _midConveyorSensor;
   private DoubleSolenoid _infeedSolenoid;
 
   /**
@@ -72,6 +73,7 @@ public class Infeed extends SubsystemBase {
     _postSingulatorSensor = new DigitalInput(RobotMap.POST_SINGULATOR_SENSOR);
     _infeedSolenoid = new DoubleSolenoid(0, 1);
     _infeedSolenoid.set(SOLENOID_OUT_POSITION);
+    _midConveyorSensor = new DigitalInput(4);
   }
 
   public void zeroEcnoder(){

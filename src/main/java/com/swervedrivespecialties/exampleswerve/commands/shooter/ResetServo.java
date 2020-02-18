@@ -25,13 +25,8 @@ public class ResetServo extends CommandBase {
     _shooter.resetServo();
   }
 
-  @Override
-  public void execute(){
-    _shooter.resetServo();
-  }
-
   @Override 
   public boolean isFinished(){
-    return _shooter.isServoReset();
+    return true;
   }
 }

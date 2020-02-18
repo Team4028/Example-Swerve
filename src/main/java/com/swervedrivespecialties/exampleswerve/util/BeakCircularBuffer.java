@@ -7,14 +7,25 @@
 
 package com.swervedrivespecialties.exampleswerve.util;
 
-import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpiutil.CircularBuffer;
 
-public class BoundedServo extends Servo{
+public class BeakCircularBuffer extends CircularBuffer{
+    
+    int size = 0;
 
-    public BoundedServo(int port, double lowerBound, double upperBound){
-        super(port);
-        double lower = lowerBound + 1;
-        double upper = upperBound + 1;
-        this.setBounds(upper, upper, 1.5, lower, lower);
+    public BeakCircularBuffer(int size){
+        super(size);
+        this.size = size;
     }
+
+    public double getMean(){
+        double tot = 0;
+        for (int i = 0; i < this.size; i++){
+            tot += this.get(i);
+        }
+        double avg = tot / this.size;
+        return avg;
+    }
+
+
 }
