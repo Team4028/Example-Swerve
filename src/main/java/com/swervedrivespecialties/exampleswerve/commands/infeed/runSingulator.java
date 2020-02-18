@@ -18,25 +18,25 @@ public class runSingulator extends CommandBase {
     _infeed = infeed;
   }
 
-  // Called when the command is initially scheduled.
+  //Called when the command is initially scheduled.
   @Override
   public void initialize() {
     runSing();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  //Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     runSing();
   }
 
-  // Called once the command ends or is interrupted.
+  //Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     _infeed.stopSingulator();
   }
 
-  // Returns true when the command should end.
+  //Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return _infeed.getPostSingulatorSensor() && _infeed.getPreShooterSensor();
@@ -49,4 +49,4 @@ public class runSingulator extends CommandBase {
       _infeed.stopSingulator();
     }
   }
-}
+} 

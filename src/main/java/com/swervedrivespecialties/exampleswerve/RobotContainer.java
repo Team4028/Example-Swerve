@@ -40,7 +40,7 @@ public class RobotContainer {
     private Infeed infeed = Infeed.get_instance();
 
     private BeakXBoxController primary = new BeakXBoxController(0);
-    private BeakXBoxController secondary = new BeakXBoxController(0);
+    private BeakXBoxController secondary = new BeakXBoxController(1);
 
     private DataLogger _dataLogger = null;
 

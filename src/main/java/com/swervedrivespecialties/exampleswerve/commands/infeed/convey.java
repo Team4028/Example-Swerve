@@ -23,13 +23,14 @@ public class convey extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    targetPos = Infeed.get_instance().getConveyorPosiiton() + Infeed.kEncoderCountsPerBall;
+  //targetPos = Infeed.get_instance().getConveyorPosiiton() + Infeed.kEncoderCountsPerBall;
+    _infeed.preConveyorSensorPressed();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _infeed.conveyConveyor();
+      _infeed.conveyConveyor();
   }
 
   // Called once the command ends or is interrupted.
@@ -41,6 +42,6 @@ public class convey extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (_infeed.getConveyorPosiiton() > targetPos) || _infeed.getPreShooterSensor();
+    return _infeed.midConveyorSensorPressed() || _infeed.getPreShooterSensor();
   }
 }

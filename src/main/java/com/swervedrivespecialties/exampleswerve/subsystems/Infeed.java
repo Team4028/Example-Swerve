@@ -45,8 +45,11 @@ public class Infeed extends SubsystemBase {
   private TalonSRX _conveyorTalon;
   private DigitalInput _preConveyorSensor;
   private DigitalInput _preShooterSensor;
+  private DigitalInput _midConveyorSensor;
   private boolean _preConveyorSensorLastCycle;
   private boolean _preConveyorSensorThisCycle;
+  private boolean _midConveyorSensorLastCycle;
+  private boolean _midConveyorSensorThisCycle;
   private boolean _isFirstCycle;
 
   private final Value SOLENOID_OUT_POSITION = Value.kReverse;
@@ -63,12 +66,13 @@ public class Infeed extends SubsystemBase {
   private Infeed() {
     _conveyorTalon = new TalonSRX(RobotMap.CONVEYOR_MOTOR);
     _conveyorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    _preConveyorSensor = new DigitalInput(RobotMap.PRE_CONVEYOR_SENSOR);
-    _preShooterSensor = new DigitalInput(RobotMap.PRE_SHOOTER_SENSOR);
     _conveyorTalon.setNeutralMode(NeutralMode.Brake);
 
     _singulatorTalon = new TalonSRX(RobotMap.SINGULATOR_MOTOR);
     _infeedVictor = new VictorSPX(RobotMap.INFEED_MOTOR);
+    _preConveyorSensor = new DigitalInput(RobotMap.CONVEYOR_SENSOR);
+    _midConveyorSensor = new DigitalInput(RobotMap.PRE_CONVEYOR_SENSOR);
+    _preShooterSensor = new DigitalInput(RobotMap.PRE_SHOOTER_SENSOR);
     _postSingulatorSensor = new DigitalInput(RobotMap.POST_SINGULATOR_SENSOR);
     _infeedSolenoid = new DoubleSolenoid(0, 1);
     _infeedSolenoid.set(SOLENOID_OUT_POSITION);
@@ -76,10 +80,6 @@ public class Infeed extends SubsystemBase {
 
   public void zeroEcnoder(){
     _conveyorTalon.setSelectedSensorPosition(0);
-  }
-
-  public double getConveyorPosiiton(){
-    return _conveyorTalon.getSelectedSensorPosition();
   }
 
   public void conveyConveyor(){
@@ -103,19 +103,29 @@ public class Infeed extends SubsystemBase {
   }
 
   public boolean getHasBallConveyedBallLength(){
-    return _conveyorTalon.getSelectedSensorPosition() > kEncoderCountsPerBall;
+    return midConveyorSensorPressed();
   }
 
   public boolean preConveyorSensorPressed() {
     if (_isFirstCycle) {
-      _preConveyorSensorThisCycle = getPreConveyorSensor();
+      _preConveyorSensorThisCycle = _preConveyorSensor.get();
       _isFirstCycle = false;
       return false;
     } else {
       _preConveyorSensorLastCycle = _preConveyorSensorThisCycle;
-      _preConveyorSensorThisCycle = getPreConveyorSensor();
-      return _preConveyorSensorThisCycle && !_preConveyorSensorLastCycle;
+      _preConveyorSensorThisCycle = _preConveyorSensor.get();
+      return !_preConveyorSensorThisCycle && _preConveyorSensorLastCycle;
     }
+  }
+
+  public boolean midConveyorSensorPressed() {
+      _midConveyorSensorLastCycle = _midConveyorSensorThisCycle;
+      _midConveyorSensorThisCycle = _midConveyorSensor.get();
+      return !_midConveyorSensorThisCycle && _midConveyorSensorLastCycle;
+  }
+ 
+  public boolean getMidConveyorSensor() {
+    return _midConveyorSensor.get() == kPreConveyorNormal;
   }
 
   public boolean getPreConveyorSensor(){
@@ -126,7 +136,7 @@ public class Infeed extends SubsystemBase {
     return _preShooterSensor.get() == kPreShooterNormal;
   }
 
-  public boolean getPostSingulatorSensor(){
+  public boolean getPostSingulatorSensor() {
     return _postSingulatorSensor.get() == kPostSingulatorNormal;
   }
 
