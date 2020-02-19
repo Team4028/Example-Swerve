@@ -15,6 +15,8 @@ import java.util.function.Supplier;
 
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+
 /**
  * Add your docs here.
  */
@@ -80,5 +82,21 @@ public class util {
 
 	public static double feetToInches(double feet){
 		return feet * 12.;
+	}
+
+	public static double iversonBrackets(boolean bool){
+		return bool ? 1: 0;
+	}
+
+	public static Translation2d transFromAngle(double angDegrees){
+		return new Translation2d(Math.cos(Math.toRadians(angDegrees)), Math.sin(Math.toRadians(angDegrees)));
+	}
+
+	public static boolean isInRange(double val, double lower, double upper){
+		return (val >= lower) && (val <= upper);
+	}
+
+	public static double getAngleDegrees(Translation2d t){
+		return Math.toDegrees(Math.atan2(t.getY(), t.getX()));
 	}
 }

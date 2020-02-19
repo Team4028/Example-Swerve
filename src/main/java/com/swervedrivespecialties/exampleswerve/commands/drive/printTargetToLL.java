@@ -7,42 +7,39 @@
 
 package com.swervedrivespecialties.exampleswerve.commands.drive;
 
-import com.swervedrivespecialties.exampleswerve.Robot;
-import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
+import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class MikeeDrive extends CommandBase {
-  DrivetrainSubsystem _drive;
-
-  double kRot = .025;
-  double kDeadBand = .06; //custom because of the unique demands of this task
-
-  boolean shouldFinish = false;
-  
-  public MikeeDrive(DrivetrainSubsystem drive) {
-    _drive = drive;
-    addRequirements(_drive);
+public class printTargetToLL extends CommandBase {
+  /**
+   * Creates a new printTargetToLL.
+   */
+  public printTargetToLL() {
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
   }
 
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rotVal = -Robot.getRobotContainer().getPrimaryRightXAxis();
-    _drive.drive(new Translation2d(), Math.abs(rotVal) > kDeadBand ? Math.copySign(kRot, rotVal) : 0.0, true);
+    //System.out.println(Limelight.getInstance().getTargetToLL().plus(new Translation2d(29.5, 0)).toString());
+    System.out.println(Double.toString(Limelight.getInstance().locateFlavortownUSA().toDegrees()));
   }
 
+  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    _drive.drive(new Translation2d(), 0, true);
   }
 
+  // Returns true when the command should end.
   @Override
-  public boolean isFinished(){
+  public boolean isFinished() {
     return false;
   }
 }

@@ -10,7 +10,6 @@ package com.swervedrivespecialties.exampleswerve.commands.shooter;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ResetServo extends CommandBase {
 

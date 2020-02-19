@@ -10,7 +10,6 @@ package com.swervedrivespecialties.exampleswerve.commands.infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class convey extends CommandBase {
   private Infeed _infeed;

@@ -7,10 +7,9 @@
 
 package com.swervedrivespecialties.exampleswerve;
 
-import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
 import com.swervedrivespecialties.exampleswerve.commands.drive.DriveSubsystemCommands;
+import com.swervedrivespecialties.exampleswerve.commands.drive.printTargetToLL;
 import com.swervedrivespecialties.exampleswerve.commands.shooter.ShooterSubsystemCommands;
-import com.swervedrivespecialties.exampleswerve.commands.shooter.ToggleAlternateShot;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
@@ -20,24 +19,13 @@ import com.swervedrivespecialties.exampleswerve.util.BeakXBoxController;
 import com.swervedrivespecialties.exampleswerve.util.DataLogger;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.util;
-
-import org.frcteam2910.common.robot.input.DPadButton;
-import org.frcteam2910.common.robot.input.DPadButton.Direction;
-
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.command.ConditionalCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
 
     private DrivetrainSubsystem drive = DrivetrainSubsystem.getInstance();
     private Shooter shooter = Shooter.getInstance();
-    private Limelight _limelight = Limelight.getInstance();
+    private Limelight limelight = Limelight.getInstance();
     private Infeed infeed = Infeed.get_instance();
 
     private BeakXBoxController primary = new BeakXBoxController(0);
@@ -48,7 +36,7 @@ public class RobotContainer {
     private void bindPrimaryJoystickButtons(){
         //primary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
         //primary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
-        primary.x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
+        primary.x.whenPressed(DriveSubsystemCommands.getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown());
         primary.y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
         primary.left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
        // primary.right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
@@ -118,21 +106,17 @@ public class RobotContainer {
         if(_dataLogger != null) {    	
 	    	// create a new, empty logging class
             LogDataBE logData = new LogDataBE();
-            if (drive != null){
-                drive.updateLogData(logData);
-            }
-            if (shooter != null )
-            {
-                shooter.updateLogData(logData);
-            }
+            if (drive != null){ drive.updateLogData(logData); }
+            if (limelight != null){ limelight.updateLogData(logData); }
+            if (shooter != null ){ shooter.updateLogData(logData); }
 
             _dataLogger.WriteDataLine(logData);
-            
         }
     }
 
-    public static void configureDrive(){
-        DrivetrainSubsystem.getInstance().setCurrentLimit(40);
+    public void configureDrive(){
+        drive.reset();
+        drive.setCurrentLimit(40);
     }
 
     public static void configureInfeed(){

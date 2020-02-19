@@ -9,8 +9,8 @@ package com.swervedrivespecialties.exampleswerve.commands.drive;
 
 import java.util.function.Supplier;
 
+import com.swervedrivespecialties.exampleswerve.subsystems.Chameleon;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
-import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.util.InertiaGain;
 
 import org.frcteam2910.common.control.Trajectory;
@@ -98,10 +98,16 @@ public class DriveSubsystemCommands {
     }
     
     public static CommandBase getLLRotateToTargetCommand(){
-        return new LLRotateToTarget(Limelight.getInstance(), drivetrainSubsystem).withTimeout(2.5);
+        return new LLRotateToTarget(drivetrainSubsystem).withTimeout(2.5);
+    }
+    public static CommandBase getChameleonTrackPowercellCommand(){
+        return new TrackPowercell(Chameleon.getInstance(), drivetrainSubsystem).withTimeout(3.0);
     }
 
     public static CommandBase getToggleLEDMode(){
         return new SetLLLEDMode();
+    }
+    public static CommandBase getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown(){
+        return new RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown(drivetrainSubsystem);
     }
 }

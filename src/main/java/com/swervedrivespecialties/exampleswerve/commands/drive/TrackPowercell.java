@@ -7,49 +7,43 @@
 
 package com.swervedrivespecialties.exampleswerve.commands.drive;
 
-import com.swervedrivespecialties.exampleswerve.Robot;
+import com.swervedrivespecialties.exampleswerve.subsystems.Chameleon;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
-import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.util.util;
 
 import org.frcteam2910.common.control.PidConstants;
 import org.frcteam2910.common.control.PidController;
-import org.frcteam2910.common.robot.Utilities;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class LLRotateToTarget extends CommandBase {
+public class TrackPowercell extends CommandBase {
   
   DrivetrainSubsystem _drive;
-  Limelight _limelight = Limelight.getInstance();
+  Chameleon _chameleon;
 
 
   PidController _rotController = new PidController(new PidConstants(0.012, 0.01, 0.0008));
 
-  private double _prevTime,  error, forward, strafe;
-  private boolean _translate;
+  private double _prevTime, error, prevError, prevGyro;
+  private double kSpeed = 0.2;
 
-  public LLRotateToTarget(DrivetrainSubsystem drive, boolean canTranslate) {
-    _drive = drive;
-    _translate = canTranslate;
+  public TrackPowercell(Chameleon chameleon, DrivetrainSubsystem subsystem) {
+    _chameleon = chameleon;
+    _drive = subsystem;
     _rotController.setContinuous(true);
     _rotController.setInputRange(-180, 180);
     _rotController.setOutputRange(-1, 1);
-    _rotController.setSetpoint(0);
+    _rotController.setSetpoint(7.3);
     _rotController.setIntegralRange(10);
-  }
-
-  public LLRotateToTarget(DrivetrainSubsystem drive){
-    this(drive, true);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     _prevTime = Timer.getFPGATimestamp();
-    error = _limelight.getAngle1();
+    error = _chameleon.getAngle1();
+    prevGyro = _drive.getGyroAngle().toDegrees();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -58,33 +52,24 @@ public class LLRotateToTarget extends CommandBase {
     double dt = Timer.getFPGATimestamp() - _prevTime;
     _prevTime = Timer.getFPGATimestamp();
 
-    double minSS = DrivetrainSubsystem.getInstance().getMinControllerSpeed();
-    double additionalSS =  Robot.getRobotContainer().getPrimaryRightTrigger();
-    double speedScale = minSS + (1 - minSS) * additionalSS * additionalSS;
-    
-    forward = -Robot.getRobotContainer().getPrimaryLeftYAxis();
-    forward = Utilities.deadband(forward);
-    // Square the forward stick
-    forward = util.iversonBrackets(_translate) * speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
+    error = _chameleon.getAngle1() == prevError ? prevError - (_drive.getGyroAngle().toDegrees() - prevGyro) : _chameleon.getAngle1();
+    prevGyro = _drive.getGyroAngle().toDegrees();
+    prevError = error;
 
-    strafe = -Robot.getRobotContainer().getPrimaryLeftXAxis();
-    strafe = Utilities.deadband(strafe);
-    // Square the strafe stick'
-    strafe = util.iversonBrackets(_translate) * speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
-
-    error = _limelight.getAngle1();
     double rot = _rotController.calculate(error, dt);
-    _drive.drive(new Translation2d(forward, strafe), rot, true);
+
+    _drive.drive(util.transFromAngle(-error).times(kSpeed), rot, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    _drive.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(_limelight.getAngle1()) <= 0.5;
+    return Math.abs(error - 7.3) <= 0.5;
   }
 }

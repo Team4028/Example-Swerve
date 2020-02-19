@@ -8,7 +8,6 @@ import com.swervedrivespecialties.exampleswerve.util.util;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -27,7 +26,6 @@ import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.drivers.Mk2SwerveModuleBuilder;
 import org.frcteam2910.common.robot.drivers.NavX;
-import org.frcteam2910.common.robot.drivers.Mk2SwerveModuleBuilder.MotorType;
 
 public class DrivetrainSubsystem implements Subsystem {
     private static final double TRACKWIDTH = 22.5;
@@ -256,5 +254,13 @@ public class DrivetrainSubsystem implements Subsystem {
         frontRightDrive.setSmartCurrentLimit(curLim);
         backLeftDrive.setSmartCurrentLimit(curLim);
         backRightDrive.setSmartCurrentLimit(curLim);
+    }
+
+    public SwerveDriveOdometry getShooterOdometry(Translation2d current){
+        return new SwerveDriveOdometry(kinematics, getGyroRotation());
+    }
+
+    public void updateShooterOdometry(SwerveDriveOdometry odom){
+        odom.update(getGyroRotation(), getModuleStates());
     }
 }

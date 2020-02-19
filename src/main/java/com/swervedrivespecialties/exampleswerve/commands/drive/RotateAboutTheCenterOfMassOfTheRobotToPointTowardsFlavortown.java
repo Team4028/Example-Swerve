@@ -9,6 +9,7 @@ package com.swervedrivespecialties.exampleswerve.commands.drive;
 
 import com.swervedrivespecialties.exampleswerve.Robot;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
+import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 
 import org.frcteam2910.common.control.PidConstants;
 import org.frcteam2910.common.control.PidController;
@@ -19,7 +20,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class RotateToAngle extends CommandBase {
+public class RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown extends CommandBase {
 
   final static double kDefaultTimeout = 2;
   final static double kMaxRotation = .75;
@@ -29,23 +30,17 @@ public class RotateToAngle extends CommandBase {
   private static DrivetrainSubsystem _drive;
   private PidController _pidController = new PidController(new PidConstants(0.013, 0, 0.0008));
   private double _currentTime, _target;
-  private double kAcceptableError = 2.0;
+  private double kAcceptableError = 0.5;
 
-  public RotateToAngle(DrivetrainSubsystem drive, double targetAngleDegrees, double timeOut) {
+  public RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown(DrivetrainSubsystem drive) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     _drive = drive;
     addRequirements(_drive);
-    _target = targetAngleDegrees;
     _pidController.setContinuous(true);
     _pidController.setInputRange(-180, 180);
     _pidController.setOutputRange(-kMaxRotation, kMaxRotation);
     _pidController.setSetpoint(0);
-    timeout = timeOut;
-  }
-
-  public RotateToAngle(DrivetrainSubsystem drive, double targetAngleDegrees){
-    this(drive, targetAngleDegrees, kDefaultTimeout);
   }
   
   // Called just before this Command runs the first time
@@ -76,18 +71,18 @@ public class RotateToAngle extends CommandBase {
     double deltaTime = localTime - _currentTime;
     _currentTime = localTime;
 
-    double err = getMinAngleDiff(_drive.getGyroAngle().toDegrees(), _target);
-    double rot =  _pidController.calculate(err, deltaTime);
+    double err = -getMinAngleDiff(_drive.getGyroAngle().toDegrees(), Limelight.getInstance().locateFlavortownUSA().toDegrees());
+    double rot =  -_pidController.calculate(err, deltaTime);
     _drive.drive(new Translation2d(forward, strafe), rot, true); //because the angle is continually changing, it's assumed if you drive while calling this you intend to drive field oriented
     
-    SmartDashboard.putNumber("AngleError", _target - _drive.getGyroAngle().toDegrees());
+    SmartDashboard.putNumber("AngleError", err);
     SmartDashboard.putNumber("Rotation Value", rot);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return (Timer.getFPGATimestamp() - starttime > timeout) || (Math.abs(getMinAngleDiff(_target, _drive.getGyroAngle().toDegrees())) < kAcceptableError);
+    return (Math.abs(getMinAngleDiff(_drive.getGyroAngle().toDegrees(), Limelight.getInstance().locateFlavortownUSA().toDegrees())) < kAcceptableError);
   }
 
   // Called once after isFinished returns true

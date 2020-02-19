@@ -9,12 +9,8 @@ package com.swervedrivespecialties.exampleswerve.commands.shooter;
 
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
-import com.swervedrivespecialties.exampleswerve.subsystems.Limelight.Target;
-import com.swervedrivespecialties.exampleswerve.util.ShooterTable;
-import com.swervedrivespecialties.exampleswerve.util.util;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 
 public class RunShooterFromVision extends CommandBase {

@@ -9,15 +9,10 @@ package com.swervedrivespecialties.exampleswerve.util;
 
 import com.swervedrivespecialties.exampleswerve.util.BeakXBoxController.DPADButton.Direction;
 
-import org.frcteam2910.common.robot.input.DPadButton;
-
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class BeakXBoxController {
 

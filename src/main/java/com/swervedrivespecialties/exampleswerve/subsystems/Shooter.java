@@ -20,8 +20,11 @@ import com.swervedrivespecialties.exampleswerve.subsystems.Limelight.Target;
 import com.swervedrivespecialties.exampleswerve.util.BoundedServo;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.ShooterTable;
+import com.swervedrivespecialties.exampleswerve.util.util;
+
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase{
@@ -29,10 +32,12 @@ public class Shooter extends SubsystemBase{
     private double kMaxSpeed = 5440.0; //Native Units
     private double kShooterTolerance = 20;
 
-    private static final double kServoHome = .35;
+    private static final double kServoHome = .2;
     private static final double kServoTolerance = .02;
     private static final double kShooterDistanceDelta = .8; //feet
     private static final double kShooterDefaultDistance = 27; 
+
+    private boolean hasHadOdometry;
 
 
     private static final double kServoLowerLimit = .3;
@@ -45,6 +50,9 @@ public class Shooter extends SubsystemBase{
     //5040 fresh 
 
     private static Shooter _instance = new Shooter();
+    private static Limelight _ll = Limelight.getInstance();
+    private static DrivetrainSubsystem _dt = DrivetrainSubsystem.getInstance();
+    private SwerveDriveOdometry curOdom;
 
     private static final ShooterTable primaryTable = ShooterTable.getPrimaryTable();
     private static final ShooterTable secondaryTable = ShooterTable.getSecondaryTable();
@@ -61,14 +69,16 @@ public class Shooter extends SubsystemBase{
     private CANSparkMax _shooterNEO = new CANSparkMax(RobotMap.SHOOTER_MASTER_NEO, MotorType.kBrushless);
     private CANSparkMax _shooterSlave = new CANSparkMax(RobotMap.SHOOTER_SLAVE_NEO, MotorType.kBrushless);
     private TalonSRX _feederTalon = new TalonSRX(RobotMap.KICKER_TALON);
-    private BoundedServo _linearActuator = new BoundedServo(0, kServoLowerLimit, kServoUpperLimit);
+    //private BoundedServo _linearActuator = new BoundedServo(0, kServoLowerLimit, kServoUpperLimit);
 
+    private Servo _linearActuator = new Servo(0);
     private CANPIDController _pidController;
     private CANEncoder _encoder;
     private double _P = 0.000505; //.00045 //0.0005
     private double _I = 0;
     private double _D = 0.000053; //.000045 //0.000053
     private double _F = 0.00019656543; // 00019656543
+    
     private double minOutput = -1;
     private double maxOutput = 1;
     private int _MtrTargetRPM;
@@ -94,6 +104,8 @@ public class Shooter extends SubsystemBase{
         _pidController.setD(_D);
         _pidController.setFF(_F);
         _pidController.setOutputRange(minOutput, maxOutput);
+
+        hasHadOdometry = false;
         
     } 
 
@@ -109,6 +121,7 @@ public class Shooter extends SubsystemBase{
         _kickerTalon.set(ControlMode.PercentOutput, -talonSpeed);
         if (spd > kShooterTolerance){
             _pidController.setReference(spd, ControlType.kVelocity);
+            System.out.println(_shooterNEO.getOutputCurrent());
         } else {
             _shooterNEO.set(0.0);
         }
@@ -116,9 +129,8 @@ public class Shooter extends SubsystemBase{
     }
 
     public Shot getShot(){
-    
         ShooterTable curTable = isAlternateShot ? secondaryTable : primaryTable;
-        return curTable.CalcShooterValues(_shooterShootDistance).getShot();
+        return curTable.CalcShooterValues(_shooterShootDistance/12).getShot();
     }
  
     
@@ -128,6 +140,9 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("Shooter Distance: ", _shooterShootDistance);
         SmartDashboard.putNumber("Shooter Offset: ", _shooterDistanceOffset);
         SmartDashboard.putNumber("Shooter Sensor Distance", _shooterSensorDistance);
+        SmartDashboard.putBoolean("Alt Shawty", isAlternateShot);
+        SmartDashboard.putNumber("Yeetyact", getShot().actuatorPosition);
+        SmartDashboard.putNumber("yeetshooooot", getShot().speed);
     }
 
     public void updateLogData(LogDataBE logData){  
@@ -165,7 +180,21 @@ public class Shooter extends SubsystemBase{
     }
 
     private void updateSensorDistance(){
-        _shooterSensorDistance= 22;
+        if (_ll.hasOdom()){
+            hasHadOdometry = true;
+            curOdom = _dt.getShooterOdometry(_ll.getTargetToBot());
+            _shooterSensorDistance = _ll.getDistanceToTarget(Target.HIGH);
+        } else if (_ll.hasRange()){
+            if (hasHadOdometry){
+                _dt.updateShooterOdometry(curOdom);
+            }
+            _shooterSensorDistance = _ll.getDistanceToTarget(Target.HIGH);
+        } else if (hasHadOdometry){
+            _dt.updateShooterOdometry(curOdom);
+            _shooterSensorDistance = util.metersToInches(curOdom.getPoseMeters().getTranslation().getNorm());
+        }
+
+        SmartDashboard.putBoolean("Limelight HasR", _ll.hasRange());
     }
     
     public void toggleIsAlternateShot(){
