@@ -44,7 +44,7 @@ public class RunShooterFromVision extends CommandBase {
   @Override 
   public void end(boolean interrupted){
     _shooter.isShooting = false;
-    _shooter.runShooter(Shooter.Shot.zeroShot);
+    _shooter.runShooter(Shooter.Shot.getStopShot());
   }
 
   private void run(){

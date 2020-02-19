@@ -19,6 +19,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Limelight implements Subsystem {
@@ -35,6 +36,7 @@ public class Limelight implements Subsystem {
   private NetworkTableEntry ledMode = nt.getEntry("ledMode");
   private NetworkTableEntry pipeline = nt.getEntry("pipeline");
 
+  private CAMERA_SLOT CUR_CAM_SLOT;
   private double distance;
 
   public enum Target {
@@ -49,6 +51,7 @@ public class Limelight implements Subsystem {
 
 
   private Limelight() {
+    CUR_CAM_SLOT = CAMERA_SLOT.LIMELIGHT;
   }
 
   public double getAngle1() {
@@ -173,16 +176,16 @@ public class Limelight implements Subsystem {
    //////////////////////         CONFIDENCE CODE         ////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////
 
-  private static final double kRangeLowDistance = 8.5; //feet
-  private static final double kRangeHighDistance = 41; //feet
-  private static final double kRangeMinExcludedSkew = -75;
+  private static final double kRangeLowDistance = 8.5 * 12; 
+  private static final double kRangeHighDistance = 41 * 12;
+  private static final double kRangeMinExcludedSkew = -65;
   private static final double kRangeMaxExcludedSkew = -25;
 
   private static final double kRangeMinVerticalAngle = inverseDist(kRangeHighDistance);
   private static final double kRangeMaxVerticalAngle = inverseDist(kRangeLowDistance);
   
-  private static final double kOdometryLowDistance = 12; //feet
-  private static final double kOdometryHighDistance = 32.5; //feet
+  private static final double kOdometryLowDistance = 12 * 12; 
+  private static final double kOdometryHighDistance = 32.5 * 12; 
   private static final double kOdometryMinExcludedSkew = -80;
   private static final double kOdometryMaxExcludedSkew = -20;
   private static final double kOdometryMinBoxRatio = 2.1;
@@ -225,7 +228,8 @@ public class Limelight implements Subsystem {
   }
 
   public Translation2d getTargetToBot(){
-    return getTargetToLL().plus(getLLToBot());
+    Vector2 vec = Vector2.fromAngle(DrivetrainSubsystem.getInstance().getGyroAngle().rotateBy(Rotation2.fromDegrees(-90)).rotateBy(Rotation2.fromDegrees(-getAngle1()))).scale(getDistanceToTarget(Target.HIGH)).rotateBy(Rotation2.fromDegrees(180));
+    return new Translation2d(vec.x, vec.y);
   }
 
   public Translation2d getBotAngleToTarget(){
@@ -234,5 +238,48 @@ public class Limelight implements Subsystem {
 
   public Rotation2 locateFlavortownUSA(){
     return Vector2.fromAngle(DrivetrainSubsystem.getInstance().getGyroAngle().rotateBy(Rotation2.fromDegrees(-90)).rotateBy(Rotation2.fromDegrees(-getAngle1()))).scale(getDistanceToTarget(Target.HIGH)).add(-28.5, 0).getAngle().rotateBy(Rotation2.fromDegrees(90));
+  }
+
+  public enum CAMERA_SLOT{
+    LIMELIGHT,
+    INFEED,
+    EXTRA,
+    NONE;
+  }
+
+  private CAMERA_SLOT getNextCamera(CAMERA_SLOT slot){
+    if (slot == CAMERA_SLOT.LIMELIGHT) {
+      return CAMERA_SLOT.INFEED;
+    } else if (slot == CAMERA_SLOT.INFEED) {
+      return CAMERA_SLOT.EXTRA;
+    } else if (slot == CAMERA_SLOT.EXTRA){
+      return CAMERA_SLOT.LIMELIGHT;
+    } else {
+      return CAMERA_SLOT.NONE;
+    }
+  }
+
+  private String getName(CAMERA_SLOT slot){
+    if (slot == CAMERA_SLOT.LIMELIGHT) {
+      return "LIMELIGHT";
+    } else if (slot == CAMERA_SLOT.INFEED) {
+      return "INFEED";
+    } else if (slot == CAMERA_SLOT.EXTRA){
+      return "EXTRA";
+    } else {
+      return "NONE";
+    }
+  }
+
+  public void toggleCameraSlot(){
+    CUR_CAM_SLOT = getNextCamera(CUR_CAM_SLOT);
+  }
+
+  public String getCam(){
+    return getName(CUR_CAM_SLOT);
+  }
+
+  public void OutputToSDB(){
+    SmartDashboard.putString("Camera Case", getCam());
   }
 }

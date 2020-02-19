@@ -56,7 +56,6 @@ public class RobotContainer {
        secondary.dpad_right.whenPressed(ShooterSubsystemCommands.getClearDistanceOffsetCommand());
        secondary.dpad_up.whenPressed(ShooterSubsystemCommands.getIncremenetDistanceCommand());
        secondary.dpad_down.whenPressed(ShooterSubsystemCommands.getDecremenetDistanceCommand());
-       //secondary.back.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
        secondary.start.whenPressed(ShooterSubsystemCommands.getTogggleAlternateShotCommand());
     }
 
