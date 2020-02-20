@@ -125,7 +125,7 @@ public class RobotContainer {
     }
 
     public static void configureInfeed(){
-        Infeed.get_instance().setSolenoidOut(true);
+        Infeed.get_instance().configInfeed();
     }
 
     public void outputToSDB(){

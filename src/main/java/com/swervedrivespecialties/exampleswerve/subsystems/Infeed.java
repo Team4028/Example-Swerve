@@ -162,6 +162,10 @@ public class Infeed extends SubsystemBase {
     return _infeedSolenoid.get() == SOLENOID_OUT_POSITION;
   }
 
+  public void configInfeed(){
+    _infeedSolenoid.set(SOLENOID_UP_POSITION);
+  }
+
   @Override
   public void periodic() {
     if (preConveyorSensorPressed()) {
