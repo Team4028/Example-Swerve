@@ -31,9 +31,9 @@ public class Infeed extends SubsystemBase {
   private static final double kSingulatorVBus = -.45;
   private static final double kSingulateToShootVBus = -.5;
 
-  private static final boolean kPreConveyorNormal = false;
-  private static final boolean kPreShooterNormal = false;
-  private static final boolean kPostSingulatorNormal = false;
+  private static final boolean kPreConveyorNormal = true;
+  private static final boolean kPreShooterNormal = true;
+  private static final boolean kPostSingulatorNormal = true;
 
   private static Infeed _instance = new Infeed();
 
@@ -99,6 +99,7 @@ public class Infeed extends SubsystemBase {
     SmartDashboard.putBoolean("PRE-SHOOTER SENSOR", _preShooterSensor.get());
     SmartDashboard.putNumber("CONVEYOR TALON ENCODER", _conveyorTalon.getSelectedSensorPosition());
     SmartDashboard.putBoolean("PRE-CONVEYOR SENSOR", _preConveyorSensor.get());
+    SmartDashboard.putBoolean("POST-SINGULATOR", _postSingulatorSensor.get());
     SmartDashboard.putBoolean("INFEED SOLENOID OUT JIMBO", getIsSolenoidOut());
   }
 
@@ -119,15 +120,15 @@ public class Infeed extends SubsystemBase {
   }
 
   public boolean getPreConveyorSensor(){
-    return _preConveyorSensor.get() == kPreConveyorNormal;
+    return _preConveyorSensor.get() != kPreConveyorNormal;
   }
 
   public boolean getPreShooterSensor() {
-    return _preShooterSensor.get() == kPreShooterNormal;
+    return _preShooterSensor.get() != kPreShooterNormal;
   }
 
   public boolean getPostSingulatorSensor(){
-    return _postSingulatorSensor.get() == kPostSingulatorNormal;
+    return _postSingulatorSensor.get() != kPostSingulatorNormal;
   }
 
   public void runInfeed(){

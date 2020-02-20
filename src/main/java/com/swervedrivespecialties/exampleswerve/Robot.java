@@ -40,6 +40,7 @@ public class Robot extends TimedRobot{
     public void autonomousInit() {
         robotContainer.setupLogging(true);
         robotContainer.configureDrive();
+        robotContainer.getAuton().schedule();
     }
 
     @Override

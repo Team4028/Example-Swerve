@@ -15,10 +15,13 @@ import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
+import com.swervedrivespecialties.exampleswerve.util.AutonChooser;
 import com.swervedrivespecialties.exampleswerve.util.BeakXBoxController;
 import com.swervedrivespecialties.exampleswerve.util.DataLogger;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.util;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class RobotContainer {
@@ -32,6 +35,8 @@ public class RobotContainer {
     private BeakXBoxController secondary = new BeakXBoxController(1);
 
     private DataLogger _dataLogger = null;
+
+    AutonChooser ac;
 
     private void bindPrimaryJoystickButtons(){
         //primary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
@@ -47,7 +52,7 @@ public class RobotContainer {
 
     private void bindSecondaryJoystickButtons(){
        secondary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
-       secondary.y.whenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
+       secondary.y.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
        secondary.x.toggleWhenPressed(InfeedSubsystemCommands.getRunInfeedCommand());
        secondary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
        secondary.left_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
@@ -63,6 +68,7 @@ public class RobotContainer {
         bindPrimaryJoystickButtons();
         bindSecondaryJoystickButtons();
         initDefaultCommands();
+        configAutonChooser();
     }
 
     public double getPrimaryLeftXAxis(){
@@ -125,5 +131,14 @@ public class RobotContainer {
     public void outputToSDB(){
         shooter.outputToSDB();
         infeed.outputToSDB();
+        limelight.OutputToSDB();
+    }
+
+    private void configAutonChooser(){
+        ac = new AutonChooser();
+    }
+
+    public CommandBase getAuton(){
+        return ac.getAuton();
     }
 }

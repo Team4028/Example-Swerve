@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase{
     private double kMaxSpeed = 5440.0; //Native Units
     private double kShooterTolerance = 20;
 
-    private static final double kServoHome = .2;
+    private static final double kServoHome = .3;
     private static final double kServoTolerance = .02;
     private static final double kShooterDistanceDelta = .8; //feet
     private static final double kShooterDefaultDistance = 27; 
