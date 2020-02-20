@@ -105,7 +105,7 @@ public class DriveSubsystemCommands {
     }
 
     public static CommandBase getToggleLEDMode(){
-        return new SetLLLEDMode();
+        return new ToggleLEDS();
     }
     public static CommandBase getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown(){
         return new RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown(drivetrainSubsystem);

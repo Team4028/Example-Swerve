@@ -49,41 +49,33 @@ public class Limelight implements Subsystem {
     return _instance;
   }
 
-
   private Limelight() {
     CUR_CAM_SLOT = CAMERA_SLOT.LIMELIGHT;
   }
-
   public double getAngle1() {
     return tx.getDouble(0);
-  }
-  public void setLedMode(double mode){
-    ledMode.forceSetDouble(mode);
   }
   public double getLedMode(){
     return ledMode.getDouble(0);
   }
-
+  public void setLedMode(double mode){
+    ledMode.forceSetDouble(mode);
+  }
   public double getTA() {
     return ta.getDouble(0);
   }
-
   public double getBoxShortLength() {
     return tshort.getDouble(0);
   }
-
   public double getBoxLongLength(){
     return tlong.getDouble(0);
   }
-
   public double getHorBoxLength(){
     return thor.getDouble(0);
   }
-
   public double getVertBoxLength(){
     return tvert.getDouble(0);
   }
-
   public double getSkew() {
     return ts.getDouble(0);
   }
@@ -103,10 +95,6 @@ public class Limelight implements Subsystem {
       distance = hypot > 8.5 ? Math.sqrt(hypot * hypot - 8.5 * 8.5) : 0;
       break;
     case HIGH:
-      // distance = 214.81 * Math.pow(ta.getDouble(0), -0.418);
-      // distance = Math.sqrt(Math.pow(9448.3 * Math.pow(tshort.getDouble(0), -0.904),
-      // 2) - Math.pow(94, 2));
-      //distance = 86.25 / Math.tan(Math.toRadians(6.42 + ty.getDouble(0)));
       distance = getDist(ty.getDouble(0));
       break;
     case LOW:
@@ -126,6 +114,9 @@ public class Limelight implements Subsystem {
 
   public void setZoom(boolean force){
     setPipeline(!force && getHasTarget() && Math.abs(getAngle1()) <= 11.5 && getYAng() <= 11.7 ? 1:0); 
+  }
+  public void toggleLEDS(){
+    setPipeline(pipeline.getDouble(0) == 0 || pipeline.getDouble(0) == 1 ? 2: 0);
   }
 
   //be sure to change this method and the next one as distance changes
