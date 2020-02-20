@@ -38,6 +38,9 @@ public class InfeedSubsystemCommands {
     public static CommandBase getToggleInfeedSolenoidCommand(){
         return new ToggleInfeedSolenoid(infeed);
     }
+    public static CommandBase getYeetIntake(){
+        return new YeetIntake(infeed);
+    }
     public static CommandBase getAutonInfeedCommand(double ifTime, double singTime){
         return new ParallelCommandGroup(getRunInfeedCommand().withTimeout(ifTime), getRunSingulatorCommand().withTimeout(singTime));
     }

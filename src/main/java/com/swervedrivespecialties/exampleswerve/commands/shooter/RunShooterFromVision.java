@@ -7,10 +7,12 @@
 
 package com.swervedrivespecialties.exampleswerve.commands.shooter;
 
+import com.swervedrivespecialties.exampleswerve.commands.infeed.YeetIntake;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 
 public class RunShooterFromVision extends CommandBase {
@@ -28,6 +30,9 @@ public class RunShooterFromVision extends CommandBase {
   @Override
   public void initialize() {
     _shooter.isShooting = true;
+    CommandScheduler.getInstance().cancel(YeetIntake.sCommand);
+    CommandScheduler.getInstance().cancel(YeetIntake.ifCommand)
+    ;
     run();
   }
 
