@@ -71,7 +71,7 @@ public class Infeed extends SubsystemBase {
     _infeedVictor = new VictorSPX(RobotMap.INFEED_MOTOR);
     _postSingulatorSensor = new DigitalInput(RobotMap.POST_SINGULATOR_SENSOR);
     _infeedSolenoid = new DoubleSolenoid(0, 1);
-    _infeedSolenoid.set(SOLENOID_OUT_POSITION);
+    _infeedSolenoid.set(SOLENOID_UP_POSITION);
     _midConveyorSensor = new DigitalInput(4);
   }
 
