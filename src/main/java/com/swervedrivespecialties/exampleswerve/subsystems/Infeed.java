@@ -24,10 +24,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Infeed extends SubsystemBase {
 
-  public static final double kEncoderCountsPerBall = 7500;
+  public static final double kEncoderCountsPerBall = 8000;
   private static final double kConveyorTalonConstantVBus = -0.35;
   private static final double kConveyToShootConstantVBUS = -.5;
-  private static final double kInfeedVBus = .5;
+  private static final double kInfeedVBus = .7;
   private static final double kSingulatorVBus = -.45;
   private static final double kSingulateToShootVBus = -.5;
 
@@ -36,6 +36,8 @@ public class Infeed extends SubsystemBase {
   private static final boolean kPostSingulatorNormal = true;
 
   private static Infeed _instance = new Infeed();
+
+  private int numBallsConveyed;
 
   public static Infeed get_instance() {
     return _instance;
@@ -124,7 +126,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public boolean getPreShooterSensor() {
-    return _preShooterSensor.get() != kPreShooterNormal;
+    return _preShooterSensor.get() != kPreShooterNormal || numBallsConveyed > 3;
   }
 
   public boolean getPostSingulatorSensor(){
@@ -164,11 +166,17 @@ public class Infeed extends SubsystemBase {
 
   public void configInfeed(){
     _infeedSolenoid.set(SOLENOID_UP_POSITION);
+    resetBallsConveyed();
+  }
+
+  public void resetBallsConveyed(){
+    numBallsConveyed = 0;
   }
 
   @Override
   public void periodic() {
-    if (preConveyorSensorPressed()) {
+    if (preConveyorSensorPressed() && numBallsConveyed < 3) {
+      numBallsConveyed++;
       CommandBase conveyorCommand = InfeedSubsystemCommands.getConveyCommand();
       conveyorCommand.schedule();
     }

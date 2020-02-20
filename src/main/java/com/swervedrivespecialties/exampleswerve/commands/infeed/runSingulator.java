@@ -21,13 +21,17 @@ public class runSingulator extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    runSing();
+    if (!isFinished()){
+      runSing();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    runSing();
+    if (!isFinished()){
+      runSing();
+    }
   }
 
   // Called once the command ends or is interrupted.

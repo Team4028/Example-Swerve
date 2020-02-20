@@ -36,6 +36,7 @@ public class Shooter extends SubsystemBase{
     private static final double kServoTolerance = .02;
     private static final double kShooterDistanceDelta = .8; //feet
     private static final double kShooterDefaultDistance = 27; 
+    private static final double kMinServoVBus = .7;
 
     private boolean hasHadOdometry;
 
@@ -117,7 +118,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("velo", _encoder.getVelocity());
         SmartDashboard.putNumber("Vello", _encoder.getVelocity());
         SmartDashboard.putNumber("ActuatorVal", actuatorVal); 
-        double talonSpeed = spd > 0 ? spd / kMaxSpeed: 0.0;
+        double talonSpeed = spd > 0 ? 1 * (kMinServoVBus + 0 * (1 - kMaxSpeed) *  (spd / kMaxSpeed)): 0.0;
         _kickerTalon.set(ControlMode.PercentOutput, -talonSpeed);
         if (spd > kShooterTolerance){
             _pidController.setReference(spd, ControlType.kVelocity);

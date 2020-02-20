@@ -40,20 +40,20 @@ public class RobotContainer {
 
     private void bindPrimaryJoystickButtons(){
         //primary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
+        primary.a.toggleWhenPressed(InfeedSubsystemCommands.getRunInfeedCommand());
+        primary.b.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
         //primary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
         primary.x.whenPressed(DriveSubsystemCommands.getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown());
         primary.y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
         primary.left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
        // primary.right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
         primary.back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
-        primary.start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
-        primary.a.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
+        // primary.start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
+        primary.start.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
     }
 
     private void bindSecondaryJoystickButtons(){
        secondary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
-       secondary.y.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
-       secondary.x.toggleWhenPressed(InfeedSubsystemCommands.getRunInfeedCommand());
        secondary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
        secondary.left_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
        secondary.back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
