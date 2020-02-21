@@ -31,6 +31,9 @@ public class LLRotateToTarget extends CommandBase {
   private double _prevTime,  error, forward, strafe;
   private boolean _translate;
 
+  boolean shouldStopFirstCycle;
+  boolean isFirstCycle;
+
   public LLRotateToTarget(DrivetrainSubsystem drive, boolean canTranslate) {
     _drive = drive;
     _translate = canTranslate;
@@ -50,11 +53,17 @@ public class LLRotateToTarget extends CommandBase {
   public void initialize() {
     _prevTime = Timer.getFPGATimestamp();
     error = _limelight.getAngle1();
+    isFirstCycle = true;
+    shouldStopFirstCycle = !_limelight.getHasTarget();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (isFirstCycle){
+      isFirstCycle = false;
+    }
+
     double dt = Timer.getFPGATimestamp() - _prevTime;
     _prevTime = Timer.getFPGATimestamp();
 
@@ -85,6 +94,10 @@ public class LLRotateToTarget extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (isFirstCycle && shouldStopFirstCycle){
+      System.out.println("TRIED TO AIM WITHOUT VISION!!! STOPPING!!!");
+      return shouldStopFirstCycle;
+    }
     return Math.abs(_limelight.getAngle1()) <= 0.5;
   }
 }
