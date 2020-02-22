@@ -58,27 +58,13 @@ public class RotateToAngle extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    double minSS = DrivetrainSubsystem.getInstance().getMinControllerSpeed();
-    double additionalSS =  Robot.getRobotContainer().getPrimaryRightTrigger();
-    double speedScale = minSS + (1 - minSS) * additionalSS * additionalSS;
-
-    double forward = -Robot.getRobotContainer().getPrimaryLeftYAxis();
-    forward = Utilities.deadband(forward);
-    // Square the forward stick
-    forward = speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
-
-    double strafe = -Robot.getRobotContainer().getPrimaryLeftXAxis();
-    strafe = Utilities.deadband(strafe);
-    // Square the strafe stick
-    strafe = speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
-
     double localTime = Timer.getFPGATimestamp();
     double deltaTime = localTime - _currentTime;
     _currentTime = localTime;
 
     double err = getMinAngleDiff(_drive.getGyroAngle().toDegrees(), _target);
     double rot =  _pidController.calculate(err, deltaTime);
-    _drive.drive(new Translation2d(forward, strafe), rot, true); //because the angle is continually changing, it's assumed if you drive while calling this you intend to drive field oriented
+    _drive.drive(_drive.getDriveVec(), rot, true); //because the angle is continually changing, it's assumed if you drive while calling this you intend to drive field oriented
     
     SmartDashboard.putNumber("AngleError", _target - _drive.getGyroAngle().toDegrees());
     SmartDashboard.putNumber("Rotation Value", rot);

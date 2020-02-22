@@ -63,27 +63,12 @@ public class LLRotateToTarget extends CommandBase {
     if (isFirstCycle){
       isFirstCycle = false;
     }
-
     double dt = Timer.getFPGATimestamp() - _prevTime;
     _prevTime = Timer.getFPGATimestamp();
-
-    double minSS = DrivetrainSubsystem.getInstance().getMinControllerSpeed();
-    double additionalSS =  Robot.getRobotContainer().getPrimaryRightTrigger();
-    double speedScale = minSS + (1 - minSS) * additionalSS * additionalSS;
     
-    forward = -Robot.getRobotContainer().getPrimaryLeftYAxis();
-    forward = Utilities.deadband(forward);
-    // Square the forward stick
-    forward = util.iversonBrackets(_translate) * speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
-
-    strafe = -Robot.getRobotContainer().getPrimaryLeftXAxis();
-    strafe = Utilities.deadband(strafe);
-    // Square the strafe stick'
-    strafe = util.iversonBrackets(_translate) * speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
-
     error = _limelight.getAngle1();
     double rot = _rotController.calculate(error, dt);
-    _drive.drive(new Translation2d(forward, strafe), rot, true);
+    _drive.drive(_drive.getDriveVec().times(util.iversonBrackets(_translate)), rot, true);
   }
 
   // Called once the command ends or is interrupted.

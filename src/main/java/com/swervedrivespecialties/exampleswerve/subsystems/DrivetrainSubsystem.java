@@ -2,6 +2,7 @@ package com.swervedrivespecialties.exampleswerve.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.swervedrivespecialties.exampleswerve.Robot;
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.util;
@@ -24,6 +25,7 @@ import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.drivers.SwerveModule;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
+import org.frcteam2910.common.robot.Utilities;
 import org.frcteam2910.common.robot.drivers.Mk2SwerveModuleBuilder;
 import org.frcteam2910.common.robot.drivers.NavX;
 
@@ -154,6 +156,10 @@ public class DrivetrainSubsystem implements Subsystem {
     }
 
     public void resetGyroscope() {
+        gyroscope.setAdjustmentAngle(gyroscope.getUnadjustedAngle().rotateBy(Rotation2.fromDegrees(180)));
+    }
+
+    public void customZeroGyro(){
         gyroscope.setAdjustmentAngle(gyroscope.getUnadjustedAngle());
     }
 
@@ -262,5 +268,23 @@ public class DrivetrainSubsystem implements Subsystem {
 
     public void updateShooterOdometry(SwerveDriveOdometry odom){
         odom.update(getGyroRotation(), getModuleStates());
+    }
+
+    public Translation2d getDriveVec(){
+        double minSS = getMinControllerSpeed();
+        double additionalSS =  Robot.getRobotContainer().getPrimaryRightTrigger();
+        double speedScale = minSS + (1 - minSS) * additionalSS * additionalSS;
+    
+        double forward = -Robot.getRobotContainer().getPrimaryLeftYAxis();
+        forward = Utilities.deadband(forward);
+        // Square the forward stick
+        forward = -speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
+    
+        double strafe = -Robot.getRobotContainer().getPrimaryLeftXAxis();
+        strafe = Utilities.deadband(strafe);
+        // Square the strafe stick
+        strafe = -speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
+
+        return new Translation2d(forward, strafe);
     }
 }

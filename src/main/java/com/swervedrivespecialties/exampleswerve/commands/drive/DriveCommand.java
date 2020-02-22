@@ -22,22 +22,12 @@ public class DriveCommand extends CommandBase {
         double additionalSS =  Robot.getRobotContainer().getPrimaryRightTrigger();
         double speedScale = minSS + (1 - minSS) * additionalSS * additionalSS;
 
-        double forward = -Robot.getRobotContainer().getPrimaryLeftYAxis();
-        forward = Utilities.deadband(forward);
-        // Square the forward stick
-        forward = speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
-
-        double strafe = -Robot.getRobotContainer().getPrimaryLeftXAxis();
-        strafe = Utilities.deadband(strafe);
-        // Square the strafe stick
-        strafe = speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
-
         double rotation = -Robot.getRobotContainer().getPrimaryRightXAxis();
         rotation = Utilities.deadband(rotation);
         // Square the rotation stick
         rotation = speedScale * Math.copySign(Math.pow(rotation, 2.0), rotation);
 
-        _drive.drive(new Translation2d(forward, strafe), rotation, _drive.getFieldOriented());
+        _drive.drive(_drive.getDriveVec(), rotation, _drive.getFieldOriented());
     }
 
     @Override
