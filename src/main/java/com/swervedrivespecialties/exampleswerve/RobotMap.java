@@ -30,6 +30,11 @@ public class RobotMap {
     public static final int PRE_SHOOTER_SENSOR = 1;
     public static final int POST_SINGULATOR_SENSOR = 2;
 
+    //Camera Addresses
+    public static final String RASPBERRY_PI_INFEED_CAMERA = "http://10.40.28.15:1181/stream.mjpg";
+    public static final String RASPBERRY_PI_OTHER_CAMERA = "http://10.40.28.15:1182/stream.mjpg";
+    public static final String LIMELIGHT_CAMERA = "http://10.40.28.13:5800/";
+
 
     	// Logging
         // this is where the USB stick is mounted on the RoboRIO filesystem.  

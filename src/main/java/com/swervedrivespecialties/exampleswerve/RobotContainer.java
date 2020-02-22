@@ -50,6 +50,7 @@ public class RobotContainer {
         primary.back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
         // primary.start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
         primary.start.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
+        primary.right_bumper.whenPressed(InfeedSubsystemCommands.getSwitchCameraCommand());
     }
 
     private void bindSecondaryJoystickButtons(){

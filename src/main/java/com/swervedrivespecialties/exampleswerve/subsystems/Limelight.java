@@ -7,6 +7,7 @@
 
 package com.swervedrivespecialties.exampleswerve.subsystems;
 
+import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.util;
 
@@ -234,31 +235,32 @@ public class Limelight implements Subsystem {
   public enum CAMERA_SLOT{
     LIMELIGHT,
     INFEED,
-    EXTRA,
-    NONE;
+    EXTRA;
   }
 
   private CAMERA_SLOT getNextCamera(CAMERA_SLOT slot){
-    if (slot == CAMERA_SLOT.LIMELIGHT) {
-      return CAMERA_SLOT.INFEED;
-    } else if (slot == CAMERA_SLOT.INFEED) {
-      return CAMERA_SLOT.EXTRA;
-    } else if (slot == CAMERA_SLOT.EXTRA){
-      return CAMERA_SLOT.LIMELIGHT;
-    } else {
-      return CAMERA_SLOT.NONE;
+    switch(slot){
+      default:
+        return CAMERA_SLOT.LIMELIGHT;
+      case LIMELIGHT:
+        return CAMERA_SLOT.INFEED;
+      case INFEED:
+        return CAMERA_SLOT.EXTRA;
+      case EXTRA:
+        return CAMERA_SLOT.LIMELIGHT;
     }
   }
 
   private String getName(CAMERA_SLOT slot){
-    if (slot == CAMERA_SLOT.LIMELIGHT) {
-      return "LIMELIGHT";
-    } else if (slot == CAMERA_SLOT.INFEED) {
-      return "INFEED";
-    } else if (slot == CAMERA_SLOT.EXTRA){
-      return "EXTRA";
-    } else {
-      return "NONE";
+    switch(slot){
+      case LIMELIGHT:
+        return RobotMap.LIMELIGHT_CAMERA;
+      case INFEED:
+        return RobotMap.RASPBERRY_PI_INFEED_CAMERA;
+      case EXTRA:
+        return RobotMap.RASPBERRY_PI_OTHER_CAMERA;
+      default:
+        return RobotMap.RASPBERRY_PI_INFEED_CAMERA;
     }
   }
 
@@ -271,6 +273,6 @@ public class Limelight implements Subsystem {
   }
 
   public void OutputToSDB(){
-    SmartDashboard.putString("Camera Case", getCam());
+    SmartDashboard.putString("CamSelection", getCam());
   }
 }

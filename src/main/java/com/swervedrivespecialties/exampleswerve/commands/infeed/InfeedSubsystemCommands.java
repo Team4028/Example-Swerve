@@ -44,4 +44,7 @@ public class InfeedSubsystemCommands {
     public static CommandBase getAutonInfeedCommand(double ifTime, double singTime){
         return new ParallelCommandGroup(getRunInfeedCommand().withTimeout(ifTime), getRunSingulatorCommand().withTimeout(singTime));
     }
+    public static CommandBase getSwitchCameraCommand(){
+        return new SwitchCamera();
+    }
 }
