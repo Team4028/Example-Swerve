@@ -27,9 +27,12 @@ public class RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown extend
   double timeout;
   double starttime;
 
+  boolean shouldStopFirstCycle;
+  boolean isFirstCycle;
+
   private static DrivetrainSubsystem _drive;
   private PidController _pidController = new PidController(new PidConstants(0.013, 0, 0.0008));
-  private double _currentTime, _target;
+  private double _currentTime;
   private double kAcceptableError = 0.5;
 
   public RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown(DrivetrainSubsystem drive) {
@@ -48,11 +51,16 @@ public class RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown extend
   public void initialize() {
     starttime = Timer.getFPGATimestamp();
     _currentTime = Timer.getFPGATimestamp();
+    isFirstCycle = true;
+    shouldStopFirstCycle = !Limelight.getInstance().getHasTarget();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
+    if (isFirstCycle){
+      isFirstCycle = false;
+    }
     double minSS = DrivetrainSubsystem.getInstance().getMinControllerSpeed();
     double additionalSS =  Robot.getRobotContainer().getPrimaryRightTrigger();
     double speedScale = minSS + (1 - minSS) * additionalSS * additionalSS;
@@ -82,6 +90,10 @@ public class RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown extend
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
+    if (isFirstCycle && shouldStopFirstCycle){
+      System.out.println("TRIED TO AIM WITHOUT VISION!!! STOPPING!!!");
+      return shouldStopFirstCycle;
+    }
     return (Math.abs(getMinAngleDiff(_drive.getGyroAngle().toDegrees(), Limelight.getInstance().locateFlavortownUSA().toDegrees())) < kAcceptableError);
   }
 

@@ -43,7 +43,7 @@ public class runSingulator extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return _infeed.getPostSingulatorSensor() && _infeed.getPreShooterSensor();
+    return !_infeed.getCanConvey();
   }
 
   private void runSing(){

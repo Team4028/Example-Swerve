@@ -40,7 +40,7 @@ public class RobotContainer {
 
     private void bindPrimaryJoystickButtons(){
         //primary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
-        primary.a.toggleWhenPressed(InfeedSubsystemCommands.getRunInfeedCommand());
+        primary.a.toggleWhenPressed(InfeedSubsystemCommands.getYeetIntake());
         primary.b.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
         //primary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
         primary.x.whenPressed(DriveSubsystemCommands.getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown());

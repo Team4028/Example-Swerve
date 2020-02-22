@@ -7,6 +7,7 @@
 
 package com.swervedrivespecialties.exampleswerve.commands.infeed;
 
+import com.swervedrivespecialties.exampleswerve.commands.shooter.ShooterSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -15,9 +16,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class YeetIntake extends CommandBase {
 
   Infeed _infeed;
+  CommandScheduler cs = CommandScheduler.getInstance();
 
-  CommandBase infeedCommand = InfeedSubsystemCommands.getRunInfeedCommand();
-  CommandBase singulateCommand = InfeedSubsystemCommands.getRunSingulatorCommand();
+  public static CommandBase ifCommand = InfeedSubsystemCommands.getRunInfeedCommand();
+  public static CommandBase sCommand = InfeedSubsystemCommands.getRunSingulatorCommand();
 
   //boolean isInfeedRunning
 
@@ -27,7 +29,15 @@ public class YeetIntake extends CommandBase {
 
   @Override
   public void initialize() {
-    CommandScheduler.getInstance().cancel();
+    if (cs.isScheduled(ifCommand)){
+      cs.cancel(ifCommand);
+    } else {
+      cs.schedule(ifCommand);
+    }
+
+    if (Infeed.get_instance().getCanConvey()){
+      cs.schedule(sCommand);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
