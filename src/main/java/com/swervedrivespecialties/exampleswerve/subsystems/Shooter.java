@@ -133,7 +133,9 @@ public class Shooter extends SubsystemBase{
         _linearActuator.set(actuatorVal);
     }
 
-    public void outputToSDB(){}
+    public void outputToSDB(){
+        SmartDashboard.putBoolean("Is At Speed", canShoot);
+    }
 
     public Shot getShot(){
         ShooterTable curTable = isAlternateShot ? secondaryTable : primaryTable;

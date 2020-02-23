@@ -13,6 +13,7 @@ import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 import com.swervedrivespecialties.exampleswerve.util.BeakCircularBuffer;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -59,6 +60,7 @@ public class RunShooterFromVision extends CommandBase {
     updateDVelos();
     run();
     _shooter.updateCanShoot(getSpedUp());
+    SmartDashboard.putNumber("Speed Mean", speedBuffer.getMean());
   }
 
   @Override
