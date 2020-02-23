@@ -47,4 +47,8 @@ public class InfeedSubsystemCommands {
     public static CommandBase getSwitchCameraCommand(){
         return new SwitchCamera();
     }
+
+    public static CommandBase getYeetSingulatorCommand(){
+        return new YeetSingulator(infeed);
+    }
 }

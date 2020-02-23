@@ -7,50 +7,34 @@
 
 package com.swervedrivespecialties.exampleswerve.commands.infeed;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 
-public class runSingulator extends CommandBase {
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+public class YeetSingulator extends CommandBase {
+  
   Infeed _infeed;
+  CommandScheduler cs = CommandScheduler.getInstance();
 
-  public runSingulator(Infeed infeed) {
+  public YeetSingulator(Infeed infeed) {
     _infeed = infeed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (!isFinished()){
-      runSing();
+    CommandBase cmd = YeetIntake.sCommand;
+    if (cs.isScheduled(cmd)){
+      cs.cancel(cmd);
+    } else {
+      cs.schedule(cmd);
     }
+
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    if (!isFinished()){
-      runSing();
-    }
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    _infeed.stopSingulator();
-  }
-
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !_infeed.getCanSingulate();
-  }
-
-  private void runSing(){
-    if (!(_infeed.getPreConveyorSensor() && _infeed.getPostSingulatorSensor()) && !isFinished()){
-      _infeed.runSingulator();
-    } else {
-      _infeed.stopSingulator();
-    }
+    return true;
   }
 }

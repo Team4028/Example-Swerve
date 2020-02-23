@@ -35,7 +35,7 @@ public class YeetIntake extends CommandBase {
       cs.schedule(ifCommand);
     }
 
-    if (Infeed.get_instance().getCanConvey()){
+    if (Infeed.get_instance().getCanSingulate()){
       cs.schedule(sCommand);
     }
   }

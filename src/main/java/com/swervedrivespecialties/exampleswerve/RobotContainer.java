@@ -39,30 +39,26 @@ public class RobotContainer {
     AutonChooser ac;
 
     private void bindPrimaryJoystickButtons(){
-        //primary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
-        primary.a.toggleWhenPressed(InfeedSubsystemCommands.getYeetIntake());
-        primary.b.toggleWhenPressed(InfeedSubsystemCommands.getRunSingulatorCommand());
-        //primary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
+        primary.left_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
+        primary.a.whenPressed(InfeedSubsystemCommands.getYeetIntake());
+        primary.b.whenPressed(InfeedSubsystemCommands.getYeetSingulatorCommand());
         primary.x.whenPressed(DriveSubsystemCommands.getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown());
         primary.y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
-        primary.left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
-       // primary.right_bumper.whenPressed(DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.testTrajectorySupplier));
+        primary.right_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
         primary.back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
-        // primary.start.whenPressed(DriveSubsystemCommands.getToggleFieldOrientedCommand());
         primary.start.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
-        primary.right_bumper.whenPressed(InfeedSubsystemCommands.getSwitchCameraCommand());
     }
 
     private void bindSecondaryJoystickButtons(){
        secondary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
        secondary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
-       secondary.left_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
        secondary.back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
        secondary.dpad_left.whenPressed(ShooterSubsystemCommands.getResetDistanceCommand());
        secondary.dpad_right.whenPressed(ShooterSubsystemCommands.getClearDistanceOffsetCommand());
        secondary.dpad_up.whenPressed(ShooterSubsystemCommands.getIncremenetDistanceCommand());
        secondary.dpad_down.whenPressed(ShooterSubsystemCommands.getDecremenetDistanceCommand());
        secondary.start.whenPressed(ShooterSubsystemCommands.getTogggleAlternateShotCommand());
+       secondary.right_bumper.whenPressed(InfeedSubsystemCommands.getSwitchCameraCommand());       
     }
 
     public RobotContainer(){

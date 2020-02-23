@@ -135,6 +135,7 @@ public class Shooter extends SubsystemBase{
 
     public void outputToSDB(){
         SmartDashboard.putBoolean("Is At Speed", canShoot);
+        SmartDashboard.putNumber("Shooter Sensor Distance", _shooterSensorDistance);
     }
 
     public Shot getShot(){
@@ -195,6 +196,10 @@ public class Shooter extends SubsystemBase{
         }
 
         SmartDashboard.putBoolean("Limelight HasR", _ll.hasRange());
+    }
+
+    public double getShooterSensorDistance(){
+        return _shooterSensorDistance;
     }
     
     public void toggleIsAlternateShot(){

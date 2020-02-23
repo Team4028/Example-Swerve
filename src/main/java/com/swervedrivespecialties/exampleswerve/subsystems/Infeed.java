@@ -58,6 +58,7 @@ public class Infeed extends SubsystemBase {
   private DigitalInput _postSingulatorSensor;
   private DigitalInput _midConveyorSensor;
   private DoubleSolenoid _infeedSolenoid;
+  private boolean hasStoppedSingulating = false;
 
   /**
    * Creates a new Infeed.
@@ -173,12 +174,27 @@ public class Infeed extends SubsystemBase {
     numBallsConveyed = 0;
   }
 
-  public boolean getCanConvey(){
-    return !(getPostSingulatorSensor() && (getPreShooterSensor() || numBallsConveyed > 2));
+  private void updateHasStopSingulating(){
+    if (!hasStoppedSingulating){
+      hasStoppedSingulating = (numBallsConveyed >= 3 || getPreShooterSensor()) && getPostSingulatorSensor();
+    }
+  }
+
+  public boolean getHasStoppedSingulating(){
+    return hasStoppedSingulating;
+  }
+
+  public void resetHasStoppedSingulating(){
+    hasStoppedSingulating = false;
+  }
+
+  public boolean getCanSingulate(){
+    return !(getPostSingulatorSensor() && (getPreShooterSensor() || numBallsConveyed > 2)) && !hasStoppedSingulating;
   }
 
   @Override
   public void periodic() {
+    updateHasStopSingulating();
     if (preConveyorSensorPressed() && numBallsConveyed < 3) {
       numBallsConveyed++;
       CommandBase conveyorCommand = InfeedSubsystemCommands.getConveyCommand();

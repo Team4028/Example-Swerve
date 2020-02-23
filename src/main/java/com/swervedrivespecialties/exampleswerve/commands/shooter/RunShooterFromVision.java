@@ -8,6 +8,7 @@
 package com.swervedrivespecialties.exampleswerve.commands.shooter;
 
 import com.swervedrivespecialties.exampleswerve.commands.infeed.YeetIntake;
+import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 import com.swervedrivespecialties.exampleswerve.util.BeakCircularBuffer;
@@ -49,6 +50,7 @@ public class RunShooterFromVision extends CommandBase {
     numCycles = 0;
     CommandScheduler.getInstance().cancel(YeetIntake.sCommand);
     CommandScheduler.getInstance().cancel(YeetIntake.ifCommand);
+    Infeed.get_instance().resetHasStoppedSingulating();
     thisvelo = _shooter.getSpeed();
     thistime = Timer.getFPGATimestamp();
     run();
