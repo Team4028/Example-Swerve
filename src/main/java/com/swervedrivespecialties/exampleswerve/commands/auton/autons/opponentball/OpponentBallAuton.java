@@ -13,31 +13,39 @@ import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemC
 import com.swervedrivespecialties.exampleswerve.commands.shooter.ShooterSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.util.InertiaGain;
 
+import org.frcteam2910.common.math.Rotation2;
+import org.frcteam2910.common.math.Vector2;
+
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class OpponentBallAuton extends SequentialCommandGroup {
-  
+public class OpponentBallAuton extends ParallelDeadlineGroup {
   public OpponentBallAuton() {
     super(
-      new ParallelCommandGroup(
-        DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toStealBallsTrajectorySupplier,
-                                                          new InertiaGain(0, 0, 0)), 
-        new SequentialCommandGroup(
-          new WaitCommand(1.5)
-          , InfeedSubsystemCommands.getAutonInfeedCommand(2, 3)
-        )
-      ),
-      new ParallelCommandGroup(
-        DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toShootFirstBatchTrajectorySupplier,
-                                                          new InertiaGain(0, 0, 0)),
-        new SequentialCommandGroup(
-          new WaitCommand(3),
-          ShooterSubsystemCommands.getRunShooterFromVisionCommand()
-        )
-      ),
-      InfeedSubsystemCommands.getConveyToShootCommand().withTimeout(2)   
-    );
+          new SequentialCommandGroup(
+                                      // new ParallelCommandGroup(
+                                      //                           DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toStealBallsTrajectorySupplier,
+                                      //                                                                             new InertiaGain(0, 0, 0)), 
+                                      //                           new SequentialCommandGroup(
+                                      //                             new WaitCommand(.5),
+                                      //                             InfeedSubsystemCommands.getRunInfeedCommand().withTimeout(1.7)                                                                                                                         
+                                      //                           )
+                                      //                         ),
+                                      DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toStealBallsTrajectorySupplier),
+                                      DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toShootFirstBatchTrajectorySupplier), 
+                                      new ParallelCommandGroup(
+                                        ShooterSubsystemCommands.getRunShooterFromVisionCommand().withTimeout(8), 
+                                        new SequentialCommandGroup(
+                                                                    new WaitCommand(3),
+                                                                    InfeedSubsystemCommands.getConveyToShootCommand().withTimeout(4)
+                                        ) 
+                                      )
+          ), 
+          InfeedSubsystemCommands.getRunSingulatorCommand(),
+          InfeedSubsystemCommands.getRunInfeedCommand()
+        );
   }
 }

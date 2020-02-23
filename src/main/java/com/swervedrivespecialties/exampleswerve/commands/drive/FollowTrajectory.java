@@ -31,22 +31,20 @@ public class FollowTrajectory extends CommandBase {
   DrivetrainSubsystem _drive;
 
   ///////////// PATH FOLLOWING CONSTANTS //////////////////
-  private static final double kMaxVelo = 12 * 12; //This is the physical max velocity of the machine, not of any path
-  private static final double kInterceptVoltage = .015; //the physical minimum voltage to make the robot move forward
-  private static final double kPathFollowingVeloFeedForward = 0.0051896679;
+  private static final double kInterceptVoltage = 0.0016373042839475038; //the physical minimum voltage to make the robot move forward
+  private static final double kPathFollowingVeloFeedForward = 0.005811813001730558;
   private static final double kPathFollowingAccelFeedForward = 0;
-  private static final double kPathFollowingTranslationP = .05;
+  private static final double kPathFollowingTranslationP = .017;
   private static final double kPathFollowingTranslationI = 0;
-  private static final double kPathFollowingTranslationD = 0;
-  private static final double kPathFollowingRotationP = .5;
+  private static final double kPathFollowingTranslationD = 0.0065;//.23;
+  private static final double kPathFollowingRotationP = .2;
   private static final double kPathFollowingRotationI = 0;
-  private static final double kPathFollowingRotationD = .06;
+  private static final double kPathFollowingRotationD = .06;//.009;
   ////////////////////////////////////////////////////////////
 
   //create appropriate constant classes and eventually a TrajectoryFollower from constants given above
   PidConstants translationConstants = new PidConstants(kPathFollowingTranslationP, kPathFollowingTranslationI, kPathFollowingTranslationD);
   PidConstants rotationConstants = new PidConstants(kPathFollowingRotationP, kPathFollowingRotationI, kPathFollowingRotationD);
-  double kFeedForwardVelocity = (1 - kInterceptVoltage) / kMaxVelo;
   DrivetrainFeedforwardConstants feedforwardConstants = new DrivetrainFeedforwardConstants(kPathFollowingVeloFeedForward, kPathFollowingAccelFeedForward, kInterceptVoltage);
   HolonomicFeedforward feedforward = new HolonomicFeedforward(feedforwardConstants); //can have separate forward and strafe feed forwards if desired. 
   HolonomicMotionProfiledTrajectoryFollower follower;
@@ -77,7 +75,7 @@ public class FollowTrajectory extends CommandBase {
     follower = new HolonomicMotionProfiledTrajectoryFollower(translationConstants, rotationConstants, feedforward);
     trajectory = trajectorySupplier.get();
     timestamp = Timer.getFPGATimestamp();
-    resetDriveKinematics();
+    //resetDriveKinematics();
     follower.follow(trajectory);
   }
 
@@ -97,12 +95,13 @@ public class FollowTrajectory extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     printInfo();
-    if (interrupted){
-      _drive.stop();
-    } else {
-      CommandBase finishRotate = DriveSubsystemCommands.getRotateToAngleCommand(trajectory.calculateSegment(trajectory.getDuration()).rotation.toDegrees());
-      finishRotate.schedule();
-    }
+    _drive.stop();
+    // if (interrupted){
+    //   _drive.stop();
+    // } else {
+    //   CommandBase finishRotate = DriveSubsystemCommands.getRotateToAngleCommand(trajectory.calculateSegment(trajectory.getDuration()).rotation.toDegrees());
+    //   finishRotate.schedule();
+    // }
   }
 
   // Returns true when the command should end.

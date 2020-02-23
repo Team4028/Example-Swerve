@@ -18,6 +18,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight.Target;
 import com.swervedrivespecialties.exampleswerve.util.BoundedServo;
+import com.swervedrivespecialties.exampleswerve.util.BeakSubsystem;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.ShooterTable;
 import com.swervedrivespecialties.exampleswerve.util.util;
@@ -33,6 +34,7 @@ public class Shooter extends SubsystemBase{
     private double kShooterTolerance = 20;
 
     private static final double kServoHome = .3;
+    private static final double kServoHomeEpsilon = 0.02;
     private static final double kServoTolerance = .02;
     private static final double kShooterDistanceDelta = .8; //feet
     private static final double kShooterDefaultDistance = 27; 
@@ -131,27 +133,11 @@ public class Shooter extends SubsystemBase{
         _linearActuator.set(actuatorVal);
     }
 
+    public void outputToSDB(){}
+
     public Shot getShot(){
         ShooterTable curTable = isAlternateShot ? secondaryTable : primaryTable;
         return curTable.CalcShooterValues(_shooterShootDistance/12).getShot();
-    }
- 
-    
-
-    public void outputToSDB(){
-        SmartDashboard.putNumber("Distance to Target", Limelight.getInstance().getDistanceToTarget(Target.HIGH));
-        SmartDashboard.putNumber("Shooter Distance: ", _shooterShootDistance);
-        SmartDashboard.putNumber("Shooter Offset: ", _shooterDistanceOffset);
-        SmartDashboard.putNumber("Shooter Sensor Distance", _shooterSensorDistance);
-        SmartDashboard.putBoolean("Alt Shawty", isAlternateShot);
-        SmartDashboard.putNumber("Yeetyact", getShot().actuatorPosition);
-        SmartDashboard.putNumber("yeetshooooot", getShot().speed);
-        SmartDashboard.putBoolean("Is At Speed", canShoot);
-    }
-
-    public void updateLogData(LogDataBE logData){  
-        logData.AddData("Heyo", Boolean.toString(isShooting));
-        logData.AddData("Vello", Double.toString(_encoder.getVelocity()));
     }
 
     public void resetServo(){
@@ -159,7 +145,15 @@ public class Shooter extends SubsystemBase{
     }
 
     public boolean isServoReset(){
-        return Math.abs(_linearActuator.get() - kServoHome) <= kServoTolerance;
+        return Math.abs(_linearActuator.get() - kServoHome) <= kServoHomeEpsilon;
+    }
+
+    public void updateLogData(LogDataBE logData){  
+        logData.AddData("Heyo", Boolean.toString(isShooting));
+        logData.AddData("Vello", Double.toString(_encoder.getVelocity()));
+    }
+
+    public void teleopInit(){
     }
 
     public void updateShooterDistance(){

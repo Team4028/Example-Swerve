@@ -26,6 +26,7 @@ public class ZeroGyro extends CommandBase {
   public void initialize() {
     System.out.println("Should Be Running");
     _drive.resetGyroscope();
+    _drive.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

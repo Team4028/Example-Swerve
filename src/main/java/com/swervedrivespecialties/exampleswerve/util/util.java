@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import org.frcteam2910.common.math.Vector2;
 
 /**
  * Add your docs here.
@@ -99,4 +100,6 @@ public class util {
 	public static double getAngleDegrees(Translation2d t){
 		return Math.toDegrees(Math.atan2(t.getY(), t.getX()));
 	}
+	public static Vector2 i_hat = new Vector2(1, 0);
+	public static Vector2 j_hat = new Vector2(0, 1);
 }
