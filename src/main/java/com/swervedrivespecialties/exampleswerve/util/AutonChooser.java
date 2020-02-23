@@ -11,18 +11,25 @@ import com.swervedrivespecialties.exampleswerve.commands.auton.autons.opponentba
 import com.swervedrivespecialties.exampleswerve.commands.auton.autons.opponentball.OpponentBallAuton;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonChooser {
 
     private SendableChooser<AUTONS> autonChooser = new SendableChooser<>();
 
+    private static AutonChooser instance = new AutonChooser();
+    
+    public static AutonChooser getInstance(){
+        return instance;
+    }
+
     private enum AUTONS{
         DO_NOTHING,
         STEAL_BALLS
     }
 
-    public AutonChooser(){
+    private AutonChooser(){
         autonChooser.setDefaultOption("Do Nothing", AUTONS.DO_NOTHING);
         autonChooser.addOption("Steal Balls", AUTONS.STEAL_BALLS);
     }
@@ -33,5 +40,10 @@ public class AutonChooser {
         } else {
             return new DoNothing();
         }
+    }
+
+    public void outputToSDB(){
+        SmartDashboard.putData("Auton", autonChooser);
+        SmartDashboard.putString("AutonChoosers:AutonAction", autonChooser.getSelected().toString());
     }
 }

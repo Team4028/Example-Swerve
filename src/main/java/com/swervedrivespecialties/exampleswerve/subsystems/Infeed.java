@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
+import com.swervedrivespecialties.exampleswerve.util.util;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -108,7 +109,7 @@ public class Infeed extends SubsystemBase {
     SmartDashboard.putBoolean("PRE-CONVEYOR SENSOR", _preConveyorSensor.get());
     SmartDashboard.putBoolean("POST-SINGULATOR", _postSingulatorSensor.get());
     SmartDashboard.putBoolean("INFEED SOLENOID OUT JIMBO", getIsSolenoidOut());
-    SmartDashboard.putNumber("Cell Count", numBallsConveyed);
+    SmartDashboard.putNumber("Cell Count", numBallsConveyed + util.iversonBrackets(hasStoppedSingulating || getPostSingulatorSensor()));
   }
 
   public boolean getHasBallConveyedBallLength(){

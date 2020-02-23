@@ -36,7 +36,7 @@ public class RobotContainer {
 
     private DataLogger _dataLogger = null;
 
-    AutonChooser ac;
+    AutonChooser ac = AutonChooser.getInstance();
 
     private void bindPrimaryJoystickButtons(){
         primary.left_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
@@ -66,7 +66,6 @@ public class RobotContainer {
         bindPrimaryJoystickButtons();
         bindSecondaryJoystickButtons();
         initDefaultCommands();
-        configAutonChooser();
     }
 
     public double getPrimaryLeftXAxis(){
@@ -131,10 +130,7 @@ public class RobotContainer {
         shooter.outputToSDB();
         infeed.outputToSDB();
         limelight.OutputToSDB();
-    }
-
-    private void configAutonChooser(){
-        ac = new AutonChooser();
+        ac.outputToSDB();
     }
 
     public CommandBase getAuton(){
