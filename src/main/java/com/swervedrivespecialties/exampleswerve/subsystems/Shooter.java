@@ -69,8 +69,8 @@ public class Shooter extends BeakSubsystem{
         _shooterNEO.setIdleMode(IdleMode.kCoast);
 
 
-        _shooterNEO.setInverted(true);
-        _shooterSlave.setInverted(false);
+        _shooterNEO.setInverted(false);
+        _shooterSlave.setInverted(true);
         _shooterSlave.follow(_shooterNEO, true);
         _encoder = _shooterNEO.getEncoder();
         _pidController = new CANPIDController(_shooterNEO);
