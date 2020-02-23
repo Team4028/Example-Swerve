@@ -60,7 +60,6 @@ public class RunShooterFromVision extends CommandBase {
     updateDVelos();
     run();
     _shooter.updateCanShoot(getSpedUp());
-    SmartDashboard.putNumber("Speed Mean", speedBuffer.getMean());
   }
 
   @Override
