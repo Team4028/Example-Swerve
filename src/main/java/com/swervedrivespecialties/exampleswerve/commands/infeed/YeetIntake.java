@@ -29,16 +29,17 @@ public class YeetIntake extends CommandBase {
 
   @Override
   public void initialize() {
-    if (cs.isScheduled(ifCommand)){
-      cs.cancel(ifCommand);
-    } else {
-      cs.schedule(ifCommand);
-    }
-
+    //This has to run in this order for the schedule to behave as you'd expect
     if (Infeed.get_instance().getCanSingulate()){
       if (!(cs.isScheduled(ifCommand) && !cs.isScheduled(sCommand))){
         cs.schedule(sCommand);
       }
+    }
+
+    if (cs.isScheduled(ifCommand)){
+      cs.cancel(ifCommand);
+    } else {
+      cs.schedule(ifCommand);
     }
   }
 
