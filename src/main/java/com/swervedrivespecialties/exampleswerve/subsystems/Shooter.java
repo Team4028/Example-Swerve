@@ -40,6 +40,8 @@ public class Shooter extends SubsystemBase{
 
     private boolean hasHadOdometry;
 
+    private boolean canShoot = false;
+
 
     private static final double kServoLowerLimit = .3;
     private static final double kServoUpperLimit = .55;
@@ -144,6 +146,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putBoolean("Alt Shawty", isAlternateShot);
         SmartDashboard.putNumber("Yeetyact", getShot().actuatorPosition);
         SmartDashboard.putNumber("yeetshooooot", getShot().speed);
+        SmartDashboard.putBoolean("Is At Speed", canShoot);
     }
 
     public void updateLogData(LogDataBE logData){  
@@ -216,6 +219,14 @@ public class Shooter extends SubsystemBase{
         public static Shot getStopShot(){
             return new Shot(0, getInstance()._linearActuator.get());
         }
+    }
+
+    public double getSpeed(){
+        return _encoder.getVelocity();
+    }
+
+    public void updateCanShoot(boolean can){
+        canShoot = can;
     }
 
     @Override
