@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.function.Supplier;
 
 import com.swervedrivespecialties.exampleswerve.RobotMap;
@@ -102,4 +103,18 @@ public class util {
 	}
 	public static Vector2 i_hat = new Vector2(1, 0);
 	public static Vector2 j_hat = new Vector2(0, 1);
+
+	public static Double roundNum(double val, int decimalPlaces){
+		return (double)(Math.round(val * Math.pow(10, decimalPlaces)) / Math.pow(10, decimalPlaces));
+	}
+
+	public static String getRoundedString(double val, int decimalPlaces){
+		double rounded = roundNum(val, decimalPlaces);
+		String keyStr = decimalPlaces > 0 ? "0." : "0";
+		for (int ind = 0; ind < decimalPlaces; ind++){
+			keyStr += "0";
+		}
+		DecimalFormat df = new DecimalFormat(keyStr);
+		return df.format(rounded);
+	}
 }

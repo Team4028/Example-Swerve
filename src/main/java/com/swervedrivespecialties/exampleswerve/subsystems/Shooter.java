@@ -36,9 +36,10 @@ public class Shooter extends SubsystemBase{
     private static final double kServoHome = .3;
     private static final double kServoHomeEpsilon = 0.02;
     private static final double kServoTolerance = .02;
-    private static final double kShooterDistanceDelta = .8; //feet
-    private static final double kShooterDefaultDistance = 27; 
+    private static final double kShooterDistanceDelta = .8 * 12;
+    private static final double kShooterDefaultDistance = 27 * 12; 
     private static final double kMinServoVBus = .7;
+    private static final int kNumShooterTableDecimalPlaces = 1;
 
     private boolean hasHadOdometry;
 
@@ -133,11 +134,15 @@ public class Shooter extends SubsystemBase{
         _linearActuator.set(actuatorVal);
     }
 
+    private String getFormattedDistanceStr(double val){
+        return util.getRoundedString(val/12, kNumShooterTableDecimalPlaces);
+    }
+
     public void outputToSDB(){
         SmartDashboard.putBoolean("Is At Speed", canShoot);
-        SmartDashboard.putNumber("Shooter Sensor Distance", _shooterSensorDistance);
-        SmartDashboard.putNumber("Shooter Distance Offset", _shooterDistanceOffset);
-        SmartDashboard.putNumber("Shot Distance", _shooterSensorDistance);
+        SmartDashboard.putString("Shooter Sensor Distance", getFormattedDistanceStr(_shooterSensorDistance));
+        SmartDashboard.putString("Shooter Offset", getFormattedDistanceStr(_shooterDistanceOffset));
+        SmartDashboard.putString("Shot Distance", getFormattedDistanceStr(_shooterShootDistance));
         SmartDashboard.putBoolean("Is Alternate Shot", isAlternateShot);
     }
 
@@ -155,7 +160,7 @@ public class Shooter extends SubsystemBase{
     }
 
     public void updateLogData(LogDataBE logData){  
-        logData.AddData("Heyo", Boolean.toString(isShooting));
+        logData.AddData("Is Shooting", Boolean.toString(isShooting));
         logData.AddData("Vello", Double.toString(_encoder.getVelocity()));
     }
 
@@ -164,7 +169,7 @@ public class Shooter extends SubsystemBase{
 
     public void updateShooterDistance(){
         updateSensorDistance();
-        _shooterShootDistance = _shooterSensorDistance+ _shooterDistanceOffset;
+        _shooterShootDistance = _shooterSensorDistance + _shooterDistanceOffset;
     }
 
     public void incrementShooterDistance(){

@@ -59,7 +59,7 @@ public class RobotContainer {
        secondary.dpad_up.whenPressed(ShooterSubsystemCommands.getIncremenetDistanceCommand());
        secondary.dpad_down.whenPressed(ShooterSubsystemCommands.getDecremenetDistanceCommand());
        secondary.start.whenPressed(ShooterSubsystemCommands.getTogggleAlternateShotCommand());
-       secondary.right_bumper.whenPressed(InfeedSubsystemCommands.getSwitchCameraCommand());       
+       secondary.right_bumper.whenPressed(InfeedSubsystemCommands.getSwitchCameraCommand());
     }
 
     public RobotContainer(){

@@ -34,6 +34,9 @@ public class Infeed extends SubsystemBase {
   private static final boolean kPreConveyorNormal = true;
   private static final boolean kPreShooterNormal = true;
   private static final boolean kPostSingulatorNormal = true;
+  private static final boolean kMidConveyorNormal = true;
+
+  private static final boolean usesFourthPhotoEye = false;
 
   private static Infeed _instance = new Infeed();
 
@@ -59,6 +62,7 @@ public class Infeed extends SubsystemBase {
   private DigitalInput _midConveyorSensor;
   private DoubleSolenoid _infeedSolenoid;
   private boolean hasStoppedSingulating = false;
+  private boolean hasMidConveyorBeenPressed = false;
 
   /**
    * Creates a new Infeed.
@@ -75,7 +79,7 @@ public class Infeed extends SubsystemBase {
     _postSingulatorSensor = new DigitalInput(RobotMap.POST_SINGULATOR_SENSOR);
     _infeedSolenoid = new DoubleSolenoid(0, 1);
     _infeedSolenoid.set(SOLENOID_UP_POSITION);
-    _midConveyorSensor = new DigitalInput(4);
+    _midConveyorSensor = new DigitalInput(RobotMap.MID_CONVEYOR_SENSOR);
   }
 
   public void zeroEcnoder(){
@@ -193,9 +197,32 @@ public class Infeed extends SubsystemBase {
     return !(getPostSingulatorSensor() && (getPreShooterSensor() || numBallsConveyed > 2)) && !hasStoppedSingulating;
   }
 
+  private boolean getMidConveyorSensor(){
+    return _midConveyorSensor.get() != kMidConveyorNormal;
+  }
+
+  private void updateMidConveyorPressed(){
+    boolean local = getMidConveyorSensor();
+    if (!hasMidConveyorBeenPressed){
+      hasMidConveyorBeenPressed = local;
+    }
+  }
+
+  public void resetMidConveyorPressed(){
+    hasMidConveyorBeenPressed = false;
+  }
+
+  public boolean getMidConveyorPressed(){
+    return hasMidConveyorBeenPressed;
+  }
+
+  public boolean getHasFourthEye(){
+    return usesFourthPhotoEye;
+  }
   @Override
   public void periodic() {
     updateHasStopSingulating();
+    updateMidConveyorPressed();
     if (preConveyorSensorPressed() && numBallsConveyed < 3) {
       numBallsConveyed++;
       CommandBase conveyorCommand = InfeedSubsystemCommands.getConveyCommand();

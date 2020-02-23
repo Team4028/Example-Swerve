@@ -22,6 +22,7 @@ public class convey extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    _infeed.resetMidConveyorPressed();
     targetPos = Infeed.get_instance().getConveyorPosiiton() + Infeed.kEncoderCountsPerBall;
   }
 
@@ -35,11 +36,20 @@ public class convey extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     _infeed.stopConveyor();
+    _infeed.resetMidConveyorPressed();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (_infeed.getConveyorPosiiton() > targetPos) || _infeed.getPreShooterSensor();
+    if (_infeed.getPreShooterSensor()){
+      return true;
+    } else {
+      if (_infeed.getHasFourthEye()){
+        return _infeed.getMidConveyorPressed();
+      } else {
+        return _infeed.getConveyorPosiiton() > targetPos;
+      }
+    }
   }
 }
