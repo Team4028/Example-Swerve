@@ -52,6 +52,7 @@ public class RobotContainer {
     private void bindSecondaryJoystickButtons(){
        secondary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
        secondary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
+       secondary.y.whenPressed(InfeedSubsystemCommands.getResetInfeedCommand());
        secondary.back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
        secondary.dpad_left.whenPressed(ShooterSubsystemCommands.getResetDistanceCommand());
        secondary.dpad_right.whenPressed(ShooterSubsystemCommands.getClearDistanceOffsetCommand());
@@ -119,6 +120,7 @@ public class RobotContainer {
     public void configureDrive(){
         drive.reset();
         drive.setCurrentLimit(40);
+        drive.setRapRate(.48);
     }
 
     public static void configureInfeed(){

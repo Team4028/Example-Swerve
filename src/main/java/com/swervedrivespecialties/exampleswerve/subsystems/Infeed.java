@@ -104,6 +104,7 @@ public class Infeed extends SubsystemBase {
     SmartDashboard.putBoolean("PRE-CONVEYOR SENSOR", _preConveyorSensor.get());
     SmartDashboard.putBoolean("POST-SINGULATOR", _postSingulatorSensor.get());
     SmartDashboard.putBoolean("INFEED SOLENOID OUT JIMBO", getIsSolenoidOut());
+    SmartDashboard.putNumber("Cell Count", numBallsConveyed);
   }
 
   public boolean getHasBallConveyedBallLength(){

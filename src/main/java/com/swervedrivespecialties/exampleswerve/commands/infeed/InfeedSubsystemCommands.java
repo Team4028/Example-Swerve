@@ -51,4 +51,8 @@ public class InfeedSubsystemCommands {
     public static CommandBase getYeetSingulatorCommand(){
         return new YeetSingulator(infeed);
     }
+
+    public static CommandBase getResetInfeedCommand(){
+        return new ResetInfeed(infeed);
+    }
 }

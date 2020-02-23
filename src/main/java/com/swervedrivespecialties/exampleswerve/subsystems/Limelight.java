@@ -274,5 +274,7 @@ public class Limelight implements Subsystem {
 
   public void OutputToSDB(){
     SmartDashboard.putString("CamSelection", getCam());
+    SmartDashboard.putBoolean("Has Target", getHasTarget());
+    SmartDashboard.putNumber("Angle 1", getAngle1());
   }
 }

@@ -262,6 +262,10 @@ public class DrivetrainSubsystem implements Subsystem {
         backRightDrive.setSmartCurrentLimit(curLim);
     }
 
+    public void setRapRate(double rate){
+        frontLeftDrive.setOpenLoopRampRate(rate);
+    }
+
     public SwerveDriveOdometry getShooterOdometry(Translation2d current){
         return new SwerveDriveOdometry(kinematics, getGyroRotation());
     }

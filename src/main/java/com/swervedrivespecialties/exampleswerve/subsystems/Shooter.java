@@ -136,6 +136,9 @@ public class Shooter extends SubsystemBase{
     public void outputToSDB(){
         SmartDashboard.putBoolean("Is At Speed", canShoot);
         SmartDashboard.putNumber("Shooter Sensor Distance", _shooterSensorDistance);
+        SmartDashboard.putNumber("Shooter Distance Offset", _shooterDistanceOffset);
+        SmartDashboard.putNumber("Shot Distance", _shooterSensorDistance);
+        SmartDashboard.putBoolean("Is Alternate Shot", isAlternateShot);
     }
 
     public Shot getShot(){

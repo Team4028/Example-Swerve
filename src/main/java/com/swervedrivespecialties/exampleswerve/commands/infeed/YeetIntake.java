@@ -36,7 +36,9 @@ public class YeetIntake extends CommandBase {
     }
 
     if (Infeed.get_instance().getCanSingulate()){
-      cs.schedule(sCommand);
+      if (!(cs.isScheduled(ifCommand) && !cs.isScheduled(sCommand))){
+        cs.schedule(sCommand);
+      }
     }
   }
 

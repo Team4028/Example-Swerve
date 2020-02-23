@@ -53,6 +53,7 @@ public class Robot extends TimedRobot{
         _shooter.runShooter(Shooter.Shot.getStopShot());
         CommandScheduler.getInstance().cancelAll();
         RobotContainer.configureInfeed();
+        robotContainer.configureDrive();
     }
     @Override
     public void teleopPeriodic(){
