@@ -143,7 +143,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putString("Shooter Sensor Distance", getFormattedDistanceStr(_shooterSensorDistance));
         SmartDashboard.putString("Shooter Offset", getFormattedDistanceStr(_shooterDistanceOffset));
         SmartDashboard.putString("Shot Distance", getFormattedDistanceStr(_shooterShootDistance));
-        SmartDashboard.putBoolean("Is Alternate Shot", isAlternateShot);
+        SmartDashboard.putBoolean("Is Normal Shot", !isAlternateShot);
     }
 
     public Shot getShot(){
