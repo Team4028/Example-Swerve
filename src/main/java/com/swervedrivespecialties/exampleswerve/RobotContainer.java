@@ -7,10 +7,12 @@
 
 package com.swervedrivespecialties.exampleswerve;
 
+import com.swervedrivespecialties.exampleswerve.commands.climber.ClimberSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.drive.DriveSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.drive.printTargetToLL;
 import com.swervedrivespecialties.exampleswerve.commands.shooter.ShooterSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
+import com.swervedrivespecialties.exampleswerve.subsystems.Climber;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
@@ -30,6 +32,7 @@ public class RobotContainer {
     private Shooter shooter = Shooter.getInstance();
     private Limelight limelight = Limelight.getInstance();
     private Infeed infeed = Infeed.get_instance();
+    private Climber climber = Climber.getInstance();
 
     private BeakXBoxController primary = new BeakXBoxController(0);
     private BeakXBoxController secondary = new BeakXBoxController(1);
@@ -60,6 +63,7 @@ public class RobotContainer {
        secondary.dpad_down.whenPressed(ShooterSubsystemCommands.getDecremenetDistanceCommand());
        secondary.start.whenPressed(ShooterSubsystemCommands.getTogggleAlternateShotCommand());
        secondary.right_bumper.whenPressed(InfeedSubsystemCommands.getSwitchCameraCommand());
+       secondary.x.whenPressed(ClimberSubsystemCommands.getToggleClimbSolenoidCommand());
     }
 
     public RobotContainer(){
@@ -92,8 +96,13 @@ public class RobotContainer {
         return primary.getRightYAxis();
     }
 
+    public double getSecondaryRightYAxis(){
+        return secondary.getRightYAxis();
+    }
+
     public void initDefaultCommands(){
         CommandScheduler.getInstance().setDefaultCommand(drive, DriveSubsystemCommands.getDriveCommand());
+        CommandScheduler.getInstance().setDefaultCommand(climber, ClimberSubsystemCommands.getClimbCommand());
     }
 
     public void setupLogging(boolean auto){
@@ -124,6 +133,10 @@ public class RobotContainer {
 
     public static void configureInfeed(){
         Infeed.get_instance().configInfeed();
+    }
+
+    public void configureClimber(){
+        Climber.getInstance().resetClimbSolenoid();
     }
 
     public void outputToSDB(){

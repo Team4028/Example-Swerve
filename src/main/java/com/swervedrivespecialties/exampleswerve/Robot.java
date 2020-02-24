@@ -41,6 +41,7 @@ public class Robot extends TimedRobot{
         robotContainer.setupLogging(true);
         robotContainer.configureDrive();
         robotContainer.getAuton().schedule();
+        robotContainer.configureClimber();
     }
 
     @Override
@@ -50,6 +51,7 @@ public class Robot extends TimedRobot{
     @Override
     public void teleopInit() {
         robotContainer.setupLogging(false);
+        robotContainer.configureClimber();
         _shooter.runShooter(Shooter.Shot.getStopShot());
         CommandScheduler.getInstance().cancelAll();
         RobotContainer.configureInfeed();

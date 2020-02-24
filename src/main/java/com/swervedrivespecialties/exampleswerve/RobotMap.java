@@ -26,6 +26,9 @@ public class RobotMap {
     public static final int SINGULATOR_MOTOR = 13;
     public static final int INFEED_MOTOR = 14;
 
+    //Climber
+    public static final int CLIMBER_MOTOR = 15;
+
     public static final int PRE_CONVEYOR_SENSOR = 0;
     public static final int PRE_SHOOTER_SENSOR = 1;
     public static final int POST_SINGULATOR_SENSOR = 2;
