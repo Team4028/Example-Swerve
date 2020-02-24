@@ -238,6 +238,10 @@ public class Shooter extends SubsystemBase{
         canShoot = can;
     }
 
+    public boolean getSpedUp(){
+        return canShoot;
+    }
+
     @Override
     public void periodic()
     {

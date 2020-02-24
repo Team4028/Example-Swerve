@@ -89,6 +89,8 @@ public class FollowTrajectory extends CommandBase {
     } else {
       _drive.stop();
     }
+
+
   }
 
   // Called once the command ends or is interrupted.
@@ -140,7 +142,7 @@ public class FollowTrajectory extends CommandBase {
   private void printInfo(){
     RigidTransform2 curPose = getPose();
     RigidTransform2 goalPose = new RigidTransform2(trajectory.calculateSegment(trajectory.getDuration()).translation, trajectory.calculateSegment(trajectory.getDuration()).rotation);
-    System.out.println("Goal Pose: (" + Double.toString(goalPose.translation.x) + ", " + Double.toString(goalPose.translation.y) + ", " + Double.toString(goalPose.rotation.toDegrees()));
-    System.out.println("Current Pose: (" + Double.toString(curPose.translation.x) + ", " + Double.toString(curPose.translation.y) + ", " + Double.toString(curPose.rotation.toDegrees()));
+    System.out.println("Goal Pose: (" + Double.toString(goalPose.translation.x) + ", " + Double.toString(goalPose.translation.y) + ", " + Double.toString(goalPose.rotation.toDegrees()) + ")");
+    System.out.println("Current Pose: (" + Double.toString(curPose.translation.x) + ", " + Double.toString(curPose.translation.y) + ", " + Double.toString(curPose.rotation.toDegrees()) + ")");
   }
 }

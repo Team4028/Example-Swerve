@@ -42,4 +42,12 @@ public class ShooterSubsystemCommands {
     public static CommandBase getClearDistanceOffsetCommand(){
         return new ClearDistanceOffset(shooter);
     }
+
+    public static CommandBase getAutoShootCommand(){
+        return new AutoShoot(shooter);
+    }
+
+    public static CommandBase getWaitUntilCanShootCommand(){
+        return new WaitUntilCanShoot(shooter);
+    }
 }

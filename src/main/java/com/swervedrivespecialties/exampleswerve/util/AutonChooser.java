@@ -26,17 +26,21 @@ public class AutonChooser {
 
     private enum AUTONS{
         DO_NOTHING,
-        STEAL_BALLS
+        STEAL_BALLS, 
+        OWN_TRENCH
     }
 
     private AutonChooser(){
         autonChooser.setDefaultOption("Do Nothing", AUTONS.DO_NOTHING);
         autonChooser.addOption("Steal Balls", AUTONS.STEAL_BALLS);
+        autonChooser.addOption("Run And Gun", AUTONS.OWN_TRENCH);
     }
 
     public CommandBase getAuton(){
         if (autonChooser.getSelected() == AUTONS.STEAL_BALLS){
             return new OpponentBallAuton();
+        } else if (autonChooser.getSelected() == AUTONS.OWN_TRENCH) {
+            return new DoNothing();
         } else {
             return new DoNothing();
         }

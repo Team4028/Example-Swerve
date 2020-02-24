@@ -110,4 +110,8 @@ public class DriveSubsystemCommands {
     public static CommandBase getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown(){
         return new RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown(drivetrainSubsystem);
     }
+
+    public static CommandBase getWaitUntilDistanceRemaining(Supplier<Trajectory> trajSupplier, double distance){
+        return new WaitUntilDistanceRemaining(drivetrainSubsystem, trajSupplier, distance);
+    }
 }
