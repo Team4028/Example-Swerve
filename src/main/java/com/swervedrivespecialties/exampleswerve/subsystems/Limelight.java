@@ -136,17 +136,17 @@ public class Limelight implements Subsystem {
   }
 
   public void updateLogData(LogDataBE logData){
-    if (getHasTarget()){
-      logData.AddData("Distance", Double.toString(getDistanceToTarget(Target.HIGH)));
-      logData.AddData("Y Angle", Double.toString(getYAng()));
-      logData.AddData("Skew", Double.toString(getSkew()));
-      logData.AddData("Angle 1", Double.toString(getAngle1()));
-      logData.AddData("Box Short Length", Double.toString(getBoxShortLength()));
-      logData.AddData("Box Long Length", Double.toString(getBoxLongLength()));
-      logData.AddData("Horizontal Box Length", Double.toString(getHorBoxLength()));
-      logData.AddData("Vertical Box Length", Double.toString(getVertBoxLength()));
-      logData.AddData("Area", Double.toString(getTA()));
-    }
+    // if (getHasTarget()){
+    //   logData.AddData("Distance", Double.toString(getDistanceToTarget(Target.HIGH)));
+    //   logData.AddData("Y Angle", Double.toString(getYAng()));
+    //   logData.AddData("Skew", Double.toString(getSkew()));
+    //   logData.AddData("Angle 1", Double.toString(getAngle1()));
+    //   logData.AddData("Box Short Length", Double.toString(getBoxShortLength()));
+    //   logData.AddData("Box Long Length", Double.toString(getBoxLongLength()));
+    //   logData.AddData("Horizontal Box Length", Double.toString(getHorBoxLength()));
+    //   logData.AddData("Vertical Box Length", Double.toString(getVertBoxLength()));
+    //   logData.AddData("Area", Double.toString(getTA()));
+    // }
   }
 
   private static class ConfidenceData{

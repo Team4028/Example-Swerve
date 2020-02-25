@@ -160,8 +160,8 @@ public class Shooter extends SubsystemBase{
     }
 
     public void updateLogData(LogDataBE logData){  
-        logData.AddData("Is Shooting", Boolean.toString(isShooting));
-        logData.AddData("Vello", Double.toString(_encoder.getVelocity()));
+        //logData.AddData("Is Shooting", Boolean.toString(isShooting));
+        //logData.AddData("Vello", Double.toString(_encoder.getVelocity()));
     }
 
     public void teleopInit(){

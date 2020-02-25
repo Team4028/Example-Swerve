@@ -29,8 +29,8 @@ public class Infeed extends SubsystemBase {
   private static final double kConveyorTalonConstantVBus = -0.35;
   private static final double kConveyToShootConstantVBUS = -.5;
   private static final double kInfeedVBus = -.7;
-  private static final double kSingulatorVBus = -.45;
-  private static final double kSingulateToShootVBus = -.5;
+  private static final double kSingulatorVBus = .45;
+  private static final double kSingulateToShootVBus = .5;
 
   private static final boolean kPreConveyorNormal = true;
   private static final boolean kPreShooterNormal = true;

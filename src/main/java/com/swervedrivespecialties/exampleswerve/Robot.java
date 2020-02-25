@@ -1,6 +1,9 @@
 package com.swervedrivespecialties.exampleswerve;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
+import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
@@ -8,6 +11,7 @@ import com.swervedrivespecialties.exampleswerve.subsystems.Limelight.Target;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -18,6 +22,8 @@ public class Robot extends TimedRobot{
     Shooter _shooter = Shooter.getInstance();
 
     Compressor _compressor = new Compressor(0);
+
+    //CANSparkMax spark = new CANSparkMax(0, MotorType.kBrushless);
 
     @Override
     public void robotInit() {
@@ -32,6 +38,7 @@ public class Robot extends TimedRobot{
         if (!isDisabled()){
             robotContainer.logAllData();
         }
+        SmartDashboard.putNumber("NavX", DrivetrainSubsystem.getInstance().getGyroAngle().toDegrees());
         SmartDashboard.putNumber("Distance LL", Limelight.getInstance().getDistanceToTarget(Target.HIGH));
     }
 
@@ -40,12 +47,13 @@ public class Robot extends TimedRobot{
     public void autonomousInit() {
         robotContainer.setupLogging(true);
         robotContainer.configureDrive();
-        robotContainer.getAuton().schedule();
+        //robotContainer.getAuton().schedule();
         robotContainer.configureClimber();
     }
 
     @Override
     public void autonomousPeriodic() {
+        DrivetrainSubsystem.getInstance().drive(new Translation2d(1., 0), 0.0, true);
     }
 
     @Override

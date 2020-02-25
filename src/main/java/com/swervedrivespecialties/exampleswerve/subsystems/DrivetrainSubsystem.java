@@ -2,6 +2,7 @@ package com.swervedrivespecialties.exampleswerve.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.swervedrivespecialties.exampleswerve.Robot;
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
@@ -33,12 +34,12 @@ public class DrivetrainSubsystem implements Subsystem {
     private static final double TRACKWIDTH = 22.5;
     private static final double WHEELBASE = 24.41;
 
-    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(278.06);
-    private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(45.48);
-    private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(93.51);
-    private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(300.77);
+    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(211.770524);//278.06 Practice
+    private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(250.524496);//45.48
+    private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(206.815318);//93.51
+    private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(55.683811);//300.77
 
-    private static final PidConstants ANGLE_CONSTANTS = new PidConstants(1.5, 0.0, 0.5);
+    private static final PidConstants ANGLE_CONSTANTS = new PidConstants(1.5, 0.0, .5);
     private static final double ANGLE_REDUCTION = 18.0 / 1.0;
     private static final double WHEEL_DIAMETER = 4;
     private static final double DRIVE_REDUCTION = 6.92 / 1.0;
@@ -95,12 +96,21 @@ public class DrivetrainSubsystem implements Subsystem {
 
     public DrivetrainSubsystem() {
         gyroscope.calibrate();
-        gyroscope.setInverted(false); // You might not need to invert the gyro
+        gyroscope.setInverted(true); // You might not need to invert the gyro
 
         frontLeftModule.setName("Front Left");
         frontRightModule.setName("Front Right");
         backLeftModule.setName("Back Left");
         backRightModule.setName("Back Right");
+
+        frontLeftDrive.setIdleMode(IdleMode.kBrake);
+        frontRightDrive.setIdleMode(IdleMode.kBrake);
+        backLeftDrive.setIdleMode(IdleMode.kBrake);
+        backRightDrive.setIdleMode(IdleMode.kBrake);
+        frontLeftSteer.setIdleMode(IdleMode.kBrake);
+        frontRightSteer.setIdleMode(IdleMode.kBrake);
+        backLeftSteer.setIdleMode(IdleMode.kBrake);
+        backRightSteer.setIdleMode(IdleMode.kBrake);
     }
 
     public static DrivetrainSubsystem getInstance() {
@@ -150,13 +160,14 @@ public class DrivetrainSubsystem implements Subsystem {
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
 
         frontLeftModule.setTargetVelocity(states[0].speedMetersPerSecond, states[0].angle.getRadians());
+        System.out.println(states[0].angle.getRadians() + " : " + frontLeftModule.getCurrentAngle());
         frontRightModule.setTargetVelocity(states[1].speedMetersPerSecond, states[1].angle.getRadians());
         backLeftModule.setTargetVelocity(states[2].speedMetersPerSecond, states[2].angle.getRadians());
         backRightModule.setTargetVelocity(states[3].speedMetersPerSecond, states[3].angle.getRadians());
     }
 
     public void resetGyroscope() {
-        gyroscope.setAdjustmentAngle(gyroscope.getUnadjustedAngle().rotateBy(Rotation2.fromDegrees(180)));
+        gyroscope.setAdjustmentAngle(gyroscope.getUnadjustedAngle());
     }
 
     public void customZeroGyro(){
@@ -252,7 +263,7 @@ public class DrivetrainSubsystem implements Subsystem {
         //   logData.AddData("Forward Velocity", Double.toString(getKinematicVelocity().x));
         //   logData.AddData("Strafe Velocity", Double.toString(getKinematicVelocity().y));
         //   logData.AddData("Angular Velocity", Double.toString(gyroscope.getRate()));  
-        //logData.AddData("Velocity", Double.toString(getKinematicVelocity().length));
+        logData.AddData("Velocity", Double.toString(getKinematicVelocity().length));
     }
 
     public void setCurrentLimit(int curLim){
@@ -282,12 +293,12 @@ public class DrivetrainSubsystem implements Subsystem {
         double forward = -Robot.getRobotContainer().getPrimaryLeftYAxis();
         forward = Utilities.deadband(forward);
         // Square the forward stick
-        forward = -speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
+        forward = speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
     
         double strafe = -Robot.getRobotContainer().getPrimaryLeftXAxis();
         strafe = Utilities.deadband(strafe);
         // Square the strafe stick
-        strafe = -speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
+        strafe = speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
 
         return new Translation2d(forward, strafe);
     }

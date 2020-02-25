@@ -27,7 +27,7 @@ public class DriveCommand extends CommandBase {
         // Square the rotation stick
         rotation = speedScale * Math.copySign(Math.pow(rotation, 2.0), rotation);
 
-        _drive.drive(_drive.getDriveVec(), rotation, _drive.getFieldOriented());
+        _drive.drive(_drive.getDriveVec(), rotation, true);
     }
 
     @Override
