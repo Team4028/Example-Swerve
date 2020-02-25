@@ -19,6 +19,7 @@ public class climb extends CommandBase {
 
   public climb(Climber climber) {
     _climber = climber;
+    addRequirements(_climber);
   }
 
   @Override

@@ -52,6 +52,7 @@ public class Limelight implements Subsystem {
 
   private Limelight() {
     CUR_CAM_SLOT = CAMERA_SLOT.LIMELIGHT;
+    setPipeline(0);
   }
   public double getAngle1() {
     return tx.getDouble(0);

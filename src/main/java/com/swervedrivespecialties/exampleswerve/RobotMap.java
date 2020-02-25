@@ -29,10 +29,10 @@ public class RobotMap {
     //Climber
     public static final int CLIMBER_MOTOR = 15;
 
-    public static final int PRE_CONVEYOR_SENSOR = 1;
-    public static final int PRE_SHOOTER_SENSOR = 3;
-    public static final int POST_SINGULATOR_SENSOR = 0;
-    public static final int MID_CONVEYOR_SENSOR = 2;
+    public static final int PRE_CONVEYOR_SENSOR = 0;
+    public static final int PRE_SHOOTER_SENSOR = 1;
+    public static final int POST_SINGULATOR_SENSOR = 2;
+    public static final int MID_CONVEYOR_SENSOR = 3;
 
     //Camera Addresses
     public static final String RASPBERRY_PI_INFEED_CAMERA = "http://10.40.28.15:1181/stream.mjpg";
