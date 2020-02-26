@@ -160,7 +160,7 @@ public class DrivetrainSubsystem implements Subsystem {
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
 
         frontLeftModule.setTargetVelocity(states[0].speedMetersPerSecond, states[0].angle.getRadians());
-        System.out.println(states[0].angle.getRadians() + " : " + frontLeftModule.getCurrentAngle());
+        //System.out.println(states[0].angle.getRadians() + " : " + frontLeftModule.getCurrentAngle());
         frontRightModule.setTargetVelocity(states[1].speedMetersPerSecond, states[1].angle.getRadians());
         backLeftModule.setTargetVelocity(states[2].speedMetersPerSecond, states[2].angle.getRadians());
         backRightModule.setTargetVelocity(states[3].speedMetersPerSecond, states[3].angle.getRadians());

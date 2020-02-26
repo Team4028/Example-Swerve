@@ -97,8 +97,8 @@ public class Shooter extends SubsystemBase{
         _shooterNEO.setIdleMode(IdleMode.kCoast);
 
 
-        _shooterNEO.setInverted(false);
-        _shooterSlave.setInverted(true);
+        _shooterNEO.setInverted(true);
+        _shooterSlave.setInverted(false);
         _shooterSlave.follow(_shooterNEO, true);
         _encoder = _shooterNEO.getEncoder();
         _pidController = new CANPIDController(_shooterNEO);

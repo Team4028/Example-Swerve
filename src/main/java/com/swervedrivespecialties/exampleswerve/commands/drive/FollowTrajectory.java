@@ -31,15 +31,15 @@ public class FollowTrajectory extends CommandBase {
   DrivetrainSubsystem _drive;
 
   ///////////// PATH FOLLOWING CONSTANTS //////////////////
-  private static final double kInterceptVoltage = 0.0016373042839475038; //the physical minimum voltage to make the robot move forward
-  private static final double kPathFollowingVeloFeedForward = 0.005811813001730558;
-  private static final double kPathFollowingAccelFeedForward = 0;
-  private static final double kPathFollowingTranslationP = .017;
-  private static final double kPathFollowingTranslationI = 0;
-  private static final double kPathFollowingTranslationD = 0.0065;//.23;
-  private static final double kPathFollowingRotationP = .2;
-  private static final double kPathFollowingRotationI = 0;
-  private static final double kPathFollowingRotationD = .06;//.009;
+  private static final double kInterceptVoltage = 0.014857233341018905; //the physical minimum voltage to make the robot move forward
+  private static final double kPathFollowingVeloFeedForward = 0.006001712543891718; //0.005928582445756418;
+  private static final double kPathFollowingAccelFeedForward = 0.0013419758453577547;//0.0017517552895438423;
+  private static final double kPathFollowingTranslationP = .00112;
+  private static final double kPathFollowingTranslationI = 0.00043;
+  private static final double kPathFollowingTranslationD = 0.00066;//65;//.23;
+  private static final double kPathFollowingRotationP = .35;
+  private static final double kPathFollowingRotationI = 0.00055;
+  private static final double kPathFollowingRotationD = .09;//.009;
   ////////////////////////////////////////////////////////////
 
   //create appropriate constant classes and eventually a TrajectoryFollower from constants given above

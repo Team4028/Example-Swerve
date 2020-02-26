@@ -25,8 +25,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Infeed extends SubsystemBase {
 
-  public static final double kEncoderCountsPerBall = 8000;
-  private static final double kConveyorTalonConstantVBus = -0.35;
+  public static final double kEncoderCountsPerBall = 7500;
+  private static final double kConveyorTalonConstantVBus = -0.50;
   private static final double kConveyToShootConstantVBUS = -.5;
   private static final double kInfeedVBus = -.7;
   private static final double kSingulatorVBus = .45;
@@ -71,7 +71,7 @@ public class Infeed extends SubsystemBase {
   private Infeed() {
     _conveyorTalon = new TalonSRX(RobotMap.CONVEYOR_MOTOR);
     _conveyorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    _preConveyorSensor = new DigitalInput(RobotMap.PRE_CONVEYOR_SENSOR);
+    //_preConveyorSensor = new DigitalInput(RobotMap.PRE_CONVEYOR_SENSOR);
     _preShooterSensor = new DigitalInput(RobotMap.PRE_SHOOTER_SENSOR);
     _conveyorTalon.setNeutralMode(NeutralMode.Brake);
 
@@ -106,8 +106,9 @@ public class Infeed extends SubsystemBase {
   public void outputToSDB() {
     SmartDashboard.putBoolean("PRE-SHOOTER SENSOR", _preShooterSensor.get());
     SmartDashboard.putNumber("CONVEYOR TALON ENCODER", _conveyorTalon.getSelectedSensorPosition());
-    SmartDashboard.putBoolean("PRE-CONVEYOR SENSOR", _preConveyorSensor.get());
+    SmartDashboard.putBoolean("PRE-CONVEYOR SENSOR", _postSingulatorSensor.get());
     SmartDashboard.putBoolean("POST-SINGULATOR", _postSingulatorSensor.get());
+    SmartDashboard.putBoolean("MID-CONVEYOR", _midConveyorSensor.get());
     SmartDashboard.putBoolean("INFEED SOLENOID OUT JIMBO", getIsSolenoidOut());
     SmartDashboard.putNumber("Cell Count", numBallsConveyed + util.iversonBrackets(hasStoppedSingulating || getPostSingulatorSensor()));
   }
@@ -129,7 +130,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public boolean getPreConveyorSensor(){
-    return _preConveyorSensor.get() != kPreConveyorNormal;
+    return _postSingulatorSensor.get() != kPreConveyorNormal;
   }
 
   public boolean getPreShooterSensor() {
@@ -172,7 +173,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public void configInfeed(){
-    _infeedSolenoid.set(SOLENOID_UP_POSITION);
+    _infeedSolenoid.set(SOLENOID_OUT_POSITION);
     resetBallsConveyed();
   }
 
@@ -182,7 +183,7 @@ public class Infeed extends SubsystemBase {
 
   private void updateHasStopSingulating(){
     if (!hasStoppedSingulating){
-      hasStoppedSingulating = (numBallsConveyed >= 3 || getPreShooterSensor()) && getPostSingulatorSensor();
+      hasStoppedSingulating = (getPreShooterSensor()) && getPostSingulatorSensor(); //numBallsConveyed >= 3 || 
     }
   }
 
@@ -195,7 +196,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public boolean getCanSingulate(){
-    return !(getPostSingulatorSensor() && (getPreShooterSensor() || numBallsConveyed > 2)) && !hasStoppedSingulating;
+    return !(getPostSingulatorSensor() && (getPreShooterSensor())) && !hasStoppedSingulating; //|| numBallsConveyed > 2
   }
 
   private boolean getMidConveyorSensor(){
@@ -224,7 +225,7 @@ public class Infeed extends SubsystemBase {
   public void periodic() {
     updateHasStopSingulating();
     updateMidConveyorPressed();
-    if (preConveyorSensorPressed() && numBallsConveyed < 3) {
+    if (preConveyorSensorPressed()) { // && numBallsConveyed < 3
       numBallsConveyed++;
       CommandBase conveyorCommand = InfeedSubsystemCommands.getConveyCommand();
       conveyorCommand.schedule();

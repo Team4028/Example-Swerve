@@ -23,26 +23,28 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class OpponentBallAuton extends ParallelDeadlineGroup {
-  public OpponentBallAuton() {
+public class OpponentBallBestAuton extends ParallelDeadlineGroup {
+  public OpponentBallBestAuton() {
     super(
           new SequentialCommandGroup(
                                       InfeedSubsystemCommands.getToggleInfeedSolenoidCommand(),
                                       new ParallelCommandGroup(
-                                                                DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toStealBallsTrajectorySupplier,
+                                                                DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallBestAuton.toStealBallsTrajectorySupplier,
                                                                                                                   new InertiaGain(0, 0, 0)), 
                                                                 new SequentialCommandGroup(
                                                                   new WaitCommand(.5),
                                                                   InfeedSubsystemCommands.getRunInfeedCommand().withTimeout(1.7)                                                                                                                         
                                                                 )
                                                               ),
-                                      DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toShootFirstBatchTrajectorySupplier), 
+                                      DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallBestAuton.toShootFirstBatchTrajectorySupplier),
+                                      new ParallelCommandGroup(
+                                        DriveSubsystemCommands.getLLRotateToTargetCommand().withTimeout(2), 
                                       new ParallelRaceGroup(
                                         ShooterSubsystemCommands.getRunShooterFromVisionCommand().withTimeout(8), 
                                         new SequentialCommandGroup(
                                                                     ShooterSubsystemCommands.getWaitUntilCanShootCommand(),
                                                                     InfeedSubsystemCommands.getConveyToShootCommand().withTimeout(3.5)
-                                        ) 
+                                        ))
                                       )
           ), 
           InfeedSubsystemCommands.getRunSingulatorCommand()

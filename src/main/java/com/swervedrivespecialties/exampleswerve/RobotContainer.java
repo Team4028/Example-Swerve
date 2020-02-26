@@ -7,6 +7,9 @@
 
 package com.swervedrivespecialties.exampleswerve;
 
+import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
+import com.swervedrivespecialties.exampleswerve.commands.auton.autons.opponentball.OpponentBallAuton;
+import com.swervedrivespecialties.exampleswerve.commands.auton.autons.opponentball.OpponentBallBestAuton;
 import com.swervedrivespecialties.exampleswerve.commands.climber.ClimberSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.drive.DriveSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.drive.printTargetToLL;
@@ -42,12 +45,13 @@ public class RobotContainer {
     AutonChooser ac = AutonChooser.getInstance();
 
     private void bindPrimaryJoystickButtons(){
-        primary.left_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
+        primary.right_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
+        primary.left_bumper.whenPressed(new OpponentBallBestAuton());
         primary.a.whenPressed(InfeedSubsystemCommands.getYeetIntake());
         primary.b.whenPressed(InfeedSubsystemCommands.getYeetSingulatorCommand());
-        primary.x.whenPressed(DriveSubsystemCommands.getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown());
+        primary.x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
         primary.y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
-        primary.right_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
+       // primary.right_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
         primary.back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
         primary.start.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
     }
