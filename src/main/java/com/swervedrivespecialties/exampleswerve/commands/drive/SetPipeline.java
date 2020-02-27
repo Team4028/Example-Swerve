@@ -5,57 +5,41 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.swervedrivespecialties.exampleswerve.commands.infeed;
+package com.swervedrivespecialties.exampleswerve.commands.drive;
 
-import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
+import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-
-//Runs the conveyor to shoot
-public class conveyToShoot extends CommandBase {
-  private Infeed _infeed;
-
-  double singulatorDelayTime = 200 / 1000; //200 ms
-  double startTime;
-
-
-  public conveyToShoot(Infeed infeed) {
-    _infeed = infeed;
-    addRequirements(_infeed);
+public class SetPipeline extends CommandBase {
+  /**
+   * Creates a new SetPipeline.
+   */
+  private double _pipe;
+  public SetPipeline(double pipe) {
     // Use addRequirements() here to declare subsystem dependencies.
+    _pipe = pipe;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
-    _infeed.resetBallsConveyed();
-    _infeed.stopSingulator();
+    Limelight.getInstance().setPipeline(_pipe);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _infeed.conveyConveyorToShoot();
-    if (Timer.getFPGATimestamp() - startTime > singulatorDelayTime){
-      _infeed.runSingulatorToShoot();
-    } else {
-      _infeed.stopSingulator();
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    _infeed.stopConveyor();
-    _infeed.stopSingulator();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

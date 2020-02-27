@@ -27,7 +27,6 @@ public class OpponentBallBestAuton extends ParallelDeadlineGroup {
   public OpponentBallBestAuton() {
     super(
           new SequentialCommandGroup(
-                                      InfeedSubsystemCommands.getToggleInfeedSolenoidCommand(),
                                       new ParallelCommandGroup(
                                                                 DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallBestAuton.toStealBallsTrajectorySupplier,
                                                                                                                   new InertiaGain(0, 0, 0)), 

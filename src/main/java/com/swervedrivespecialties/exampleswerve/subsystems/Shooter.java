@@ -40,8 +40,8 @@ public class Shooter extends SubsystemBase{
     private static final double kMinKickerVBus = .7;
     private static final int kNumShooterTableDecimalPlaces = 1;
 
-    private static final double kBackKickerVBus = -.6;
-    private static final double kBackShooterVBus = -.5;
+    private static final double kBackKickerVBus = .95;
+    private static final double kBackShooterVBus = -.95;
 
     private boolean hasHadOdometry;
 
@@ -165,7 +165,7 @@ public class Shooter extends SubsystemBase{
 
     public Shot getShot(){
         ShooterTable curTable = isAlternateShot ? secondaryTable : primaryTable;
-        return curTable.CalcShooterValues(_shooterShootDistance/12).getShot();
+        return curTable.CalcShooterValues(_ll.offsetLLDist(_shooterShootDistance/12)).getShot();
     }
 
     public void resetServo(){
@@ -174,6 +174,10 @@ public class Shooter extends SubsystemBase{
 
     public boolean isServoReset(){
         return Math.abs(_linearActuator.get() - kServoHome) <= kServoHomeEpsilon;
+    }
+
+    public void analogRunKicker(double v){
+        _kickerTalon.set(ControlMode.PercentOutput, v);
     }
 
     public void updateLogData(LogDataBE logData){  

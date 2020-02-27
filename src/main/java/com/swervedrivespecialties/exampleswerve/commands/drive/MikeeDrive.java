@@ -9,6 +9,8 @@ package com.swervedrivespecialties.exampleswerve.commands.drive;
 
 import com.swervedrivespecialties.exampleswerve.Robot;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
+import com.swervedrivespecialties.exampleswerve.subsystems.Limelight;
+import com.swervedrivespecialties.exampleswerve.subsystems.Limelight.CAMERA_SLOT;
 
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -28,6 +30,7 @@ public class MikeeDrive extends CommandBase {
 
   @Override
   public void initialize() {
+    Limelight.getInstance().setCameraSlot(CAMERA_SLOT.LIMELIGHT);
   }
 
   @Override
@@ -39,6 +42,7 @@ public class MikeeDrive extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     _drive.drive(new Translation2d(), 0, true);
+    Limelight.getInstance().setCameraSlot(CAMERA_SLOT.INFEED);
   }
 
   @Override

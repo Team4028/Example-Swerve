@@ -98,17 +98,18 @@ public class DriveSubsystemCommands {
     }
     
     public static CommandBase getLLRotateToTargetCommand(){
-        return new LLRotateToTarget(drivetrainSubsystem).withTimeout(2.5);
+        //return new LLRotateToTarget(drivetrainSubsystem).withTimeout(2.5);
+        return new LLTargetRotateWithWait().withTimeout(3);
     }
     public static CommandBase getChameleonTrackPowercellCommand(){
-        return new TrackPowercell(Chameleon.getInstance(), drivetrainSubsystem).withTimeout(3.0);
+        return new TrackPowercell(Chameleon.getInstance(), drivetrainSubsystem).withTimeout(3.0); //1.5
     }
 
     public static CommandBase getToggleLEDMode(){
         return new ToggleLEDS();
     }
     public static CommandBase getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown(){
-        return new RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown(drivetrainSubsystem);
+        return new RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown(drivetrainSubsystem).withTimeout(3);
     }
 
     public static CommandBase getWaitUntilDistanceRemaining(Supplier<Trajectory> trajSupplier, double distance){

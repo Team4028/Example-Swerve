@@ -8,6 +8,7 @@
 package com.swervedrivespecialties.exampleswerve.commands.shooter;
 
 import com.swervedrivespecialties.exampleswerve.commands.shooter.distance.*;
+import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -49,6 +50,10 @@ public class ShooterSubsystemCommands {
 
     public static CommandBase getWaitUntilCanShootCommand(){
         return new WaitUntilCanShoot(shooter);
+    }
+
+    public static CommandBase getBackItUpCommand(){
+        return new BackItUp(Shooter.getInstance(), Infeed.get_instance());
     }
 
     public static CommandBase BACK_KICKER = new BackKicker(shooter);

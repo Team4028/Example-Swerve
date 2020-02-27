@@ -31,6 +31,7 @@ public class Robot extends TimedRobot{
     @Override
     public void robotInit() {
         Trajectories.generateAllTrajectories();
+        CommandScheduler.getInstance().cancelAll();
         robotContainer = new RobotContainer();
     }
 
@@ -50,14 +51,14 @@ public class Robot extends TimedRobot{
     public void autonomousInit() {
         robotContainer.setupLogging(true);
         robotContainer.configureDrive();
-       RobotContainer.configureInfeed();
-        //robotContainer.getAuton().schedule();
+        RobotContainer.configureInfeed();
         robotContainer.configureClimber();
+        Limelight.getInstance().setPipeline(0.0);
+        robotContainer.getAuton().withTimeout(14.8).schedule();
     }
 
     @Override
     public void autonomousPeriodic() {
-        DriveSubsystemCommands.getLineDriveCommand(new Vector2(120, 0), true).schedule();
     }
 
     @Override
@@ -65,12 +66,17 @@ public class Robot extends TimedRobot{
         robotContainer.setupLogging(false);
         robotContainer.configureClimber();
         _shooter.runShooter(Shooter.Shot.getStopShot());
-        CommandScheduler.getInstance().cancelAll();
         //RobotContainer.configureInfeed();
         robotContainer.configureDrive();
+        Limelight.getInstance().setPipeline(2.0);
     }
     @Override
     public void teleopPeriodic(){
+    }
+
+    @Override
+    public void disabledInit(){
+        Limelight.getInstance().setPipeline(2.0);
     }
 
     public static RobotContainer getRobotContainer(){

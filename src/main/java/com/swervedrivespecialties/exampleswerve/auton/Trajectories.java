@@ -33,13 +33,13 @@ public class Trajectories {
     public static class steallBallAuton { 
         private static final Vector2 goalPoint = new Vector2(-176, 198);
         private static final Rotation2 startRot = Rotation2.ZERO;
-        private static final double travelDist = 78;
-        private static final Vector2 shootPoint = new Vector2(78, 132); //must have that |y| > |x - travelDist|
+        private static final double travelDist = 92;
+        private static final Vector2 shootPoint = new Vector2(84, 132); //must have that |y| > |x - travelDist|
         private static final double stealBallSpeed = 11 * 12;
         private static final double goShootSpeed = 11.5 * 12;
 
         private static final double rad = travelDist - shootPoint.x;
-        private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint).rotateBy(Rotation2.fromDegrees(-90));
+        private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint).rotateBy(Rotation2.fromDegrees(-85));
         
         private static Trajectory toStealBalls;
         private static Trajectory toShootFirstBatch;
@@ -73,13 +73,13 @@ public class Trajectories {
     public static class steallBallBestAuton { 
         private static final Vector2 goalPoint = new Vector2(-224, 200);
         private static final Rotation2 startRot = Rotation2.ZERO;
-        private static final double travelDist = 78;
+        private static final double travelDist = 92;
         private static final Vector2 shootPoint = new Vector2(36, 200); //must have that |y| > |x - travelDist|
         private static final double stealBallSpeed = 11 * 12;
         private static final double goShootSpeed = 11.5 * 12;
 
         private static final double rad = travelDist - shootPoint.x;
-        private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint).rotateBy(Rotation2.fromDegrees(-90));
+        private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint).rotateBy(Rotation2.fromDegrees(-105));
         
         private static Trajectory toStealBalls;
         private static Trajectory toShootFirstBatch;
@@ -116,7 +116,7 @@ public class Trajectories {
         private static void generateToGetNextBatch(){
             ITrajectoryConstraint[] toGetNextBatchConstraints = getConstraint(12 * 12);
             Path toGetNextBatchPath = new Path(steallBallBestAuton.firstShotRotation);
-            toGetNextBatchPath.addSegment(new PathArcSegment(steallBallBestAuton.shootPoint, new Vector2(90, 140), new Vector2(120, 180)), Rotation2.fromDegrees(30));
+            toGetNextBatchPath.addSegment(new PathArcSegment(steallBallBestAuton.shootPoint, new Vector2(160, 170), new Vector2(120, 180)), Rotation2.fromDegrees(30));
             toGetNextBatchPath.subdivide(kSubdivideIterations);
             toGetNextBatch = new Trajectory(0.0, 36.0, toGetNextBatchPath, toGetNextBatchConstraints);
         }

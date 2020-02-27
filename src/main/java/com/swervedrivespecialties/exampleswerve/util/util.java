@@ -117,4 +117,15 @@ public class util {
 		DecimalFormat df = new DecimalFormat(keyStr);
 		return df.format(rounded);
 	}
+
+	public static double lin_int(double x0, double y0, double x1, double y1, double x_star){
+		if (x_star <= x0){
+			return y0;
+		} else if (x_star >= x1) {
+			return y1;
+		} else {
+			double slope = (y1 - y0) / (x1 - x0);
+			return y0 + (x_star - x0) * slope;
+		}
+	}
 }

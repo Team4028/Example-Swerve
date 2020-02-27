@@ -5,51 +5,48 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.swervedrivespecialties.exampleswerve.commands.infeed;
+package com.swervedrivespecialties.exampleswerve.commands.shooter;
 
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
+import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-
-//Runs the conveyor to shoot
-public class conveyToShoot extends CommandBase {
-  private Infeed _infeed;
-
-  double singulatorDelayTime = 200 / 1000; //200 ms
-  double startTime;
-
-
-  public conveyToShoot(Infeed infeed) {
-    _infeed = infeed;
-    addRequirements(_infeed);
-    // Use addRequirements() here to declare subsystem dependencies.
+public class BackItUp extends CommandBase {
+  Shooter _shooter;
+  Infeed _infeed;
+  public BackItUp(Shooter shooter, Infeed infeed) {
+    _shooter = shooter;
+    _infeed = infeed;    
+    addRequirements(_shooter);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
-    _infeed.resetBallsConveyed();
+    _shooter.stopShooter();
+    _shooter.stopKicker();
+    _infeed.stopConveyor();
+    _infeed.stopInfeed();
     _infeed.stopSingulator();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _infeed.conveyConveyorToShoot();
-    if (Timer.getFPGATimestamp() - startTime > singulatorDelayTime){
-      _infeed.runSingulatorToShoot();
-    } else {
-      _infeed.stopSingulator();
-    }
+    _shooter.backKicker();
+    _shooter.backShooter();
+    _infeed.backConveyor();
+    _infeed.backInfeed();
+    _infeed.backSingulator();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    _shooter.stopShooter();
+    _shooter.stopKicker();
     _infeed.stopConveyor();
+    _infeed.stopInfeed();
     _infeed.stopSingulator();
   }
 

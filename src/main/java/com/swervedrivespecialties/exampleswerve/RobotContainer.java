@@ -47,15 +47,13 @@ public class RobotContainer {
     AutonChooser ac = AutonChooser.getInstance();
 
     private void bindPrimaryJoystickButtons(){
-        primary.right_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
-        //primary.left_bumper.whenPressed(new OpponentBallBestAuton());
         primary.a.whenPressed(InfeedSubsystemCommands.getYeetIntake());
         primary.b.whenPressed(InfeedSubsystemCommands.getYeetSingulatorCommand());
-        primary.x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
+        primary.x.whenPressed(DriveSubsystemCommands.getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown());
         primary.y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
-        primary.left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
+        primary.left_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
+        primary.right_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
         primary.back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
-        primary.start.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
         primary.dpad_down.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(0));
         primary.dpad_left.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(270));
         primary.dpad_right.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(90));
@@ -66,23 +64,25 @@ public class RobotContainer {
        secondary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
        secondary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
        secondary.y.whenPressed(InfeedSubsystemCommands.getResetInfeedCommand());
-       secondary.back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
+       secondary.back.whileHeld(InfeedSubsystemCommands.BACK_SINGULATOR);
        secondary.dpad_left.whenPressed(ShooterSubsystemCommands.getResetDistanceCommand());
        secondary.dpad_right.whenPressed(ShooterSubsystemCommands.getClearDistanceOffsetCommand());
        secondary.dpad_up.whenPressed(ShooterSubsystemCommands.getIncremenetDistanceCommand());
        secondary.dpad_down.whenPressed(ShooterSubsystemCommands.getDecremenetDistanceCommand());
        secondary.start.whenPressed(ShooterSubsystemCommands.getTogggleAlternateShotCommand());
        secondary.right_bumper.whenPressed(InfeedSubsystemCommands.getSwitchCameraCommand());
-       secondary.x.whenPressed(ClimberSubsystemCommands.getToggleClimbSolenoidCommand());
+       secondary.x.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
+       secondary.left_bumper.whenPressed(ClimberSubsystemCommands.getToggleClimbSolenoidCommand());
     }
 
     private void bindTertiaryJoystickButtons(){
-        tertiary.a.toggleWhenPressed(InfeedSubsystemCommands.BACK_INFEED);
-        tertiary.b.toggleWhenPressed(InfeedSubsystemCommands.BACK_SINGULATOR);
-        tertiary.x.toggleWhenPressed(InfeedSubsystemCommands.BACK_CONVEYOR);
-        tertiary.y.toggleWhenPressed(ShooterSubsystemCommands.BACK_KICKER);
-        tertiary.left_bumper.whenPressed(new ToggleBackAll());
-        tertiary.right_bumper.toggleWhenPressed(ShooterSubsystemCommands.BACK_SHOOTER);
+        tertiary.a.whileHeld(InfeedSubsystemCommands.BACK_INFEED);
+        tertiary.b.whileHeld(ShooterSubsystemCommands.BACK_SHOOTER);
+        tertiary.y.whileHeld(InfeedSubsystemCommands.BACK_CONVEYOR);
+        tertiary.x.whileHeld(InfeedSubsystemCommands.getAnalogBackKickerCommand());
+        tertiary.back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
+        tertiary.left_bumper.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
+        tertiary.start.whileHeld(ShooterSubsystemCommands.getBackItUpCommand());
     }
 
     public RobotContainer(){
@@ -120,6 +120,10 @@ public class RobotContainer {
         return secondary.getRightYAxis();
     }
 
+    public double getTertiaryRightYAxis(){
+        return tertiary.getRightYAxis();
+    }
+
     public void initDefaultCommands(){
         CommandScheduler.getInstance().setDefaultCommand(drive, DriveSubsystemCommands.getDriveCommand());
         CommandScheduler.getInstance().setDefaultCommand(climber, ClimberSubsystemCommands.getClimbCommand());
@@ -140,12 +144,13 @@ public class RobotContainer {
             if (drive != null){ drive.updateLogData(logData); }
             if (limelight != null){ limelight.updateLogData(logData); }
             if (shooter != null ){ shooter.updateLogData(logData); }
-
+            if (infeed != null){ infeed.updatLogData(logData);}
             _dataLogger.WriteDataLine(logData);
         }
     }
 
     public void configureDrive(){
+        drive.customZeroGyro();
         drive.reset();
         drive.setCurrentLimit(40);
         drive.setRapRate(.48);

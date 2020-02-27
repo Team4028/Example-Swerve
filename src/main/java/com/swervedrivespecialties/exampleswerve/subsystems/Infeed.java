@@ -14,6 +14,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
+import com.swervedrivespecialties.exampleswerve.commands.infeed.YeetIntake;
+import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.util;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -21,11 +23,12 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Infeed extends SubsystemBase {
 
-  public static final double kEncoderCountsPerBall = 7500;
+  public static final double kEncoderCountsPerBall = 7000;
   private static final double kConveyorTalonConstantVBus = -0.50;
   private static final double kConveyToShootConstantVBUS = -.5;
   private static final double kInfeedVBus = -.7;
@@ -39,13 +42,13 @@ public class Infeed extends SubsystemBase {
 
   private static final boolean usesFourthPhotoEye = false;
 
-  private static final double kBackInfeedVBus = .7;
-  private static final double kBackSingulatorVBus = -.5;
-  private static final double kBackConveyorVBus = .5;
+  private static final double kBackInfeedVBus = .9;
+  private static final double kBackSingulatorVBus = -.95;
+  private static final double kBackConveyorVBus = .95;
 
   private static Infeed _instance = new Infeed();
 
-  private int numBallsConveyed;
+  private int BBallsConveyed;
 
   public static Infeed get_instance() {
     return _instance;
@@ -68,6 +71,7 @@ public class Infeed extends SubsystemBase {
   private DoubleSolenoid _infeedSolenoid;
   private boolean hasStoppedSingulating = false;
   private boolean hasMidConveyorBeenPressed = false;
+  int numBallsConveyed = 0;
 
   /**
    * Creates a new Infeed.
@@ -189,7 +193,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public void configInfeed(){
-    _infeedSolenoid.set(SOLENOID_OUT_POSITION);
+    _infeedSolenoid.set(SOLENOID_UP_POSITION);
     resetBallsConveyed();
   }
 
@@ -199,7 +203,7 @@ public class Infeed extends SubsystemBase {
 
   private void updateHasStopSingulating(){
     if (!hasStoppedSingulating){
-      hasStoppedSingulating = (getPreShooterSensor()) && getPostSingulatorSensor(); //numBallsConveyed >= 3 || 
+      hasStoppedSingulating = (numBallsConveyed >= 3 || getPreShooterSensor()) && getPostSingulatorSensor();
     }
   }
 
@@ -212,7 +216,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public boolean getCanSingulate(){
-    return !(getPostSingulatorSensor() && (getPreShooterSensor())) && !hasStoppedSingulating; //|| numBallsConveyed > 2
+    return !(getPostSingulatorSensor() && (getPreShooterSensor() || numBallsConveyed > 2)) && !hasStoppedSingulating; 
   }
 
   private boolean getMidConveyorSensor(){
@@ -237,11 +241,19 @@ public class Infeed extends SubsystemBase {
   public boolean getHasFourthEye(){
     return usesFourthPhotoEye;
   }
+
+  public void updatLogData(LogDataBE logData){
+    logData.AddData("IS INFEED COMMAND RUNNING", Boolean.toString(CommandScheduler.getInstance().isScheduled(YeetIntake.ifCommand)));
+    logData.AddData("IS SINGULATOR COMMAND RUNNING", Boolean.toString(CommandScheduler.getInstance().isScheduled(YeetIntake.sCommand)));
+    logData.AddData("HAS STOPPED SINGULATING", Boolean.toString(hasStoppedSingulating));
+    logData.AddData("CONVEYOR TALON COMMAND", Double.toString(_conveyorTalon.getMotorOutputPercent()));
+  }
+
   @Override
   public void periodic() {
     updateHasStopSingulating();
     updateMidConveyorPressed();
-    if (preConveyorSensorPressed()) { // && numBallsConveyed < 3
+    if (preConveyorSensorPressed() && numBallsConveyed < 3) { 
       numBallsConveyed++;
       CommandBase conveyorCommand = InfeedSubsystemCommands.getConveyCommand();
       conveyorCommand.schedule();

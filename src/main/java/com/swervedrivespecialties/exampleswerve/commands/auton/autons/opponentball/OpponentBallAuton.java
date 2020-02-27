@@ -27,7 +27,6 @@ public class OpponentBallAuton extends ParallelDeadlineGroup {
   public OpponentBallAuton() {
     super(
           new SequentialCommandGroup(
-                                      InfeedSubsystemCommands.getToggleInfeedSolenoidCommand(),
                                       new ParallelCommandGroup(
                                                                 DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toStealBallsTrajectorySupplier,
                                                                                                                   new InertiaGain(0, 0, 0)), 

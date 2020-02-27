@@ -30,20 +30,20 @@ public class CouldItBeSeven extends SequentialCommandGroup {
               new WaitCommand(.5), 
               InfeedSubsystemCommands.getRunInfeedCommand().withTimeout(1.2)
             )
-          ),
-          DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.sevenBallAuton.toShootNextShotTrajectorySupplier), 
-          DriveSubsystemCommands.getRotateToAngleCommand(140)
+          )
+          // DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.sevenBallAuton.toShootNextShotTrajectorySupplier), 
+          // DriveSubsystemCommands.getRotateToAngleCommand(140)
         ), 
       InfeedSubsystemCommands.getRunSingulatorCommand()
-      ), 
-      new ParallelDeadlineGroup(
-        new SequentialCommandGroup(
-          ShooterSubsystemCommands.getWaitUntilCanShootCommand(), 
-          InfeedSubsystemCommands.getConveyToShootCommand().withTimeout(2)
-        ),
-        DriveSubsystemCommands.getLLRotateToTargetCommand(), 
-        ShooterSubsystemCommands.getRunShooterFromVisionCommand()
-      )      
+      )
+      // new ParallelDeadlineGroup(
+      //   new SequentialCommandGroup(
+      //     ShooterSubsystemCommands.getWaitUntilCanShootCommand(), 
+      //     InfeedSubsystemCommands.getConveyToShootCommand().withTimeout(2)
+      //   ),
+      //   DriveSubsystemCommands.getLLRotateToTargetCommand(), 
+      //   ShooterSubsystemCommands.getRunShooterFromVisionCommand()
+      // )      
     );
   }
 }

@@ -135,6 +135,22 @@ public class Limelight implements Subsystem {
     return new RigidTransform2(Vector2.fromAngle(Rotation2.fromDegrees(getAngle1())).scale(getDistanceToTarget(target)), Rotation2.fromDegrees(getAngle1()));
   }
 
+  public double offsetLLDist(double raw){
+    if (raw < 1){
+      return 0;
+    } else if (raw < 14.7) {
+      return raw;
+    } else if (raw <= 23.7){
+      return raw + util.lin_int(14.7, 13.833 - 14.7, 23.7, 23.167 - 23.7, raw);
+    } else if (raw <= 26.5){
+      return raw + util.lin_int(23.7, 23.167 - 23.7, 26.5, 27.54167 - 26.5, raw);
+    } else if (raw <= 38.6){
+      return raw + util.lin_int(26.5, 27.54167 - 26.5, 38.6, 38.33 - 38.6, raw);
+    } else {
+      return raw;
+    }
+  }
+
   public void updateLogData(LogDataBE logData){
     // if (getHasTarget()){
     //   logData.AddData("Distance", Double.toString(getDistanceToTarget(Target.HIGH)));
@@ -263,6 +279,10 @@ public class Limelight implements Subsystem {
       default:
         return RobotMap.RASPBERRY_PI_INFEED_CAMERA;
     }
+  }
+
+  public void setCameraSlot(CAMERA_SLOT slot){
+    CUR_CAM_SLOT = slot;
   }
 
   public void toggleCameraSlot(){

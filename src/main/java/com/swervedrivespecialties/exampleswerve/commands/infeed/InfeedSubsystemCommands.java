@@ -8,6 +8,7 @@
 package com.swervedrivespecialties.exampleswerve.commands.infeed;
 
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
+import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -54,6 +55,10 @@ public class InfeedSubsystemCommands {
 
     public static CommandBase getResetInfeedCommand(){
         return new ResetInfeed(infeed);
+    }
+
+    public static CommandBase getAnalogBackKickerCommand(){
+        return new AnalogBackKicker(Shooter.getInstance());
     }
 
     public static CommandBase BACK_INFEED = new BackInfeed(infeed);

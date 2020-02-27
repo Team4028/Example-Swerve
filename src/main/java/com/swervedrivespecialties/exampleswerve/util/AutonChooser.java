@@ -7,6 +7,7 @@
 
 package com.swervedrivespecialties.exampleswerve.util;
 
+import com.swervedrivespecialties.exampleswerve.commands.auton.autons.opponentball.CouldItBeSeven;
 import com.swervedrivespecialties.exampleswerve.commands.auton.autons.opponentball.DoNothing;
 import com.swervedrivespecialties.exampleswerve.commands.auton.autons.opponentball.OpponentBallAuton;
 
@@ -38,7 +39,7 @@ public class AutonChooser {
 
     public CommandBase getAuton(){
         if (autonChooser.getSelected() == AUTONS.STEAL_BALLS){
-            return new OpponentBallAuton();
+            return new CouldItBeSeven();
         } else if (autonChooser.getSelected() == AUTONS.OWN_TRENCH) {
             return new DoNothing();
         } else {
