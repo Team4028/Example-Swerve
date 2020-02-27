@@ -5,42 +5,37 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.swervedrivespecialties.exampleswerve.commands.drive;
+package com.swervedrivespecialties.exampleswerve.commands.shooter;
 
-import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
+import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ZeroGyro extends CommandBase {
-  DrivetrainSubsystem _drive;
+public class BackKicker extends CommandBase {
 
-  /**
-   * Creates a new ZeroGyro.
-   */
-  public ZeroGyro(DrivetrainSubsystem drive) {
-    _drive = drive;
+  Shooter _shooter;
+  public BackKicker(Shooter shooter) {
+    _shooter = shooter;
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Should Be Running");
-    _drive.resetGyroscope();
+    _shooter.backKicker();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    _shooter.backKicker();
   }
 
-  // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted){
+  public void end(boolean interrupted) {
+    _shooter.stopKicker();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

@@ -167,7 +167,7 @@ public class DrivetrainSubsystem implements Subsystem {
     }
 
     public void resetGyroscope() {
-        gyroscope.setAdjustmentAngle(gyroscope.getUnadjustedAngle());
+        gyroscope.setAdjustmentAngle(gyroscope.getUnadjustedAngle().rotateBy(Rotation2.fromDegrees(180)));
     }
 
     public void customZeroGyro(){
@@ -293,12 +293,12 @@ public class DrivetrainSubsystem implements Subsystem {
         double forward = -Robot.getRobotContainer().getPrimaryLeftYAxis();
         forward = Utilities.deadband(forward);
         // Square the forward stick
-        forward = speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
+        forward = -speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
     
         double strafe = -Robot.getRobotContainer().getPrimaryLeftXAxis();
         strafe = Utilities.deadband(strafe);
         // Square the strafe stick
-        strafe = speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
+        strafe = -speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
 
         return new Translation2d(forward, strafe);
     }

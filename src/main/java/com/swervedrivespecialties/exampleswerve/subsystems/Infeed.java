@@ -39,6 +39,10 @@ public class Infeed extends SubsystemBase {
 
   private static final boolean usesFourthPhotoEye = false;
 
+  private static final double kBackInfeedVBus = .7;
+  private static final double kBackSingulatorVBus = -.5;
+  private static final double kBackConveyorVBus = .5;
+
   private static Infeed _instance = new Infeed();
 
   private int numBallsConveyed;
@@ -159,6 +163,18 @@ public class Infeed extends SubsystemBase {
 
   public void stopSingulator(){
     _singulatorTalon.set(ControlMode.PercentOutput, 0.0);
+  }
+
+  public void backConveyor(){
+    _conveyorTalon.set(ControlMode.PercentOutput, kBackConveyorVBus);
+  }
+
+  public void backSingulator(){
+    _singulatorTalon.set(ControlMode.PercentOutput, kBackSingulatorVBus);
+  }
+
+  public void backInfeed(){
+    _infeedVictor.set(ControlMode.PercentOutput, kBackInfeedVBus);
   }
 
 

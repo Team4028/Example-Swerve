@@ -55,4 +55,8 @@ public class InfeedSubsystemCommands {
     public static CommandBase getResetInfeedCommand(){
         return new ResetInfeed(infeed);
     }
+
+    public static CommandBase BACK_INFEED = new BackInfeed(infeed);
+    public static CommandBase BACK_SINGULATOR = new BackSingulator(infeed);
+    public static CommandBase BACK_CONVEYOR = new BackConveyor(infeed);
 }

@@ -5,42 +5,39 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.swervedrivespecialties.exampleswerve.commands.drive;
+package com.swervedrivespecialties.exampleswerve.commands.infeed;
 
-import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
+import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ZeroGyro extends CommandBase {
-  DrivetrainSubsystem _drive;
+public class BackInfeed extends CommandBase {
 
-  /**
-   * Creates a new ZeroGyro.
-   */
-  public ZeroGyro(DrivetrainSubsystem drive) {
-    _drive = drive;
+  Infeed _infeed;
+  public BackInfeed(Infeed infeed) {
+    _infeed = infeed;
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Should Be Running");
-    _drive.resetGyroscope();
+    _infeed.backInfeed();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    _infeed.backInfeed();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted){
+  public void end(boolean interrupted) {
+    _infeed.stopInfeed();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

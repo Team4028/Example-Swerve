@@ -35,11 +35,13 @@ public class Shooter extends SubsystemBase{
 
     private static final double kServoHome = .3;
     private static final double kServoHomeEpsilon = 0.02;
-    private static final double kServoTolerance = .02;
     private static final double kShooterDistanceDelta = .8 * 12;
     private static final double kShooterDefaultDistance = 27 * 12; 
-    private static final double kMinServoVBus = .7;
+    private static final double kMinKickerVBus = .7;
     private static final int kNumShooterTableDecimalPlaces = 1;
+
+    private static final double kBackKickerVBus = -.6;
+    private static final double kBackShooterVBus = -.5;
 
     private boolean hasHadOdometry;
 
@@ -74,7 +76,6 @@ public class Shooter extends SubsystemBase{
     private TalonSRX _kickerTalon = new TalonSRX(RobotMap.KICKER_TALON);
     private CANSparkMax _shooterNEO = new CANSparkMax(RobotMap.SHOOTER_MASTER_NEO, MotorType.kBrushless);
     private CANSparkMax _shooterSlave = new CANSparkMax(RobotMap.SHOOTER_SLAVE_NEO, MotorType.kBrushless);
-    private TalonSRX _feederTalon = new TalonSRX(RobotMap.KICKER_TALON);
     //private BoundedServo _linearActuator = new BoundedServo(0, kServoLowerLimit, kServoUpperLimit);
 
     private Servo _linearActuator = new Servo(0);
@@ -123,7 +124,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("velo", _encoder.getVelocity());
         SmartDashboard.putNumber("Vello", _encoder.getVelocity());
         SmartDashboard.putNumber("ActuatorVal", actuatorVal); 
-        double talonSpeed = spd > 0 ? 1 * (kMinServoVBus + 0 * (1 - kMaxSpeed) *  (spd / kMaxSpeed)): 0.0;
+        double talonSpeed = spd > 0 ? 1 * (kMinKickerVBus + 0 * (1 - kMaxSpeed) *  (spd / kMaxSpeed)): 0.0;
         _kickerTalon.set(ControlMode.PercentOutput, -talonSpeed);
         if (spd > kShooterTolerance){
             _pidController.setReference(spd, ControlType.kVelocity);
@@ -132,6 +133,22 @@ public class Shooter extends SubsystemBase{
             _shooterNEO.set(0.0);
         }
         _linearActuator.set(actuatorVal);
+    }
+
+    public void backKicker(){
+        _kickerTalon.set(ControlMode.PercentOutput, kBackKickerVBus);
+    }
+
+    public void backShooter(){
+        _shooterNEO.set(kBackShooterVBus);
+    }
+
+    public void stopKicker(){
+        _kickerTalon.set(ControlMode.PercentOutput, 0.0);
+    }
+
+    public void stopShooter(){
+        _shooterNEO.set(0.0);
     }
 
     private String getFormattedDistanceStr(double val){
@@ -160,8 +177,8 @@ public class Shooter extends SubsystemBase{
     }
 
     public void updateLogData(LogDataBE logData){  
-        //logData.AddData("Is Shooting", Boolean.toString(isShooting));
-        //logData.AddData("Vello", Double.toString(_encoder.getVelocity()));
+        logData.AddData("Is Shooting", Boolean.toString(isShooting));
+        logData.AddData("Vello", Double.toString(_encoder.getVelocity()));
     }
 
     public void teleopInit(){

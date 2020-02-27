@@ -50,4 +50,7 @@ public class ShooterSubsystemCommands {
     public static CommandBase getWaitUntilCanShootCommand(){
         return new WaitUntilCanShoot(shooter);
     }
+
+    public static CommandBase BACK_KICKER = new BackKicker(shooter);
+    public static CommandBase BACK_SHOOTER = new BackShooter(shooter);
 }

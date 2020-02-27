@@ -14,6 +14,7 @@ import com.swervedrivespecialties.exampleswerve.commands.climber.ClimberSubsyste
 import com.swervedrivespecialties.exampleswerve.commands.drive.DriveSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.drive.printTargetToLL;
 import com.swervedrivespecialties.exampleswerve.commands.shooter.ShooterSubsystemCommands;
+import com.swervedrivespecialties.exampleswerve.commands.shooter.ToggleBackAll;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.subsystems.Climber;
 import com.swervedrivespecialties.exampleswerve.subsystems.DrivetrainSubsystem;
@@ -39,6 +40,7 @@ public class RobotContainer {
 
     private BeakXBoxController primary = new BeakXBoxController(0);
     private BeakXBoxController secondary = new BeakXBoxController(1);
+    private BeakXBoxController tertiary = new BeakXBoxController(2);
 
     private DataLogger _dataLogger = null;
 
@@ -46,14 +48,18 @@ public class RobotContainer {
 
     private void bindPrimaryJoystickButtons(){
         primary.right_bumper.whenPressed(InfeedSubsystemCommands.getToggleInfeedSolenoidCommand());
-        primary.left_bumper.whenPressed(new OpponentBallBestAuton());
+        //primary.left_bumper.whenPressed(new OpponentBallBestAuton());
         primary.a.whenPressed(InfeedSubsystemCommands.getYeetIntake());
         primary.b.whenPressed(InfeedSubsystemCommands.getYeetSingulatorCommand());
         primary.x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
         primary.y.whenPressed(DriveSubsystemCommands.getToggleSpeedCommand());
-       // primary.right_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
+        primary.left_bumper.toggleWhenPressed(DriveSubsystemCommands.getMikeeDriveCommand());
         primary.back.whenPressed(DriveSubsystemCommands.getZeroGyroCommand());
         primary.start.whenPressed(DriveSubsystemCommands.getToggleLEDMode());
+        primary.dpad_down.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(0));
+        primary.dpad_left.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(270));
+        primary.dpad_right.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(90));
+        primary.dpad_up.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(180));
     }
 
     private void bindSecondaryJoystickButtons(){
@@ -70,9 +76,19 @@ public class RobotContainer {
        secondary.x.whenPressed(ClimberSubsystemCommands.getToggleClimbSolenoidCommand());
     }
 
+    private void bindTertiaryJoystickButtons(){
+        tertiary.a.toggleWhenPressed(InfeedSubsystemCommands.BACK_INFEED);
+        tertiary.b.toggleWhenPressed(InfeedSubsystemCommands.BACK_SINGULATOR);
+        tertiary.x.toggleWhenPressed(InfeedSubsystemCommands.BACK_CONVEYOR);
+        tertiary.y.toggleWhenPressed(ShooterSubsystemCommands.BACK_KICKER);
+        tertiary.left_bumper.whenPressed(new ToggleBackAll());
+        tertiary.right_bumper.toggleWhenPressed(ShooterSubsystemCommands.BACK_SHOOTER);
+    }
+
     public RobotContainer(){
         bindPrimaryJoystickButtons();
         bindSecondaryJoystickButtons();
+        bindTertiaryJoystickButtons();
         initDefaultCommands();
     }
 

@@ -43,7 +43,7 @@ public class OpponentBallBestAuton extends ParallelDeadlineGroup {
                                         ShooterSubsystemCommands.getRunShooterFromVisionCommand().withTimeout(8), 
                                         new SequentialCommandGroup(
                                                                     ShooterSubsystemCommands.getWaitUntilCanShootCommand(),
-                                                                    InfeedSubsystemCommands.getConveyToShootCommand().withTimeout(3.5)
+                                                                    InfeedSubsystemCommands.getConveyToShootCommand().withTimeout(3)
                                         ))
                                       )
           ), 

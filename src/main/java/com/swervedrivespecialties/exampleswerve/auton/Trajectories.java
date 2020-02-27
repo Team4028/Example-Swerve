@@ -110,9 +110,41 @@ public class Trajectories {
         public static Supplier<Trajectory> toShootFirstBatchTrajectorySupplier = () -> toShootFirstBatch;
     }
 
+    public static class sevenBallAuton {
+        public static Trajectory toGetNextBatch;
+
+        private static void generateToGetNextBatch(){
+            ITrajectoryConstraint[] toGetNextBatchConstraints = getConstraint(12 * 12);
+            Path toGetNextBatchPath = new Path(steallBallBestAuton.firstShotRotation);
+            toGetNextBatchPath.addSegment(new PathArcSegment(steallBallBestAuton.shootPoint, new Vector2(90, 140), new Vector2(120, 180)), Rotation2.fromDegrees(30));
+            toGetNextBatchPath.subdivide(kSubdivideIterations);
+            toGetNextBatch = new Trajectory(0.0, 36.0, toGetNextBatchPath, toGetNextBatchConstraints);
+        }
+
+        public static Supplier<Trajectory> toGetNextBatchTrajectorySupplier = () -> toGetNextBatch;
+
+        public static Trajectory toShootNextShot;
+
+        private static void generateToShootNextShot(){
+            ITrajectoryConstraint[] toShootNextShotConstraints = getConstraint(12 * 12);
+            Path toShootNextShotPath = new Path(Rotation2.fromDegrees(30));
+            toShootNextShotPath.addSegment(new PathLineSegment(new Vector2(90, 140), new Vector2(65, 110)), Rotation2.fromDegrees(140));
+            toShootNextShotPath.subdivide(kSubdivideIterations);
+            toShootNextShot = new Trajectory(0.0, 36.0, toShootNextShotPath, toShootNextShotConstraints);
+        }
+
+        public static Supplier<Trajectory> toShootNextShotTrajectorySupplier = () -> toGetNextBatch;
+
+        public static void generate(){
+            generateToGetNextBatch();
+            generateToShootNextShot();
+        }
+    }
+
     public static void generateAllTrajectories(){
         steallBallAuton.generate();
         steallBallBestAuton.generate();
+        sevenBallAuton.generate();
     }
 
 
