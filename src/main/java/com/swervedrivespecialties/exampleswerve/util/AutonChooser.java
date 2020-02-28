@@ -39,7 +39,7 @@ public class AutonChooser {
 
     public CommandBase getAuton(){
         if (autonChooser.getSelected() == AUTONS.STEAL_BALLS){
-            return new CouldItBeSeven();
+            return new OpponentBallAuton();
         } else if (autonChooser.getSelected() == AUTONS.OWN_TRENCH) {
             return new DoNothing();
         } else {

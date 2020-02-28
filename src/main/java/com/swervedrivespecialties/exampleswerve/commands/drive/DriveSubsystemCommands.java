@@ -109,7 +109,7 @@ public class DriveSubsystemCommands {
         return new ToggleLEDS();
     }
     public static CommandBase getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown(){
-        return new RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown(drivetrainSubsystem).withTimeout(3);
+        return new RotateAboutTheCenterOfMassOfTheRobotToPointTowardsFlavortown(drivetrainSubsystem).withTimeout(2.25);
     }
 
     public static CommandBase getWaitUntilDistanceRemaining(Supplier<Trajectory> trajSupplier, double distance){

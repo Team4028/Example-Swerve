@@ -19,7 +19,7 @@ public class Climber extends SubsystemBase{
     VictorSPX climbVictor;
     DoubleSolenoid climbSolenoid = new DoubleSolenoid(2, 3);
 
-    double kClimberNominalVBus = .5;
+    double kClimberNominalVBus = .10;
     double kClimberDeadband = .05;
     Value kClimberSolenoidDefault = Value.kForward;
 
@@ -35,7 +35,7 @@ public class Climber extends SubsystemBase{
     }
 
     public void run(double spd){
-        climbVictor.set(ControlMode.PercentOutput, Math.abs(spd) > kClimberDeadband ? spd *kClimberNominalVBus : 0.0);
+        climbVictor.set(ControlMode.PercentOutput, Math.abs(spd) > kClimberDeadband ? (spd - kClimberDeadband) * kClimberNominalVBus : 0.0);
     }
 
     public void resetClimbSolenoid(){

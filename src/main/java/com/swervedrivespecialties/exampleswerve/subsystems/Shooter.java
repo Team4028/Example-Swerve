@@ -165,7 +165,7 @@ public class Shooter extends SubsystemBase{
 
     public Shot getShot(){
         ShooterTable curTable = isAlternateShot ? secondaryTable : primaryTable;
-        return curTable.CalcShooterValues(_ll.offsetLLDist(_shooterShootDistance/12)).getShot();
+        return curTable.CalcShooterValues(_shooterShootDistance/12).getShot();
     }
 
     public void resetServo(){
@@ -213,12 +213,12 @@ public class Shooter extends SubsystemBase{
         if (_ll.hasOdom()){
             hasHadOdometry = true;
             curOdom = _dt.getShooterOdometry(_ll.getTargetToBot());
-            _shooterSensorDistance = _ll.getDistanceToTarget(Target.HIGH);
+            _shooterSensorDistance = _ll.offsetLLDist(_ll.getDistanceToTarget(Target.HIGH));
         } else if (_ll.hasRange()){
             if (hasHadOdometry){
                 _dt.updateShooterOdometry(curOdom);
             }
-            _shooterSensorDistance = _ll.getDistanceToTarget(Target.HIGH);
+            _shooterSensorDistance = _ll.offsetLLDist(_ll.getDistanceToTarget(Target.HIGH));
         } else if (hasHadOdometry){
             _dt.updateShooterOdometry(curOdom);
             _shooterSensorDistance = util.metersToInches(curOdom.getPoseMeters().getTranslation().getNorm());

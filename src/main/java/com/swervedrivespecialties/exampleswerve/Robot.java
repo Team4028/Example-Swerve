@@ -66,7 +66,7 @@ public class Robot extends TimedRobot{
         robotContainer.setupLogging(false);
         robotContainer.configureClimber();
         _shooter.runShooter(Shooter.Shot.getStopShot());
-        //RobotContainer.configureInfeed();
+        RobotContainer.configureInfeed();
         robotContainer.configureDrive();
         Limelight.getInstance().setPipeline(2.0);
     }

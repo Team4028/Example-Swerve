@@ -33,13 +33,13 @@ public class Trajectories {
     public static class steallBallAuton { 
         private static final Vector2 goalPoint = new Vector2(-176, 198);
         private static final Rotation2 startRot = Rotation2.ZERO;
-        private static final double travelDist = 92;
-        private static final Vector2 shootPoint = new Vector2(84, 132); //must have that |y| > |x - travelDist|
+        private static final double travelDist = 92.5;
+        private static final Vector2 shootPoint = new Vector2(80, 124); //must have that |y| > |x - travelDist|
         private static final double stealBallSpeed = 11 * 12;
         private static final double goShootSpeed = 11.5 * 12;
 
         private static final double rad = travelDist - shootPoint.x;
-        private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint).rotateBy(Rotation2.fromDegrees(-85));
+        private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint).rotateBy(Rotation2.fromDegrees(-87));
         
         private static Trajectory toStealBalls;
         private static Trajectory toShootFirstBatch;

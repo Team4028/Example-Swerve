@@ -29,13 +29,10 @@ public class OpponentBallAuton extends ParallelDeadlineGroup {
           new SequentialCommandGroup(
                                       new ParallelCommandGroup(
                                                                 DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toStealBallsTrajectorySupplier,
-                                                                                                                  new InertiaGain(0, 0, 0)), 
-                                                                new SequentialCommandGroup(
-                                                                  new WaitCommand(.5),
-                                                                  InfeedSubsystemCommands.getRunInfeedCommand().withTimeout(1.7)                                                                                                                         
-                                                                )
+                                                                                                                  new InertiaGain(0, 0, 0))
                                                               ),
                                       DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toShootFirstBatchTrajectorySupplier), 
+                                      DriveSubsystemCommands.getRotateAboutTheCenterOfTheRobotToPointTowardsFlavortown(),
                                       new ParallelRaceGroup(
                                         ShooterSubsystemCommands.getRunShooterFromVisionCommand().withTimeout(8), 
                                         new SequentialCommandGroup(
@@ -44,7 +41,11 @@ public class OpponentBallAuton extends ParallelDeadlineGroup {
                                         ) 
                                       )
           ), 
-          InfeedSubsystemCommands.getRunSingulatorCommand()
+          InfeedSubsystemCommands.getRunSingulatorCommand(), 
+          new SequentialCommandGroup(
+            new WaitCommand(.5),
+            InfeedSubsystemCommands.getRunInfeedCommand().withTimeout(1.7)                                                                                                                         
+          )
           // InfeedSubsystemCommands.getRunInfeedCommand()
         );
   }

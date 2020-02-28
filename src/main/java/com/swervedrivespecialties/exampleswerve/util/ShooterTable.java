@@ -150,12 +150,12 @@ public class ShooterTable {
 		//======================================================================================
 		//									Position	feet Stg1  
 		//======================================================================================
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 11.5, 2600, .28)); // line
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 13.38, 2910, .34)); //good
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 18.5, 3200, .41)); // good
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 21.0, 3707 , .44));//good
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 27.5, 4028, .44));// good
-        primarytable.add(new ShooterTableEntry(_indexCounter++,  38, 4300, .48)); //good
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 11.5, 2600, .28));
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 13.38, 2910, .33)); //34
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 18.5, 3200, .39));  //41
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 21.0, 3707 , .43)); //44
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 27.5, 4028, .44));
+        primarytable.add(new ShooterTableEntry(_indexCounter++,  38, 4300, .48)); 
         primarytable.add(new ShooterTableEntry(_indexCounter++,  42, 4400, .50));
         
         

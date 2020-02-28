@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class convey extends CommandBase {
   private Infeed _infeed;
   double targetPos;
+  boolean midConveyorSensorFreed = false;
+  boolean midConveyorSensorPressed = false;
 
   public convey(Infeed infeed) {
     _infeed = infeed;
@@ -22,8 +24,9 @@ public class convey extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    _infeed.resetMidConveyorPressed();
     targetPos = Infeed.get_instance().getConveyorPosiiton() + Infeed.kEncoderCountsPerBall;
+    midConveyorSensorFreed = false;
+    midConveyorSensorPressed = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,7 +39,6 @@ public class convey extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     _infeed.stopConveyor();
-    _infeed.resetMidConveyorPressed();
   }
 
   // Returns true when the command should end.
@@ -46,10 +48,23 @@ public class convey extends CommandBase {
       return true;
     } else {
       if (_infeed.getHasFourthEye()){
-        return _infeed.getMidConveyorPressed();
+        return updateMidConveyorPressed();
       } else {
         return _infeed.getConveyorPosiiton() > targetPos;
       }
     }
+  }
+
+  public boolean updateMidConveyorPressed(){
+    if (!midConveyorSensorFreed){
+      midConveyorSensorFreed = !_infeed.getMidConveyorSensor(); //If I haven't been freed, and I have no Mid Conveyor, then I'm free
+      midConveyorSensorPressed = false;
+    }
+
+    if (midConveyorSensorFreed){
+      midConveyorSensorPressed = _infeed.getMidConveyorSensor();
+    }
+
+    return midConveyorSensorPressed;
   }
 }

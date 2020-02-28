@@ -48,8 +48,6 @@ public class Infeed extends SubsystemBase {
 
   private static Infeed _instance = new Infeed();
 
-  private int BBallsConveyed;
-
   public static Infeed get_instance() {
     return _instance;
   }
@@ -70,7 +68,6 @@ public class Infeed extends SubsystemBase {
   private DigitalInput _midConveyorSensor;
   private DoubleSolenoid _infeedSolenoid;
   private boolean hasStoppedSingulating = false;
-  private boolean hasMidConveyorBeenPressed = false;
   int numBallsConveyed = 0;
 
   /**
@@ -219,23 +216,8 @@ public class Infeed extends SubsystemBase {
     return !(getPostSingulatorSensor() && (getPreShooterSensor() || numBallsConveyed > 2)) && !hasStoppedSingulating; 
   }
 
-  private boolean getMidConveyorSensor(){
+  public boolean getMidConveyorSensor(){
     return _midConveyorSensor.get() != kMidConveyorNormal;
-  }
-
-  private void updateMidConveyorPressed(){
-    boolean local = getMidConveyorSensor();
-    if (!hasMidConveyorBeenPressed){
-      hasMidConveyorBeenPressed = local;
-    }
-  }
-
-  public void resetMidConveyorPressed(){
-    hasMidConveyorBeenPressed = false;
-  }
-
-  public boolean getMidConveyorPressed(){
-    return hasMidConveyorBeenPressed;
   }
 
   public boolean getHasFourthEye(){
@@ -245,17 +227,20 @@ public class Infeed extends SubsystemBase {
   public void updatLogData(LogDataBE logData){
     logData.AddData("IS INFEED COMMAND RUNNING", Boolean.toString(CommandScheduler.getInstance().isScheduled(YeetIntake.ifCommand)));
     logData.AddData("IS SINGULATOR COMMAND RUNNING", Boolean.toString(CommandScheduler.getInstance().isScheduled(YeetIntake.sCommand)));
+    logData.AddData("IS CONVEYOR COMMAND RUNNING", Boolean.toString(CommandScheduler.getInstance().isScheduled(conveyorCommand)));
     logData.AddData("HAS STOPPED SINGULATING", Boolean.toString(hasStoppedSingulating));
+    logData.AddData("NUMBER BALLS CONVEYED", Integer.toString(numBallsConveyed));
+    logData.AddData("SINGULATOR MOTOR COMMAND", Double.toString(_singulatorTalon.getMotorOutputPercent()));
     logData.AddData("CONVEYOR TALON COMMAND", Double.toString(_conveyorTalon.getMotorOutputPercent()));
   }
+
+  private static final CommandBase conveyorCommand = InfeedSubsystemCommands.getConveyCommand().withTimeout(4);
 
   @Override
   public void periodic() {
     updateHasStopSingulating();
-    updateMidConveyorPressed();
     if (preConveyorSensorPressed() && numBallsConveyed < 3) { 
       numBallsConveyed++;
-      CommandBase conveyorCommand = InfeedSubsystemCommands.getConveyCommand();
       conveyorCommand.schedule();
     }
   }
