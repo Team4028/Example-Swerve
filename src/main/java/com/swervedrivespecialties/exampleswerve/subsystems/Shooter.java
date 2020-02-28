@@ -160,6 +160,8 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putString("Shooter Sensor Distance", getFormattedDistanceStr(_shooterSensorDistance));
         SmartDashboard.putString("Shooter Offset", getFormattedDistanceStr(_shooterDistanceOffset));
         SmartDashboard.putString("Shot Distance", getFormattedDistanceStr(_shooterShootDistance));
+        SmartDashboard.putString("Target RPM", getFormattedDistanceStr(getShot().speed));
+        SmartDashboard.putString("RPM", getFormattedDistanceStr(_encoder.getVelocity()));
         SmartDashboard.putBoolean("Is Normal Shot", !isAlternateShot);
     }
 
@@ -182,7 +184,12 @@ public class Shooter extends SubsystemBase{
 
     public void updateLogData(LogDataBE logData){  
         logData.AddData("Is Shooting", Boolean.toString(isShooting));
-        logData.AddData("Vello", Double.toString(_encoder.getVelocity()));
+        logData.AddData("Shooter Velo", Double.toString(_encoder.getVelocity()));
+        logData.AddData("Shooter Target", Double.toString(getShot().speed));
+        logData.AddData("Shooter Applied Output", Double.toString(_shooterNEO.getAppliedOutput()));
+        logData.AddData("Shooter Current", Double.toString(_shooterNEO.getOutputCurrent()));
+        logData.AddData("Shooter Tenperature", Double.toString(_shooterNEO.getMotorTemperature()));
+
     }
 
     public void teleopInit(){

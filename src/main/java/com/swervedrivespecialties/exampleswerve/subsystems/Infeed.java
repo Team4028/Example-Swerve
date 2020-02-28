@@ -224,6 +224,10 @@ public class Infeed extends SubsystemBase {
     return usesFourthPhotoEye;
   }
 
+  public void putHasStoppedSingulating(boolean putval){
+    hasStoppedSingulating = putval;
+  }
+
   public void updatLogData(LogDataBE logData){
     logData.AddData("IS INFEED COMMAND RUNNING", Boolean.toString(CommandScheduler.getInstance().isScheduled(YeetIntake.ifCommand)));
     logData.AddData("IS SINGULATOR COMMAND RUNNING", Boolean.toString(CommandScheduler.getInstance().isScheduled(YeetIntake.sCommand)));

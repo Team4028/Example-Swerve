@@ -49,6 +49,8 @@ public class Robot extends TimedRobot{
 
     @Override
     public void autonomousInit() {
+        Infeed.get_instance().putHasStoppedSingulating(true);
+        CommandScheduler.getInstance().run();
         robotContainer.setupLogging(true);
         robotContainer.configureDrive();
         RobotContainer.configureInfeed();
@@ -70,6 +72,7 @@ public class Robot extends TimedRobot{
         robotContainer.configureDrive();
         Limelight.getInstance().setPipeline(2.0);
     }
+
     @Override
     public void teleopPeriodic(){
     }
