@@ -26,7 +26,7 @@ public class LLRotateToTarget extends CommandBase {
   Limelight _limelight = Limelight.getInstance();
 
 
-  PidController _rotController = new PidController(new PidConstants(0.012, 0.01, 0.0008));
+  PidController _rotController = new PidController(new PidConstants(0.013, 0.0125, 0.0008));
 
   private double _prevTime,  error, forward, strafe;
   private boolean _translate;

@@ -40,9 +40,12 @@ public class Trajectories {
 
         private static final double rad = travelDist - shootPoint.x;
         private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint).rotateBy(Rotation2.fromDegrees(-87));
+        public static final Rotation2 towardsBallsRotation = Rotation2.fromDegrees(25);
+        private static final double driveForwardDistance = 30;
         
         private static Trajectory toStealBalls;
         private static Trajectory toShootFirstBatch;
+        private static Trajectory pickupNext;
 
         private static void generateToStealBall(){
             ITrajectoryConstraint[] stealBallConstraints = getConstraint(stealBallSpeed);
@@ -61,13 +64,23 @@ public class Trajectories {
             toShootFirstBatch = new Trajectory(0.0, 0.0, toShootFirstBatchPath, toShootFirstBatchConstraints);
         }     
 
+        private static void generatePickupNext(){
+            ITrajectoryConstraint[] pickupNextConstraints = getConstraint(8);
+            Path pickupNextBallz = new Path(towardsBallsRotation);
+            pickupNextBallz.addSegment(new PathLineSegment(shootPoint, shootPoint.add(Vector2.fromAngle(towardsBallsRotation).scale(driveForwardDistance))));
+            pickupNextBallz.subdivide(kSubdivideIterations);
+            pickupNext = new Trajectory(0.0, 0.0, pickupNextBallz, pickupNextConstraints);
+        }
+
         private static void generate(){
             generateToStealBall();
             generateToShootFirstBatch();
+            generatePickupNext();
         }
 
         public static Supplier<Trajectory> toStealBallsTrajectorySupplier = () -> toStealBalls;
         public static Supplier<Trajectory> toShootFirstBatchTrajectorySupplier = () -> toShootFirstBatch;
+        public static Supplier<Trajectory> toPickupNextTrajectorySupplier = () -> pickupNext;
     }
 
     public static class steallBallBestAuton { 

@@ -44,9 +44,8 @@ public class OpponentBallAuton extends ParallelDeadlineGroup {
           InfeedSubsystemCommands.getRunSingulatorCommand(), 
           new SequentialCommandGroup(
             new WaitCommand(.5),
-            InfeedSubsystemCommands.getRunInfeedCommand().withTimeout(1.7)                                                                                                                         
+            InfeedSubsystemCommands.getRunInfeedCommand().withTimeout(14)                                                                                                                         
           )
-          // InfeedSubsystemCommands.getRunInfeedCommand()
         );
   }
 }
