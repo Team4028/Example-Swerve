@@ -29,7 +29,7 @@ public class HereWeGoAgain extends SequentialCommandGroup {
         DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toPickupNextTrajectorySupplier),
         new SequentialCommandGroup(
           new WaitCommand(.4),
-          InfeedSubsystemCommands.getRunInfeedCommand().withTimeout(1.3)
+          InfeedSubsystemCommands.getRunInfeedCommand().withTimeout(3.5)
         )
       )
     );

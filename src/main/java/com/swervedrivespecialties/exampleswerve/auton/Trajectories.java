@@ -34,14 +34,14 @@ public class Trajectories {
         private static final Vector2 goalPoint = new Vector2(-176, 198);
         private static final Rotation2 startRot = Rotation2.ZERO;
         private static final double travelDist = 93.75;
-        private static final Vector2 shootPoint = new Vector2(80, 124); //must have that |y| > |x - travelDist|
+        private static final Vector2 shootPoint = new Vector2(74, 124); //must have that |y| > |x - travelDist|
         private static final double stealBallSpeed = 11 * 12;
         private static final double goShootSpeed = 11.5 * 12;
 
         private static final double rad = travelDist - shootPoint.x;
         private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint).rotateBy(Rotation2.fromDegrees(-87));
-        public static final Rotation2 towardsBallsRotation = Rotation2.fromDegrees(25);
-        private static final double driveForwardDistance = 30;
+        public static final Rotation2 towardsBallsRotation = Rotation2.fromDegrees(5);
+        private static final double driveForwardDistance = 25;
         
         private static Trajectory toStealBalls;
         private static Trajectory toShootFirstBatch;
@@ -65,7 +65,7 @@ public class Trajectories {
         }     
 
         private static void generatePickupNext(){
-            ITrajectoryConstraint[] pickupNextConstraints = getConstraint(8);
+            ITrajectoryConstraint[] pickupNextConstraints = getConstraint(8 * 12);
             Path pickupNextBallz = new Path(towardsBallsRotation);
             pickupNextBallz.addSegment(new PathLineSegment(shootPoint, shootPoint.add(Vector2.fromAngle(towardsBallsRotation).scale(driveForwardDistance))));
             pickupNextBallz.subdivide(kSubdivideIterations);

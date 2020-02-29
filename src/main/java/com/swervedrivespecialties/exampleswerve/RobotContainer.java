@@ -154,6 +154,8 @@ public class RobotContainer {
         drive.reset();
         drive.setCurrentLimit(40);
         drive.setRapRate(.48);
+        shooter.isSensorDistanceLocked = true;
+        shooter.setAutoShooterDistance();
     }
 
     public static void configureInfeed(){

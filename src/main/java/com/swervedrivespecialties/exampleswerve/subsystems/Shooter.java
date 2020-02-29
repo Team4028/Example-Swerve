@@ -42,6 +42,8 @@ public class Shooter extends SubsystemBase{
 
     private static final double kBackKickerVBus = .95;
     private static final double kBackShooterVBus = -.95;
+    
+    private static final double kAutoShotDistance = 14 * 12;
 
     private boolean hasHadOdometry;
 
@@ -53,6 +55,7 @@ public class Shooter extends SubsystemBase{
 
     private boolean isAlternateShot = false;
     public boolean isShooting = false;
+    public boolean isSensorDistanceLocked = false;
 
     //4880 12.5
     //5040 fresh 
@@ -189,7 +192,9 @@ public class Shooter extends SubsystemBase{
         logData.AddData("Shooter Applied Output", Double.toString(_shooterNEO.getAppliedOutput()));
         logData.AddData("Shooter Current", Double.toString(_shooterNEO.getOutputCurrent()));
         logData.AddData("Shooter Tenperature", Double.toString(_shooterNEO.getMotorTemperature()));
-
+        logData.AddData("Shooter Distance", Double.toString(_shooterShootDistance));
+        logData.AddData("Shooter Sensor Distance", Double.toString(_shooterSensorDistance));
+        logData.AddData("Shooter Distance Offset", Double.toString(_shooterDistanceOffset));
     }
 
     public void teleopInit(){
@@ -198,6 +203,10 @@ public class Shooter extends SubsystemBase{
     public void updateShooterDistance(){
         updateSensorDistance();
         _shooterShootDistance = _shooterSensorDistance + _shooterDistanceOffset;
+    }
+
+    public void setAutoShooterDistance(){
+        _shooterDistanceOffset = kAutoShotDistance;
     }
 
     public void incrementShooterDistance(){
@@ -217,20 +226,21 @@ public class Shooter extends SubsystemBase{
     }
 
     private void updateSensorDistance(){
-        if (_ll.hasOdom()){
-            hasHadOdometry = true;
-            curOdom = _dt.getShooterOdometry(_ll.getTargetToBot());
-            _shooterSensorDistance = _ll.offsetLLDist(_ll.getDistanceToTarget(Target.HIGH));
-        } else if (_ll.hasRange()){
-            if (hasHadOdometry){
+        if (!isSensorDistanceLocked){
+            if (_ll.hasOdom()){
+                hasHadOdometry = true;
+                curOdom = _dt.getShooterOdometry(_ll.getTargetToBot());
+                _shooterSensorDistance = _ll.offsetLLDist(_ll.getDistanceToTarget(Target.HIGH));
+            } else if (_ll.hasRange()){
+                if (hasHadOdometry){
+                    _dt.updateShooterOdometry(curOdom);
+                }
+                _shooterSensorDistance = _ll.offsetLLDist(_ll.getDistanceToTarget(Target.HIGH));
+            } else if (hasHadOdometry){
                 _dt.updateShooterOdometry(curOdom);
+                _shooterSensorDistance = util.metersToInches(curOdom.getPoseMeters().getTranslation().getNorm());
             }
-            _shooterSensorDistance = _ll.offsetLLDist(_ll.getDistanceToTarget(Target.HIGH));
-        } else if (hasHadOdometry){
-            _dt.updateShooterOdometry(curOdom);
-            _shooterSensorDistance = util.metersToInches(curOdom.getPoseMeters().getTranslation().getNorm());
         }
-
         SmartDashboard.putBoolean("Limelight HasR", _ll.hasRange());
     }
 

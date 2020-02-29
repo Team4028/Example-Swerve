@@ -31,8 +31,7 @@ public class OpponentBallAuton extends ParallelDeadlineGroup {
                                                                 DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toStealBallsTrajectorySupplier,
                                                                                                                   new InertiaGain(0, 0, 0))
                                                               ),
-                                      DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toShootFirstBatchTrajectorySupplier), 
-                                      DriveSubsystemCommands.getLLRotateToTargetCommand(),
+                                      DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toShootFirstBatchTrajectorySupplier),
                                       new ParallelRaceGroup(
                                         ShooterSubsystemCommands.getRunShooterFromVisionCommand().withTimeout(8), 
                                         new SequentialCommandGroup(

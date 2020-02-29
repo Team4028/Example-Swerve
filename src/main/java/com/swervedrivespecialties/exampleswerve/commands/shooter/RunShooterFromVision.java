@@ -47,6 +47,7 @@ public class RunShooterFromVision extends CommandBase {
   @Override
   public void initialize() {
     _shooter.isShooting = true;
+    _shooter.isSensorDistanceLocked = true;
     numCycles = 0;
     CommandScheduler.getInstance().cancel(YeetIntake.sCommand);
     CommandScheduler.getInstance().cancel(YeetIntake.ifCommand);
@@ -72,6 +73,7 @@ public class RunShooterFromVision extends CommandBase {
   @Override 
   public void end(boolean interrupted){
     _shooter.isShooting = false;
+    //_shooter.isSensorDistanceLocked = false;
     _shooter.updateCanShoot(false);
     _shooter.runShooter(Shooter.Shot.getStopShot());
   }
