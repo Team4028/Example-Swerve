@@ -34,9 +34,9 @@ public class DrivetrainSubsystem implements Subsystem {
     private static final double TRACKWIDTH = 22.5;
     private static final double WHEELBASE = 24.41;
 
-    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(224.4);//211.770524);//278.06 Practice
+    private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(224.4); //211.770524);//278.06 Practice
     private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(229.6);//250.524496);//45.48
-    private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(206.815318);//93.51
+    private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(115.0);//93.51
     private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(55.683811);//300.77
 
     private static final PidConstants ANGLE_CONSTANTS = new PidConstants(1.5, 0.0, .5);

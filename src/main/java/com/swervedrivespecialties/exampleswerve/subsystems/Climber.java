@@ -19,8 +19,8 @@ public class Climber extends SubsystemBase{
     VictorSPX climbVictor;
     DoubleSolenoid climbSolenoid = new DoubleSolenoid(2, 3);
 
-    double kClimberYeetVBus = -.5; 
-    double kClimberStandardVBus = -.1;
+    double kClimberYeetVBus = -.65; 
+    double kClimberStandardVBus = -.15;
     double kClimberDeadband = .05;
     double kClimberYeetDeadband = .85;
     Value kClimberSolenoidDefault = Value.kForward;

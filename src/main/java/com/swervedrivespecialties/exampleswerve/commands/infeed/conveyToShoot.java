@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class conveyToShoot extends CommandBase {
   private Infeed _infeed;
 
-  double singulatorDelayTime = 400 / 1000; //200 ms
+  double singulatorDelayTime = 600 / 1000; //200 ms
   double startTime;
 
 
