@@ -33,7 +33,7 @@ public class Trajectories {
     public static class steallBallAuton { 
         private static final Vector2 goalPoint = new Vector2(-176, 198);
         private static final Rotation2 startRot = Rotation2.ZERO;
-        private static final double travelDist = 92.5;
+        private static final double travelDist = 93.75;
         private static final Vector2 shootPoint = new Vector2(80, 124); //must have that |y| > |x - travelDist|
         private static final double stealBallSpeed = 11 * 12;
         private static final double goShootSpeed = 11.5 * 12;
