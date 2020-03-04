@@ -115,4 +115,8 @@ public class DriveSubsystemCommands {
     public static CommandBase getWaitUntilDistanceRemaining(Supplier<Trajectory> trajSupplier, double distance){
         return new WaitUntilDistanceRemaining(drivetrainSubsystem, trajSupplier, distance);
     }
+
+    public static CommandBase getXDriveCommand(){
+        return new XDrive(drivetrainSubsystem);
+    }
 }

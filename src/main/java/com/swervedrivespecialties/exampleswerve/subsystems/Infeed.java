@@ -29,18 +29,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Infeed extends SubsystemBase {
 
   public static final double kEncoderCountsPerBall = 7000;
+  public static final double kBackEncoderCountsPerBall = 1200;
   private static final double kConveyorTalonConstantVBus = -0.50;
-  private static final double kConveyToShootConstantVBUS = -.56;
+  private static final double kReverseConveyorConstantVBus = .5;
+  private static final double kConveyToShootConstantVBUS = -.7;
   private static final double kInfeedVBus = -.7;
   private static final double kSingulatorVBus = .45;
-  private static final double kSingulateToShootVBus = .5;
+  private static final double kSingulateToShootVBus = .7;
 
   private static final boolean kPreConveyorNormal = true;
   private static final boolean kPreShooterNormal = true;
   private static final boolean kPostSingulatorNormal = true;
   private static final boolean kMidConveyorNormal = true;
 
-  private static final boolean usesFourthPhotoEye = false;
+  private static final boolean usesFourthPhotoEye = true;
 
   private static final double kBackInfeedVBus = .9;
   private static final double kBackSingulatorVBus = -.95;
@@ -177,6 +179,10 @@ public class Infeed extends SubsystemBase {
 
   public void backInfeed(){
     _infeedVictor.set(ControlMode.PercentOutput, kBackInfeedVBus);
+  }
+
+  public void runConveyorReverse(){
+    _conveyorTalon.set(ControlMode.PercentOutput, kReverseConveyorConstantVBus);
   }
 
 

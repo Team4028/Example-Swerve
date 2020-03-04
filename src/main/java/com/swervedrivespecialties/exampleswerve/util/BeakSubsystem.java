@@ -9,10 +9,9 @@ package com.swervedrivespecialties.exampleswerve.util;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public abstract class BeakSubsystem extends SubsystemBase{
-    public abstract void teleopInit();
-    public abstract void autonInit();
+public abstract class BeakSubsystem extends SubsystemBase {
     public abstract void outputToSDB();
     public abstract void updateLogData(LogDataBE logData);
+    public abstract void init(boolean isAuto);
     public abstract void stop();
 }

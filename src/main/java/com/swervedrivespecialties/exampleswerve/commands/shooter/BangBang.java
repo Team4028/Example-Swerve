@@ -5,57 +5,46 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.swervedrivespecialties.exampleswerve.commands.infeed;
+package com.swervedrivespecialties.exampleswerve.commands.shooter;
 
-import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
+import com.swervedrivespecialties.exampleswerve.subsystems.Shooter;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+public class BangBang extends CommandBase {
+  
+  Shooter _shooter;
+  double target;
 
-//Runs the conveyor to shoot
-public class conveyToShoot extends CommandBase {
-  private Infeed _infeed;
-
-  double singulatorDelayTime = .2; //200 ms
-  double startTime;
-
-
-  public conveyToShoot(Infeed infeed) {
-    _infeed = infeed;
-    addRequirements(_infeed);
-    // Use addRequirements() here to declare subsystem dependencies.
+  public BangBang(Shooter shooter, double targetSPD) {
+    _shooter = shooter;
+    target = targetSPD;
+    addRequirements(_shooter);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
-    _infeed.resetBallsConveyed();
-    _infeed.stopSingulator();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    _infeed.conveyConveyorToShoot();
-    if (Timer.getFPGATimestamp() - startTime > singulatorDelayTime){
-      _infeed.runSingulatorToShoot();
-    } else {
-      _infeed.stopSingulator();
-    }
+    bangIt();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    _infeed.stopConveyor();
-    _infeed.stopSingulator();
+    _shooter.bangShooter(false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  private void bangIt(){
+    _shooter.bangShooter(_shooter.getSpeed() < target);
   }
 }

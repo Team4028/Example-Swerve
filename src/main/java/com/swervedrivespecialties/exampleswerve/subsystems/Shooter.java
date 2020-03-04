@@ -138,6 +138,10 @@ public class Shooter extends SubsystemBase{
         _linearActuator.set(actuatorVal);
     }
 
+    public void bangShooter(boolean go){
+        _shooterNEO.set(go ? 1.0 : 0.0);
+    }
+
     public void backKicker(){
         _kickerTalon.set(ControlMode.PercentOutput, kBackKickerVBus);
     }

@@ -293,7 +293,10 @@ public class DrivetrainSubsystem implements Subsystem {
         double forward = -Robot.getRobotContainer().getPrimaryLeftYAxis();
         forward = Utilities.deadband(forward);
         // Square the forward stick
-        forward = -speedScale * Math.copySign(Math.pow(forward, 2.0), forward);
+        //the negative on the forward and strafe are because the zero convention our drivers use is 180 degrees from that of our auto. 
+        //this and the Rotation by 180 in the Zero Gyro Command are enough to make the auto convention the thing we run our swerve off of, 
+        //but let the drivers still drive in their convention just on top of this. 
+        forward = -speedScale * Math.copySign(Math.pow(forward, 2.0), forward); 
     
         double strafe = -Robot.getRobotContainer().getPrimaryLeftXAxis();
         strafe = Utilities.deadband(strafe);
@@ -301,5 +304,12 @@ public class DrivetrainSubsystem implements Subsystem {
         strafe = -speedScale * Math.copySign(Math.pow(strafe, 2.0), strafe);
 
         return new Translation2d(forward, strafe);
+    }
+
+    public void xDrive(){
+        frontLeftModule.setTargetVelocity(0.0, Math.toRadians(45));
+        frontRightModule.setTargetVelocity(0.0, Math.toRadians(-45));
+        backLeftModule.setTargetVelocity(0.0, Math.toRadians(-45));
+        backRightModule.setTargetVelocity(0.0, Math.toRadians(45));
     }
 }
