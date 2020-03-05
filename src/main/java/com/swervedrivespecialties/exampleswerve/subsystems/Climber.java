@@ -37,13 +37,17 @@ public class Climber extends SubsystemBase{
     }
 
     public void run(double spd){
+        climbVictor.set(ControlMode.PercentOutput, climbSolenoid.get() != kClimberSolenoidDefault ? getClimbVBus(spd) : 0);
+    }
+
+    private double getClimbVBus(double spd){
         spd *= -1;
         if (spd < kClimberDeadband){
-            climbVictor.set(ControlMode.PercentOutput, 0.0);
+            return 0;
         } else if (spd < kClimberYeetDeadband) {
-            climbVictor.set(ControlMode.PercentOutput, kClimberStandardVBus);
+            return kClimberStandardVBus;
         } else {
-            climbVictor.set(ControlMode.PercentOutput, kClimberYeetVBus);
+            return kClimberYeetDeadband;
         }
     }
 

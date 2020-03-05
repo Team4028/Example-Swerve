@@ -61,7 +61,7 @@ public class Infeed extends SubsystemBase {
   private boolean _preConveyorSensorThisCycle;
   private boolean _isFirstCycle;
 
-  private final Value SOLENOID_OUT_POSITION = Value.kReverse;
+  private final Value SOLENOID_OUT_POSITION = Value.kForward;
   private final Value SOLENOID_UP_POSITION = SOLENOID_OUT_POSITION == Value.kReverse ? Value.kForward : Value.kReverse;
 
   private TalonSRX _singulatorTalon;
@@ -150,7 +150,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public void runInfeed(){
-    _infeedVictor.set(ControlMode.PercentOutput, kInfeedVBus);
+    _infeedVictor.set(ControlMode.PercentOutput,  getIsSolenoidOut() ? kInfeedVBus : 0);
   }
 
   public void stopInfeed(){
@@ -197,7 +197,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public void configInfeed(){
-    _infeedSolenoid.set(SOLENOID_UP_POSITION);
+    _infeedSolenoid.set(SOLENOID_OUT_POSITION);
     resetBallsConveyed();
   }
 
