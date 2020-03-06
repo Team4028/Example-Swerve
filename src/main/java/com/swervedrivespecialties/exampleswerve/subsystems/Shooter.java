@@ -23,6 +23,7 @@ import com.swervedrivespecialties.exampleswerve.util.LogDataBE;
 import com.swervedrivespecialties.exampleswerve.util.ShooterTable;
 import com.swervedrivespecialties.exampleswerve.util.util;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -80,6 +81,7 @@ public class Shooter extends SubsystemBase{
     private CANSparkMax _shooterNEO = new CANSparkMax(RobotMap.SHOOTER_MASTER_NEO, MotorType.kBrushless);
     private CANSparkMax _shooterSlave = new CANSparkMax(RobotMap.SHOOTER_SLAVE_NEO, MotorType.kBrushless);
     //private BoundedServo _linearActuator = new BoundedServo(0, kServoLowerLimit, kServoUpperLimit);
+    private AnalogInput _forceSensor = new AnalogInput(RobotMap.FORCE_SENSOR);
 
     private Servo _linearActuator = new Servo(0);
     private CANPIDController _pidController;
@@ -92,6 +94,8 @@ public class Shooter extends SubsystemBase{
     private double minOutput = -1;
     private double maxOutput = 1;
     private int _MtrTargetRPM;
+
+    private double forceInVolts;
    
     private Shooter(){
 
@@ -138,6 +142,10 @@ public class Shooter extends SubsystemBase{
         _linearActuator.set(actuatorVal);
     }
 
+    public void getForce() {
+        forceInVolts = _forceSensor.getVoltage();
+    } 
+
     public void bangShooter(boolean go){
         _shooterNEO.set(go ? 1.0 : 0.0);
     }
@@ -170,6 +178,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putString("Target RPM", getFormattedDistanceStr(getShot().speed));
         SmartDashboard.putString("RPM", getFormattedDistanceStr(_encoder.getVelocity()));
         SmartDashboard.putBoolean("Is Normal Shot", !isAlternateShot);
+        SmartDashboard.putNumber("Force Value", forceInVolts);
     }
 
     public Shot getShot(){
@@ -199,6 +208,7 @@ public class Shooter extends SubsystemBase{
         logData.AddData("Shooter Distance", Double.toString(_shooterShootDistance));
         logData.AddData("Shooter Sensor Distance", Double.toString(_shooterSensorDistance));
         logData.AddData("Shooter Distance Offset", Double.toString(_shooterDistanceOffset));
+        logData.AddData("Force Value", Double.toString(forceInVolts));
     }
 
     public void teleopInit(){

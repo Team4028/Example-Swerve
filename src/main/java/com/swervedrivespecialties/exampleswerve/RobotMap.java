@@ -19,7 +19,8 @@ public class RobotMap {
 
     public static final int KICKER_TALON = 11;
     public static final int SHOOTER_SLAVE_NEO  = 9; 
-    public static final int SHOOTER_MASTER_NEO  = 10; 
+    public static final int SHOOTER_MASTER_NEO  = 10;
+    public static final int FORCE_SENSOR = 1; 
 
     //infeed stuffs
     public static final int CONVEYOR_MOTOR = 12;
