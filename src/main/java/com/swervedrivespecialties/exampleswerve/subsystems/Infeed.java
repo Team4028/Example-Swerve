@@ -32,10 +32,10 @@ public class Infeed extends SubsystemBase {
   public static final double kBackEncoderCountsPerBall = 1200;
   private static final double kConveyorTalonConstantVBus = -0.50;
   private static final double kReverseConveyorConstantVBus = .5;
-  private static final double kConveyToShootConstantVBUS = -.7;
+  private static final double kConveyToShootConstantVBUS = -.8;
   private static final double kInfeedVBus = -.7;
   private static final double kSingulatorVBus = .45;
-  private static final double kSingulateToShootVBus = .7;
+  private static final double kSingulateToShootVBus = .60;
 
   private static final boolean kPreConveyorNormal = true;
   private static final boolean kPreShooterNormal = true;
@@ -47,6 +47,9 @@ public class Infeed extends SubsystemBase {
   private static final double kBackInfeedVBus = .9;
   private static final double kBackSingulatorVBus = -.95;
   private static final double kBackConveyorVBus = .95;
+
+  private static final int kNumHandleConveyorLagCycles = 1;
+  private static final double kHandleConveyorLagVbus = .45;
 
   private static Infeed _instance = new Infeed();
 
@@ -70,6 +73,8 @@ public class Infeed extends SubsystemBase {
   private DigitalInput _midConveyorSensor;
   private DoubleSolenoid _infeedSolenoid;
   private boolean hasStoppedSingulating = false;
+  private boolean isSingulatorHandlingConveyorLag = false;
+  private int numHandingConveyorLagCyclesCompleted = 0;
   int numBallsConveyed = 0;
 
   /**
@@ -158,7 +163,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public void runSingulator(){
-    _singulatorTalon.set(ControlMode.PercentOutput, kSingulatorVBus);
+    _singulatorTalon.set(ControlMode.PercentOutput, isSingulatorHandlingConveyorLag ? kHandleConveyorLagVbus : kSingulatorVBus);
   }
 
   public void runSingulatorToShoot(){
@@ -235,6 +240,21 @@ public class Infeed extends SubsystemBase {
     hasStoppedSingulating = putval;
   }
 
+  public void startHandleConveyorLag(){
+    isSingulatorHandlingConveyorLag = true;
+    numHandingConveyorLagCyclesCompleted = 0;
+  }
+
+  private void updateSingulatorHandlingConveyorLag(){
+    if (isSingulatorHandlingConveyorLag){
+      if (numHandingConveyorLagCyclesCompleted < kNumHandleConveyorLagCycles){
+        numHandingConveyorLagCyclesCompleted++;
+      } else {
+        isSingulatorHandlingConveyorLag = false;
+      }
+    }
+  }
+
   public void updatLogData(LogDataBE logData){
     logData.AddData("IS INFEED COMMAND RUNNING", Boolean.toString(CommandScheduler.getInstance().isScheduled(YeetIntake.ifCommand)));
     logData.AddData("IS SINGULATOR COMMAND RUNNING", Boolean.toString(CommandScheduler.getInstance().isScheduled(YeetIntake.sCommand)));
@@ -249,7 +269,9 @@ public class Infeed extends SubsystemBase {
 
   @Override
   public void periodic() {
+    numBallsConveyed = 0;
     updateHasStopSingulating();
+    updateSingulatorHandlingConveyorLag();
     if (preConveyorSensorPressed() && numBallsConveyed < 3) { 
       numBallsConveyed++;
       conveyorCommand.schedule();

@@ -27,6 +27,7 @@ public class convey extends CommandBase {
     targetPos = Infeed.get_instance().getConveyorPosiiton() + Infeed.kEncoderCountsPerBall;
     midConveyorSensorFreed = false;
     midConveyorSensorPressed = false;
+    _infeed.startHandleConveyorLag();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
