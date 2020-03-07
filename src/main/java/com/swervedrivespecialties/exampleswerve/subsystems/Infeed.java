@@ -68,7 +68,7 @@ public class Infeed extends SubsystemBase {
   private final Value SOLENOID_UP_POSITION = SOLENOID_OUT_POSITION == Value.kReverse ? Value.kForward : Value.kReverse;
 
   private TalonSRX _singulatorTalon;
-  private VictorSPX _infeedVictor;
+  public VictorSPX _infeedVictor;
   private DigitalInput _postSingulatorSensor;
   private DigitalInput _midConveyorSensor;
   private DoubleSolenoid _infeedSolenoid;

@@ -84,6 +84,8 @@ public class RobotContainer {
         tertiary.back.whenPressed(ShooterSubsystemCommands.getResetServoCommand());
         //tertiary.left_bumper.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
         tertiary.start.whileHeld(ShooterSubsystemCommands.getBackItUpCommand());
+        tertiary.left_bumper.whileHeld(ClimberSubsystemCommands.getGondolaLeftVbusCommand());
+        tertiary.right_bumper.whileHeld(ClimberSubsystemCommands.getGondolaRightVbusCommand());
     }
 
     public RobotContainer(){

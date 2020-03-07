@@ -21,4 +21,12 @@ public class ClimberSubsystemCommands {
     public static CommandBase getToggleClimbSolenoidCommand(){
         return new ToggleClimbSolenoid(climber);
     }
+
+    public static CommandBase getGondolaLeftVbusCommand(){
+        return new GondolaLeftVbus(climber);
+    }
+
+    public static CommandBase getGondolaRightVbusCommand(){
+        return new GondolaRightVbus(climber);
+    }
 }

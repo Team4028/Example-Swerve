@@ -25,9 +25,12 @@ public class Climber extends SubsystemBase{
     double kClimberYeetDeadband = .85;
     Value kClimberSolenoidDefault = Value.kForward;
 
+    VictorSPX _infeedVictor;
+
 
     private Climber(){
         climbVictor = new VictorSPX(RobotMap.CLIMBER_MOTOR);
+        _infeedVictor = new VictorSPX(RobotMap.INFEED_MOTOR);
     }
 
     private static Climber instance = new Climber();
@@ -61,5 +64,15 @@ public class Climber extends SubsystemBase{
         } else if (climbSolenoid.get() == Value.kReverse){
             climbSolenoid.set(Value.kForward);
         }
+    }
+
+    public void GondolaVbus(){
+        _infeedVictor.set(ControlMode.PercentOutput, 0.6);
+    }
+    public void GondolaNegVbus(){
+        _infeedVictor.set(ControlMode.PercentOutput, -0.6);
+    }
+    public void GondolaStop(){
+        _infeedVictor.set(ControlMode.PercentOutput, 0);
     }
 }
