@@ -23,6 +23,7 @@ public class InertiaGain {
 
     public static InertiaGain id = new InertiaGain(0, 0, 0);
 
+    
     public HolonomicDriveSignal apply(HolonomicDriveSignal rawSignal){
         Vector2 vec = rawSignal.getTranslation();
         double x = vec.x;
