@@ -7,6 +7,10 @@
 
 package com.swervedrivespecialties.exampleswerve.subsystems;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANEncoder;
@@ -95,8 +99,20 @@ public class Shooter extends SubsystemBase{
     private double maxOutput = 1;
     private int _MtrTargetRPM;
 
+//Force Sensor Variables
+    //Balls
+    private Double ball1;
+    private Double ball2;
+    private Double ball3;
+    //Array of Ball Values
+    private List forceList = Arrays.asList(Double.toString(ball1), Double.toString(ball2), Double.toString(ball3));
+    //Variables
     private double forceInVolts;
-   
+    private double lastForce;
+    private double changeInForce = ((forceInVolts - lastForce)/1.0);
+    private double loggedForce;
+    private double averageForce = ((ball1 + ball2 + ball3)/3);
+
     private Shooter(){
 
         _shooterNEO.restoreFactoryDefaults();
@@ -143,8 +159,26 @@ public class Shooter extends SubsystemBase{
     }
 
     public void getForce() {
-        forceInVolts = _forceSensor.getVoltage();
-    } 
+        if (changeInForce > 0) {
+            //changes values of Array
+            if (ball1 == 0) {
+                forceInVolts = ball1;
+            }
+            else if (ball1 != 0) {
+                forceInVolts = ball2;
+            }
+            else if (ball2 != 0) {
+                forceInVolts = ball3;
+            }
+            else if (ball1 != 0 && ball2 != 0 && ball3 !=0) {
+                forceInVolts = 0;
+            }
+            lastForce = forceInVolts;
+        }
+        else if (changeInForce <= 0) {
+            lastForce = forceInVolts;
+        }
+    }
 
     public void bangShooter(boolean go){
         _shooterNEO.set(go ? 1.0 : 0.0);
@@ -178,7 +212,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putString("Target RPM", getFormattedDistanceStr(getShot().speed));
         SmartDashboard.putString("RPM", getFormattedDistanceStr(_encoder.getVelocity()));
         SmartDashboard.putBoolean("Is Normal Shot", !isAlternateShot);
-        SmartDashboard.putNumber("Force Value", forceInVolts);
+        SmartDashboard.putNumber("Force Average", averageForce);
     }
 
     public Shot getShot(){
@@ -208,7 +242,8 @@ public class Shooter extends SubsystemBase{
         logData.AddData("Shooter Distance", Double.toString(_shooterShootDistance));
         logData.AddData("Shooter Sensor Distance", Double.toString(_shooterSensorDistance));
         logData.AddData("Shooter Distance Offset", Double.toString(_shooterDistanceOffset));
-        logData.AddData("Force Value", Double.toString(forceInVolts));
+        logData.AddData("Force Value", Double.toString(loggedForce));
+        logData.AddData("Force Values Array", forceList.toString());
     }
 
     public void teleopInit(){
@@ -298,5 +333,6 @@ public class Shooter extends SubsystemBase{
     public void periodic()
     {
         updateShooterDistance();
+        getForce();
     }
 }
