@@ -17,6 +17,8 @@ public class convey extends CommandBase {
   boolean midConveyorSensorFreed = false;
   boolean midConveyorSensorPressed = false;
 
+  private static final CommandBase backItUp = InfeedSubsystemCommands.getBackConveyorFixedComand();
+
   public convey(Infeed infeed) {
     _infeed = infeed;
   }
@@ -40,6 +42,13 @@ public class convey extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     _infeed.stopConveyor();
+    if (!interrupted){
+      if (_infeed.getNumBallsConveyed() >= 3){
+        backItUp.schedule();
+      } else {
+        _infeed.resetConveyorSensorPressed();
+      }
+    } 
   }
 
   // Returns true when the command should end.

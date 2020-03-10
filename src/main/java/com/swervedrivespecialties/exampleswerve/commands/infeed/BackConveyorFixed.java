@@ -9,12 +9,13 @@ package com.swervedrivespecialties.exampleswerve.commands.infeed;
 
 import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class BackConveyorFixed extends CommandBase {
   
   Infeed _infeed;
-  double endPos;
+  double startTime;
 
   public BackConveyorFixed(Infeed infeed) {
     _infeed = infeed;    
@@ -23,7 +24,7 @@ public class BackConveyorFixed extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    endPos = _infeed.getConveyorPosiiton() - Infeed.kBackEncoderCountsPerBall;
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,6 +42,6 @@ public class BackConveyorFixed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return _infeed.getConveyorPosiiton() < endPos;
+    return Timer.getFPGATimestamp() - startTime > Infeed.kReverseBallOffKickerTime;
   }
 }

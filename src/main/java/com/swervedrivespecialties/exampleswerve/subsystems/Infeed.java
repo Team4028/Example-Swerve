@@ -29,12 +29,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Infeed extends SubsystemBase {
 
   public static final double kEncoderCountsPerBall = 7000;
-  public static final double kBackEncoderCountsPerBall = 1200;
   private static final double kConveyorTalonConstantVBus = -0.55; //-.5
-  private static final double kReverseConveyorConstantVBus = .5;
   private static final double kConveyToShootConstantVBUS = -.85; //.8
   private static final double kInfeedVBus = -.7;
-  private static final double kSingulatorVBus = .30; //.35 //.45
+  private static final double kSingulatorVBus = .4; //.35 //.45
   private static final double kSingulateToShootVBus = .50; //.6
 
   private static final boolean kPreConveyorNormal = true;
@@ -49,7 +47,10 @@ public class Infeed extends SubsystemBase {
   private static final double kBackConveyorVBus = .95;
 
   private static final int kNumHandleConveyorLagCycles = 1;
-  private static final double kHandleConveyorLagVbus = .45;
+  private static final double kHandleConveyorLagVbus = .4;
+
+  public static final double kReverseBallOffKickerTime = 1.0;
+  private static final double kReverseBallOffPreKickVBus = .15;
 
   private static Infeed _instance = new Infeed();
 
@@ -124,6 +125,7 @@ public class Infeed extends SubsystemBase {
     SmartDashboard.putBoolean("INFEED SOLENOID OUT JIMBO", getIsSolenoidOut());
     SmartDashboard.putNumber("Cell Count", numBallsConveyed + util.iversonBrackets(hasStoppedSingulating || getPostSingulatorSensor()));
     SmartDashboard.putBoolean("Is Singulator Running", Math.abs(_singulatorTalon.getMotorOutputPercent()) > .03);
+    SmartDashboard.putBoolean("Is Infeed Running", Math.abs(_infeedVictor.getMotorOutputPercent()) > .03);
   }
 
   public boolean getHasBallConveyedBallLength(){
@@ -140,6 +142,11 @@ public class Infeed extends SubsystemBase {
       _preConveyorSensorThisCycle = getPreConveyorSensor();
       return _preConveyorSensorThisCycle && !_preConveyorSensorLastCycle;
     }
+  }
+
+  public void resetConveyorSensorPressed(){
+    _preConveyorSensorLastCycle = false;
+    _preConveyorSensorThisCycle = false;
   }
 
   public boolean getPreConveyorSensor(){
@@ -187,7 +194,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public void runConveyorReverse(){
-    _conveyorTalon.set(ControlMode.PercentOutput, kReverseConveyorConstantVBus);
+    _conveyorTalon.set(ControlMode.PercentOutput, kReverseBallOffPreKickVBus);
   }
 
 
@@ -208,11 +215,12 @@ public class Infeed extends SubsystemBase {
 
   public void resetBallsConveyed(){
     numBallsConveyed = 0;
+    resetHasStoppedSingulating();
   }
 
   private void updateHasStopSingulating(){
     if (!hasStoppedSingulating){
-      hasStoppedSingulating = (numBallsConveyed >= 3 || getPreShooterSensor()) && getPostSingulatorSensor();
+      hasStoppedSingulating = ((numBallsConveyed > 2 && !cs.isScheduled(conveyorCommand)) || getPreShooterSensor()) && getPostSingulatorSensor();
     }
   }
 
@@ -225,7 +233,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public boolean getCanSingulate(){
-    return !(getPostSingulatorSensor() && (getPreShooterSensor() || numBallsConveyed > 2)) && !hasStoppedSingulating; 
+    return !(getPostSingulatorSensor() && (getPreShooterSensor() || (numBallsConveyed > 3 && !cs.isScheduled(conveyorCommand)))) && !hasStoppedSingulating; 
   }
 
   public boolean getMidConveyorSensor(){
@@ -243,6 +251,10 @@ public class Infeed extends SubsystemBase {
   public void startHandleConveyorLag(){
     isSingulatorHandlingConveyorLag = true;
     numHandingConveyorLagCyclesCompleted = 0;
+  }
+
+  public int getNumBallsConveyed(){
+    return numBallsConveyed;
   }
 
   private void updateSingulatorHandlingConveyorLag(){
@@ -266,13 +278,14 @@ public class Infeed extends SubsystemBase {
   }
 
   private static final CommandBase conveyorCommand = InfeedSubsystemCommands.getConveyCommand().withTimeout(4);
+  CommandScheduler cs = CommandScheduler.getInstance();
+  
 
   @Override
   public void periodic() {
-    numBallsConveyed = 0;
     updateHasStopSingulating();
     updateSingulatorHandlingConveyorLag();
-    if (preConveyorSensorPressed() && numBallsConveyed < 3) { 
+    if (preConveyorSensorPressed() && numBallsConveyed < 3 && !cs.isScheduled(conveyorCommand)) { 
       numBallsConveyed++;
       conveyorCommand.schedule();
     }

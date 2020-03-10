@@ -62,7 +62,7 @@ public class InfeedSubsystemCommands {
     }
 
     public static CommandBase getBackConveyorFixedComand(){
-        return new BackConveyor(infeed);
+        return new BackConveyorFixed(infeed);
     }
 
     public static CommandBase BACK_INFEED = new BackInfeed(infeed);

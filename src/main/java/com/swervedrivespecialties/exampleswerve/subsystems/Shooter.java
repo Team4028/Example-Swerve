@@ -168,6 +168,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putString("Shooter Offset", getFormattedDistanceStr(_shooterDistanceOffset));
         SmartDashboard.putString("Shot Distance", getFormattedDistanceStr(_shooterShootDistance));
         SmartDashboard.putString("Target RPM", getFormattedDistanceStr(getShot().speed));
+        SmartDashboard.putString("Actuator Value", Double.toString(getShot().actuatorPosition));
         SmartDashboard.putString("RPM", getFormattedDistanceStr(_encoder.getVelocity()));
         SmartDashboard.putBoolean("Is Normal Shot", !isAlternateShot);
     }

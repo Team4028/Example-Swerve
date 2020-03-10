@@ -23,7 +23,7 @@ public class Climber extends SubsystemBase{
     double kClimberStandardVBus = -.15;
     double kClimberDeadband = .05;
     double kClimberYeetDeadband = .85;
-    Value kClimberSolenoidDefault = Value.kForward;
+    Value kClimberSolenoidDefault = Value.kReverse;
 
 
     private Climber(){
@@ -37,7 +37,7 @@ public class Climber extends SubsystemBase{
     }
 
     public void run(double spd){
-        climbVictor.set(ControlMode.PercentOutput, climbSolenoid.get() != kClimberSolenoidDefault ? getClimbVBus(spd) : 0);
+        climbVictor.set(ControlMode.PercentOutput, climbSolenoid.get() == kClimberSolenoidDefault ? getClimbVBus(spd) : 0.0);
     }
 
     private double getClimbVBus(double spd){
@@ -47,7 +47,7 @@ public class Climber extends SubsystemBase{
         } else if (spd < kClimberYeetDeadband) {
             return kClimberStandardVBus;
         } else {
-            return kClimberYeetDeadband;
+            return kClimberYeetVBus;
         }
     }
 
