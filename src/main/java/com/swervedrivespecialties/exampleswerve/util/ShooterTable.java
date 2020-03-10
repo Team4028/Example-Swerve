@@ -150,13 +150,13 @@ public class ShooterTable {
 		//======================================================================================
 		//									Position	feet Stg1  
 		//======================================================================================
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 11.5, 2600, .28));
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 13.38, 3110, .28)); //30 //2910|33 //34
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 18.5, 3400, .33));   //36 //3200|39 //41
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 21.0, 3907 , .37)); //40 //3707|43 //44
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 27.5, 4228, .38)); //41 //4028|44
-        primarytable.add(new ShooterTableEntry(_indexCounter++,  38, 4300, .48)); 
-        primarytable.add(new ShooterTableEntry(_indexCounter++,  42, 4400, .50));
+        // primarytable.add(new ShooterTableEntry(_indexCounter++, 11.5, 2600, .28));
+        // primarytable.add(new ShooterTableEntry(_indexCounter++, 13.38, 3110, .28)); //30 //2910|33 //34
+        // primarytable.add(new ShooterTableEntry(_indexCounter++, 18.5, 3400, .33)); //3400|33  //36 //3200|39 //41
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 21.0, 3324 , .35)); //3907|37 //40 //3707|43 //44
+        // primarytable.add(new ShooterTableEntry(_indexCounter++, 27.5, 4228, .38)); //41 //4028|44
+        // primarytable.add(new ShooterTableEntry(_indexCounter++,  38, 4300, .48)); 
+        // primarytable.add(new ShooterTableEntry(_indexCounter++,  42, 4400, .50));
         
         
         

@@ -35,7 +35,7 @@ public class Shooter extends SubsystemBase{
 
     private static final double kServoHome = .3;
     private static final double kServoHomeEpsilon = 0.02;
-    private static final double kShooterDistanceDelta = .8 * 12;
+    private static final double kShooterDistanceDelta = 1 * 12;
     private static final double kShooterDefaultDistance = 27 * 12; 
     private static final double kMinKickerVBus = .7;
     private static final int kNumShooterTableDecimalPlaces = 1;

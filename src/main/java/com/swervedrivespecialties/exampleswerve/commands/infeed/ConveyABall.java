@@ -13,6 +13,6 @@ public class ConveyABall extends SequentialCommandGroup {
  
   
   public ConveyABall() {
-    super(InfeedSubsystemCommands.getConveyCommand(), InfeedSubsystemCommands.getBackConveyorFixedComand());
+    super(InfeedSubsystemCommands.getConveyCommand());
   }
 }

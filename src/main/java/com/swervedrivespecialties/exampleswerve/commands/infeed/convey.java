@@ -18,6 +18,7 @@ public class convey extends CommandBase {
   boolean midConveyorSensorPressed = false;
 
   private static final CommandBase backItUp = InfeedSubsystemCommands.getBackConveyorFixedComand();
+  private static final CommandBase BringItForward = InfeedSubsystemCommands.getBumpConveyorForwardCommand();
 
   public convey(Infeed infeed) {
     _infeed = infeed;
@@ -46,6 +47,9 @@ public class convey extends CommandBase {
       if (_infeed.getNumBallsConveyed() >= 3){
         backItUp.schedule();
       } else {
+        if (_infeed.getNumBallsConveyed() == 2){
+          BringItForward.schedule(true);
+        } 
         _infeed.resetConveyorSensorPressed();
       }
     } 

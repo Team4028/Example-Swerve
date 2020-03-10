@@ -30,7 +30,7 @@ public class Infeed extends SubsystemBase {
 
   public static final double kEncoderCountsPerBall = 7000;
   private static final double kConveyorTalonConstantVBus = -0.55; //-.5
-  private static final double kConveyToShootConstantVBUS = -.85; //.8
+  private static final double kConveyToShootConstantVBUS = -.9; //.8
   private static final double kInfeedVBus = -.7;
   private static final double kSingulatorVBus = .4; //.35 //.45
   private static final double kSingulateToShootVBus = .50; //.6
@@ -51,6 +51,8 @@ public class Infeed extends SubsystemBase {
 
   public static final double kReverseBallOffKickerTime = 1.0;
   private static final double kReverseBallOffPreKickVBus = .15;
+
+  public static final double kPostEyeEncoderTicks = 700.0;
 
   private static Infeed _instance = new Infeed();
 
@@ -285,7 +287,7 @@ public class Infeed extends SubsystemBase {
   public void periodic() {
     updateHasStopSingulating();
     updateSingulatorHandlingConveyorLag();
-    if (preConveyorSensorPressed() && numBallsConveyed < 3 && !cs.isScheduled(conveyorCommand)) { 
+    if (preConveyorSensorPressed() && numBallsConveyed < 3 && !cs.isScheduled(conveyorCommand) && !cs.isScheduled(InfeedSubsystemCommands.CONVEY_TO_SHOOT)) { 
       numBallsConveyed++;
       conveyorCommand.schedule();
     }
