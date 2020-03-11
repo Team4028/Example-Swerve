@@ -74,18 +74,22 @@ public class ShooterTable {
         }
 
         if (steBelow != null && steAbove != null) {
-            // find the scale factor which is how far we are between the below & above ste
-            double scaleFactor = (distanceInFeet - steBelow.DistanceInFeet)
-                    / (steAbove.DistanceInFeet - steBelow.DistanceInFeet);
+            if (steBelow.DistanceInFeet == steAbove.DistanceInFeet){
+                ste = steAbove;
+            } else {
+                // find the scale factor which is how far we are between the below & above ste
+                double scaleFactor = (distanceInFeet - steBelow.DistanceInFeet)
+                        / (steAbove.DistanceInFeet - steBelow.DistanceInFeet);
 
-            // round to int
-            double stg1Adj = scaleFactor * (steAbove.MotorTargetRPM - steBelow.MotorTargetRPM);
-            int stg1CalculatedRPM = steBelow.MotorTargetRPM + (int) (Math.round(stg1Adj));
-        
-            double actuatorValue = steBelow.ActuatorVal + (scaleFactor * (steAbove.ActuatorVal - steBelow.ActuatorVal));
+                // round to int
+                double stg1Adj = scaleFactor * (steAbove.MotorTargetRPM - steBelow.MotorTargetRPM);
+                int stg1CalculatedRPM = steBelow.MotorTargetRPM + (int) (Math.round(stg1Adj));
+            
+                double actuatorValue = steBelow.ActuatorVal + (scaleFactor * (steAbove.ActuatorVal - steBelow.ActuatorVal));
 
-            // build the return object
-            ste = new ShooterTableEntry(_indexCounter++, distanceInFeet, stg1CalculatedRPM, actuatorValue);
+                // build the return object
+                ste = new ShooterTableEntry(_indexCounter++, distanceInFeet, stg1CalculatedRPM, actuatorValue);
+            }
         } else if (steAbove != null) {
             ste = steAbove;
         } else {
@@ -153,7 +157,9 @@ public class ShooterTable {
         // primarytable.add(new ShooterTableEntry(_indexCounter++, 11.5, 2600, .28));
         // primarytable.add(new ShooterTableEntry(_indexCounter++, 13.38, 3110, .28)); //30 //2910|33 //34
         // primarytable.add(new ShooterTableEntry(_indexCounter++, 18.5, 3400, .33)); //3400|33  //36 //3200|39 //41
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 21.0, 3324 , .35)); //3907|37 //40 //3707|43 //44
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 15.0, 2600, .28)); //3907|37 //40 //3707|43 //44
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 17.0, 2910, .28));
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 20.0, 3003, .35));
         // primarytable.add(new ShooterTableEntry(_indexCounter++, 27.5, 4228, .38)); //41 //4028|44
         // primarytable.add(new ShooterTableEntry(_indexCounter++,  38, 4300, .48)); 
         // primarytable.add(new ShooterTableEntry(_indexCounter++,  42, 4400, .50));

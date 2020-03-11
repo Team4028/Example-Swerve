@@ -81,7 +81,7 @@ public class Shooter extends SubsystemBase{
     private CANSparkMax _shooterSlave = new CANSparkMax(RobotMap.SHOOTER_SLAVE_NEO, MotorType.kBrushless);
     //private BoundedServo _linearActuator = new BoundedServo(0, kServoLowerLimit, kServoUpperLimit);
 
-    private Servo _linearActuator = new Servo(0);
+    private Servo _linearActuator = new BoundedServo(0, 0.0, 1.0);
     private CANPIDController _pidController;
     private CANEncoder _encoder;
     private double _P = 0.000505; //.00045 //0.0005
@@ -135,6 +135,7 @@ public class Shooter extends SubsystemBase{
         } else {
             _shooterNEO.set(0.0);
         }
+        System.out.println("actuator Val");
         _linearActuator.set(actuatorVal);
     }
 
