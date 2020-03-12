@@ -61,7 +61,16 @@ public class InfeedSubsystemCommands {
         return new AnalogBackKicker(Shooter.getInstance());
     }
 
+    public static CommandBase getBackConveyorFixedComand(){
+        return new BackConveyorFixed(infeed);
+    }
+
+    public static CommandBase getBumpConveyorForwardCommand(){
+        return new BumpConveyorForward(infeed);
+    }
+
     public static CommandBase BACK_INFEED = new BackInfeed(infeed);
     public static CommandBase BACK_SINGULATOR = new BackSingulator(infeed);
     public static CommandBase BACK_CONVEYOR = new BackConveyor(infeed);
+    public static CommandBase CONVEY_TO_SHOOT = new conveyToShoot(infeed);
 }

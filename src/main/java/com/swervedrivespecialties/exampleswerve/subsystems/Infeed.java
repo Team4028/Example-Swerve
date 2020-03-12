@@ -29,13 +29,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Infeed extends SubsystemBase {
 
   public static final double kEncoderCountsPerBall = 7000;
-  public static final double kBackEncoderCountsPerBall = 1200;
-  private static final double kConveyorTalonConstantVBus = -0.50;
-  private static final double kReverseConveyorConstantVBus = .5;
-  private static final double kConveyToShootConstantVBUS = -.7;
+  private static final double kConveyorTalonConstantVBus = -0.55; //-.5
+  private static final double kConveyToShootConstantVBUS = -.9; //.8
   private static final double kInfeedVBus = -.7;
-  private static final double kSingulatorVBus = .45;
-  private static final double kSingulateToShootVBus = .7;
+  private static final double kSingulatorVBus = .4; //.35 //.45
+  private static final double kSingulateToShootVBus = .50; //.6
 
   private static final boolean kPreConveyorNormal = true;
   private static final boolean kPreShooterNormal = true;
@@ -47,6 +45,14 @@ public class Infeed extends SubsystemBase {
   private static final double kBackInfeedVBus = .9;
   private static final double kBackSingulatorVBus = -.95;
   private static final double kBackConveyorVBus = .95;
+
+  private static final int kNumHandleConveyorLagCycles = 1;
+  private static final double kHandleConveyorLagVbus = .4;
+
+  public static final double kReverseBallOffKickerTime = 1.0;
+  private static final double kReverseBallOffPreKickVBus = .15;
+
+  public static final double kPostEyeEncoderTicks = 700.0;
 
   private static Infeed _instance = new Infeed();
 
@@ -61,7 +67,7 @@ public class Infeed extends SubsystemBase {
   private boolean _preConveyorSensorThisCycle;
   private boolean _isFirstCycle;
 
-  private final Value SOLENOID_OUT_POSITION = Value.kReverse;
+  private final Value SOLENOID_OUT_POSITION = Value.kForward;
   private final Value SOLENOID_UP_POSITION = SOLENOID_OUT_POSITION == Value.kReverse ? Value.kForward : Value.kReverse;
 
   private TalonSRX _singulatorTalon;
@@ -70,6 +76,8 @@ public class Infeed extends SubsystemBase {
   private DigitalInput _midConveyorSensor;
   private DoubleSolenoid _infeedSolenoid;
   private boolean hasStoppedSingulating = false;
+  private boolean isSingulatorHandlingConveyorLag = false;
+  private int numHandingConveyorLagCyclesCompleted = 0;
   int numBallsConveyed = 0;
 
   /**
@@ -119,6 +127,7 @@ public class Infeed extends SubsystemBase {
     SmartDashboard.putBoolean("INFEED SOLENOID OUT JIMBO", getIsSolenoidOut());
     SmartDashboard.putNumber("Cell Count", numBallsConveyed + util.iversonBrackets(hasStoppedSingulating || getPostSingulatorSensor()));
     SmartDashboard.putBoolean("Is Singulator Running", Math.abs(_singulatorTalon.getMotorOutputPercent()) > .03);
+    SmartDashboard.putBoolean("Is Infeed Running", Math.abs(_infeedVictor.getMotorOutputPercent()) > .03);
   }
 
   public boolean getHasBallConveyedBallLength(){
@@ -137,6 +146,11 @@ public class Infeed extends SubsystemBase {
     }
   }
 
+  public void resetConveyorSensorPressed(){
+    _preConveyorSensorLastCycle = false;
+    _preConveyorSensorThisCycle = false;
+  }
+
   public boolean getPreConveyorSensor(){
     return _postSingulatorSensor.get() != kPreConveyorNormal;
   }
@@ -150,7 +164,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public void runInfeed(){
-    _infeedVictor.set(ControlMode.PercentOutput, kInfeedVBus);
+    _infeedVictor.set(ControlMode.PercentOutput,  getIsSolenoidOut() ? kInfeedVBus : 0);
   }
 
   public void stopInfeed(){
@@ -158,7 +172,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public void runSingulator(){
-    _singulatorTalon.set(ControlMode.PercentOutput, kSingulatorVBus);
+    _singulatorTalon.set(ControlMode.PercentOutput, isSingulatorHandlingConveyorLag ? kHandleConveyorLagVbus : kSingulatorVBus);
   }
 
   public void runSingulatorToShoot(){
@@ -182,7 +196,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public void runConveyorReverse(){
-    _conveyorTalon.set(ControlMode.PercentOutput, kReverseConveyorConstantVBus);
+    _conveyorTalon.set(ControlMode.PercentOutput, kReverseBallOffPreKickVBus);
   }
 
 
@@ -197,17 +211,18 @@ public class Infeed extends SubsystemBase {
   }
 
   public void configInfeed(){
-    _infeedSolenoid.set(SOLENOID_UP_POSITION);
+    _infeedSolenoid.set(SOLENOID_OUT_POSITION);
     resetBallsConveyed();
   }
 
   public void resetBallsConveyed(){
     numBallsConveyed = 0;
+    resetHasStoppedSingulating();
   }
 
   private void updateHasStopSingulating(){
     if (!hasStoppedSingulating){
-      hasStoppedSingulating = (numBallsConveyed >= 3 || getPreShooterSensor()) && getPostSingulatorSensor();
+      hasStoppedSingulating = ((numBallsConveyed > 2 && !cs.isScheduled(conveyorCommand)) || getPreShooterSensor()) && getPostSingulatorSensor();
     }
   }
 
@@ -220,7 +235,7 @@ public class Infeed extends SubsystemBase {
   }
 
   public boolean getCanSingulate(){
-    return !(getPostSingulatorSensor() && (getPreShooterSensor() || numBallsConveyed > 2)) && !hasStoppedSingulating; 
+    return !(getPostSingulatorSensor() && (getPreShooterSensor() || (numBallsConveyed > 3 && !cs.isScheduled(conveyorCommand)))) && !hasStoppedSingulating; 
   }
 
   public boolean getMidConveyorSensor(){
@@ -235,6 +250,25 @@ public class Infeed extends SubsystemBase {
     hasStoppedSingulating = putval;
   }
 
+  public void startHandleConveyorLag(){
+    isSingulatorHandlingConveyorLag = true;
+    numHandingConveyorLagCyclesCompleted = 0;
+  }
+
+  public int getNumBallsConveyed(){
+    return numBallsConveyed;
+  }
+
+  private void updateSingulatorHandlingConveyorLag(){
+    if (isSingulatorHandlingConveyorLag){
+      if (numHandingConveyorLagCyclesCompleted < kNumHandleConveyorLagCycles){
+        numHandingConveyorLagCyclesCompleted++;
+      } else {
+        isSingulatorHandlingConveyorLag = false;
+      }
+    }
+  }
+
   public void updatLogData(LogDataBE logData){
     logData.AddData("IS INFEED COMMAND RUNNING", Boolean.toString(CommandScheduler.getInstance().isScheduled(YeetIntake.ifCommand)));
     logData.AddData("IS SINGULATOR COMMAND RUNNING", Boolean.toString(CommandScheduler.getInstance().isScheduled(YeetIntake.sCommand)));
@@ -246,11 +280,14 @@ public class Infeed extends SubsystemBase {
   }
 
   private static final CommandBase conveyorCommand = InfeedSubsystemCommands.getConveyCommand().withTimeout(4);
+  CommandScheduler cs = CommandScheduler.getInstance();
+  
 
   @Override
   public void periodic() {
     updateHasStopSingulating();
-    if (preConveyorSensorPressed() && numBallsConveyed < 3) { 
+    updateSingulatorHandlingConveyorLag();
+    if (preConveyorSensorPressed() && numBallsConveyed < 3 && !cs.isScheduled(conveyorCommand) && !cs.isScheduled(InfeedSubsystemCommands.CONVEY_TO_SHOOT)) { 
       numBallsConveyed++;
       conveyorCommand.schedule();
     }

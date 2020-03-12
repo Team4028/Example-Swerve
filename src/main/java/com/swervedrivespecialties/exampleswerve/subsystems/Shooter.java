@@ -35,7 +35,7 @@ public class Shooter extends SubsystemBase{
 
     private static final double kServoHome = .3;
     private static final double kServoHomeEpsilon = 0.02;
-    private static final double kShooterDistanceDelta = .8 * 12;
+    private static final double kShooterDistanceDelta = 1 * 12;
     private static final double kShooterDefaultDistance = 27 * 12; 
     private static final double kMinKickerVBus = .7;
     private static final int kNumShooterTableDecimalPlaces = 1;
@@ -135,6 +135,7 @@ public class Shooter extends SubsystemBase{
         } else {
             _shooterNEO.set(0.0);
         }
+        System.out.println("actuator Val"+actuatorVal);
         _linearActuator.set(actuatorVal);
     }
 
@@ -168,6 +169,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putString("Shooter Offset", getFormattedDistanceStr(_shooterDistanceOffset));
         SmartDashboard.putString("Shot Distance", getFormattedDistanceStr(_shooterShootDistance));
         SmartDashboard.putString("Target RPM", getFormattedDistanceStr(getShot().speed));
+        SmartDashboard.putString("Actuator Value", Double.toString(getShot().actuatorPosition));
         SmartDashboard.putString("RPM", getFormattedDistanceStr(_encoder.getVelocity()));
         SmartDashboard.putBoolean("Is Normal Shot", !isAlternateShot);
     }

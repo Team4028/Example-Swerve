@@ -62,7 +62,7 @@ public class RobotContainer {
     }
 
     private void bindSecondaryJoystickButtons(){
-       secondary.a.toggleWhenPressed(InfeedSubsystemCommands.getConveyToShootCommand());
+       secondary.a.toggleWhenPressed(InfeedSubsystemCommands.CONVEY_TO_SHOOT);
        secondary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
        secondary.y.whenPressed(InfeedSubsystemCommands.getResetInfeedCommand());
        secondary.back.whileHeld(InfeedSubsystemCommands.BACK_SINGULATOR);

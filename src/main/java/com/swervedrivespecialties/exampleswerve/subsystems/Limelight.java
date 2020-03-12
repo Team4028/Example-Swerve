@@ -151,6 +151,12 @@ public class Limelight implements Subsystem {
     }
   }
 
+  public double accountForSkew(double theta){
+    double modSkew = ts.getDouble(0.0) < -45 ? -90 - ts.getDouble(0.): Math.abs(ts.getDouble(0.));
+    double offset = -0.2728*(modSkew - 0.2) - 0.7633;
+    return theta - offset;
+  }
+
   public void updateLogData(LogDataBE logData){
     // if (getHasTarget()){
     //   logData.AddData("Distance", Double.toString(getDistanceToTarget(Target.HIGH)));

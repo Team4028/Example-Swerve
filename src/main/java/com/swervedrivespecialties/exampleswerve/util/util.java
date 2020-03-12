@@ -87,7 +87,7 @@ public class util {
 	}
 
 	public static double iversonBrackets(boolean bool){
-		return bool ? 1: 0;
+		return bool ? 1 : 0;
 	}
 
 	public static Translation2d transFromAngle(double angDegrees){

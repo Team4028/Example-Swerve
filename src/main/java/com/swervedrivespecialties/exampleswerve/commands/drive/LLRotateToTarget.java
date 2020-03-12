@@ -52,7 +52,7 @@ public class LLRotateToTarget extends CommandBase {
   @Override
   public void initialize() {
     _prevTime = Timer.getFPGATimestamp();
-    error = _limelight.getAngle1();
+    error = _limelight.accountForSkew(_limelight.getAngle1());
     isFirstCycle = true;
     shouldStopFirstCycle = !_limelight.getHasTarget();
   }
@@ -66,7 +66,7 @@ public class LLRotateToTarget extends CommandBase {
     double dt = Timer.getFPGATimestamp() - _prevTime;
     _prevTime = Timer.getFPGATimestamp();
     
-    error = _limelight.getAngle1();
+    error = _limelight.accountForSkew(_limelight.getAngle1());
     double rot = _rotController.calculate(error, dt);
     _drive.drive(_drive.getDriveVec().times(util.iversonBrackets(_translate)), rot, true);
   }
@@ -83,6 +83,6 @@ public class LLRotateToTarget extends CommandBase {
       System.out.println("TRIED TO AIM WITHOUT VISION!!! STOPPING!!!");
       return shouldStopFirstCycle;
     }
-    return Math.abs(_limelight.getAngle1()) <= 0.5;
+    return Math.abs(_limelight.accountForSkew(_limelight.getAngle1())) <= 0.3;
   }
 }
