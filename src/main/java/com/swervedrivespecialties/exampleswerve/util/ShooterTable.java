@@ -158,8 +158,10 @@ public class ShooterTable {
         // primarytable.add(new ShooterTableEntry(_indexCounter++, 13.38, 3110, .28)); //30 //2910|33 //34
         // primarytable.add(new ShooterTableEntry(_indexCounter++, 18.5, 3400, .33)); //3400|33  //36 //3200|39 //41
         primarytable.add(new ShooterTableEntry(_indexCounter++, 15.0, 2600, .28)); //3907|37 //40 //3707|43 //44
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 17.0, 2910, .28));
-        primarytable.add(new ShooterTableEntry(_indexCounter++, 20.0, 3003, .35));
+        //primarytable.add(new ShooterTableEntry(_indexCounter++, 17.0, 2910, .28));
+        primarytable.add(new ShooterTableEntry(_indexCounter++, 20.0, 3003, .35)); // 03/10
+        // primarytable.add(new ShooterTableEntry(_indexCounter++, 20.0, 2910, .28));
+
         // primarytable.add(new ShooterTableEntry(_indexCounter++, 27.5, 4228, .38)); //41 //4028|44
         // primarytable.add(new ShooterTableEntry(_indexCounter++,  38, 4300, .48)); 
         // primarytable.add(new ShooterTableEntry(_indexCounter++,  42, 4400, .50));
