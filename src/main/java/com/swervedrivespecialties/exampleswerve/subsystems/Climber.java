@@ -8,6 +8,7 @@
 package com.swervedrivespecialties.exampleswerve.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.swervedrivespecialties.exampleswerve.RobotMap;
 
@@ -25,9 +26,14 @@ public class Climber extends SubsystemBase{
     double kClimberYeetDeadband = .85;
     Value kClimberSolenoidDefault = Value.kReverse;
 
+    VictorSPX _infeedVictor;
+    //private TalonSRX _TestTalon;
+
 
     private Climber(){
         climbVictor = new VictorSPX(RobotMap.CLIMBER_MOTOR);
+        _infeedVictor = new VictorSPX(RobotMap.INFEED_MOTOR);
+        //_TestTalon = new TalonSRX(2);
     }
 
     private static Climber instance = new Climber();
@@ -37,7 +43,7 @@ public class Climber extends SubsystemBase{
     }
 
     public void run(double spd){
-        climbVictor.set(ControlMode.PercentOutput, climbSolenoid.get() == kClimberSolenoidDefault ? getClimbVBus(spd) : 0.0);
+        climbVictor.set(ControlMode.PercentOutput, climbSolenoid.get() != kClimberSolenoidDefault ? getClimbVBus(spd) : 0);
     }
 
     private double getClimbVBus(double spd){
@@ -47,7 +53,7 @@ public class Climber extends SubsystemBase{
         } else if (spd < kClimberYeetDeadband) {
             return kClimberStandardVBus;
         } else {
-            return kClimberYeetVBus;
+            return kClimberYeetDeadband;
         }
     }
 
@@ -61,5 +67,18 @@ public class Climber extends SubsystemBase{
         } else if (climbSolenoid.get() == Value.kReverse){
             climbSolenoid.set(Value.kForward);
         }
+    }
+
+    public void GondolaVbus(){
+        _infeedVictor.set(ControlMode.PercentOutput, 0.6);
+        //_TestTalon.set(ControlMode.PercentOutput, 0.6);
+    }
+    public void GondolaNegVbus(){
+        _infeedVictor.set(ControlMode.PercentOutput, -0.6);
+        //_TestTalon.set(ControlMode.PercentOutput, -0.6);
+    }
+    public void GondolaStop(){
+        _infeedVictor.set(ControlMode.PercentOutput, 0);
+        //_TestTalon.set(ControlMode.PercentOutput, 0);
     }
 }

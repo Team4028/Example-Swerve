@@ -110,11 +110,21 @@ public class RobotContainer {
     }
 
     public double getPrimaryRightXAxis(){
-        return primary.getRighXAxis();
+        return primary.getRightXAxis();
     }
 
     public double getPrimaryRightYAxis(){
         return primary.getRightYAxis();
+    }
+
+    public double getSecondaryRightXAxis()
+    {
+        return secondary.getRightXAxis();
+    }
+
+    public double getSecondaryLeftYAxis()
+    {
+        return secondary.getLeftYAxis();
     }
 
     public double getSecondaryRightYAxis(){

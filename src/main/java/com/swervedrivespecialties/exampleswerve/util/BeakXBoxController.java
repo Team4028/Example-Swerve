@@ -63,7 +63,7 @@ public class BeakXBoxController {
         return controller.getRawAxis(1);
     }
 
-    public double getRighXAxis(){
+    public double getRightXAxis(){
         return controller.getRawAxis(4);
 
     }
