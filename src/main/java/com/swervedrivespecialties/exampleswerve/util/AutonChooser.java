@@ -42,7 +42,7 @@ public class AutonChooser {
         if (autonChooser.getSelected() == AUTONS.STEAL_BALLS){
             return new HereWeGoAgain();
         } else if (autonChooser.getSelected() == AUTONS.OWN_TRENCH) {
-            return new DoNothing();
+            return new HereWeGoAgain();
         } else {
             return new DoNothing();
         }

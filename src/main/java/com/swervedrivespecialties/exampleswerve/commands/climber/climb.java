@@ -25,18 +25,22 @@ public class climb extends CommandBase {
   @Override
   public void initialize() {
     _climber.run(Robot.getRobotContainer().getSecondaryLeftYAxis());
+    _climber.GondolaVbus(Robot.getRobotContainer().getSecondaryRightXAxis());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     _climber.run(Robot.getRobotContainer().getSecondaryLeftYAxis());
+    _climber.GondolaVbus(Robot.getRobotContainer().getSecondaryRightXAxis());
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     _climber.run(0.0);
+    _climber.GondolaStop();
   }
 
   // Returns true when the command should end.

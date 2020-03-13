@@ -47,7 +47,8 @@ public class RobotContainer {
 
     AutonChooser ac = AutonChooser.getInstance();
 
-    private void bindPrimaryJoystickButtons(){
+    private void bindPrimaryJoystickButtons()
+    {
         primary.a.whenPressed(InfeedSubsystemCommands.getYeetIntake());
         primary.b.whenPressed(InfeedSubsystemCommands.getYeetSingulatorCommand());
         primary.x.whenPressed(DriveSubsystemCommands.getLLRotateToTargetCommand());
@@ -61,7 +62,8 @@ public class RobotContainer {
         primary.dpad_up.whenPressed(DriveSubsystemCommands.getRotateToAngleCommand(180));
     }
 
-    private void bindSecondaryJoystickButtons(){
+    private void bindSecondaryJoystickButtons()
+    {
        secondary.a.toggleWhenPressed(InfeedSubsystemCommands.CONVEY_TO_SHOOT);
        secondary.b.toggleWhenPressed(ShooterSubsystemCommands.getRunShooterFromVisionCommand());
        secondary.y.whenPressed(InfeedSubsystemCommands.getResetInfeedCommand());
@@ -76,7 +78,8 @@ public class RobotContainer {
        secondary.left_bumper.whenPressed(ClimberSubsystemCommands.getToggleClimbSolenoidCommand());
     }
 
-    private void bindTertiaryJoystickButtons(){
+    private void bindTertiaryJoystickButtons()
+    {
         tertiary.a.whileHeld(InfeedSubsystemCommands.BACK_INFEED);
         tertiary.b.whileHeld(ShooterSubsystemCommands.BACK_SHOOTER);
         tertiary.y.whileHeld(InfeedSubsystemCommands.BACK_CONVEYOR);
@@ -86,14 +89,16 @@ public class RobotContainer {
         tertiary.start.whileHeld(ShooterSubsystemCommands.getBackItUpCommand());
     }
 
-    public RobotContainer(){
+    public RobotContainer()
+    {
         bindPrimaryJoystickButtons();
         bindSecondaryJoystickButtons();
         bindTertiaryJoystickButtons();
         initDefaultCommands();
     }
 
-    public double getPrimaryLeftXAxis(){
+    public double getPrimaryLeftXAxis()
+    {
         return primary.getLeftXAxis();
     }
 
