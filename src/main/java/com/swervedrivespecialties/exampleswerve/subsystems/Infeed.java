@@ -9,6 +9,7 @@ package com.swervedrivespecialties.exampleswerve.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -29,11 +30,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Infeed extends SubsystemBase {
 
   public static final double kEncoderCountsPerBall = 7000;
-  private static final double kConveyorTalonConstantVBus = -0.55; //-.5
+  private static final double kConveyorTalonConstantVBus = -0.4;//-0.55; //-.5
   private static final double kConveyToShootConstantVBUS = -.9; //.8
   private static final double kInfeedVBus = -.7;
   private static final double kSingulatorVBus = .4; //.35 //.45
-  private static final double kSingulateToShootVBus = .50; //.6
+  private static final double kSingulateToShootVBus = .65; //.50 //.6
 
   private static final boolean kPreConveyorNormal = true;
   private static final boolean kPreShooterNormal = true;
@@ -52,7 +53,7 @@ public class Infeed extends SubsystemBase {
   public static final double kReverseBallOffKickerTime = 1.0;
   private static final double kReverseBallOffPreKickVBus = .15;
 
-  public static final double kPostEyeEncoderTicks = 700.0;
+  public static final double kPostEyeEncoderTicks = -50.0;
 
   private static Infeed _instance = new Infeed();
 
@@ -86,6 +87,7 @@ public class Infeed extends SubsystemBase {
   private Infeed() {
     _conveyorTalon = new TalonSRX(RobotMap.CONVEYOR_MOTOR);
     _conveyorTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    _conveyorTalon.setInverted(true);
     //_preConveyorSensor = new DigitalInput(RobotMap.PRE_CONVEYOR_SENSOR);
     _preShooterSensor = new DigitalInput(RobotMap.PRE_SHOOTER_SENSOR);
     _conveyorTalon.setNeutralMode(NeutralMode.Brake);

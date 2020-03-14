@@ -42,8 +42,10 @@ public class conveyToShoot extends CommandBase {
     _infeed.conveyConveyorToShoot();
     if (Timer.getFPGATimestamp() - startTime > singulatorDelayTime){
       _infeed.runSingulatorToShoot();
+      _infeed.runInfeed();
     } else {
       _infeed.stopSingulator();
+      _infeed.stopInfeed();
     }
   }
 

@@ -10,8 +10,12 @@ package com.swervedrivespecialties.exampleswerve.commands.auton.autons.opponentb
 import com.swervedrivespecialties.exampleswerve.auton.Trajectories;
 import com.swervedrivespecialties.exampleswerve.commands.drive.DriveSubsystemCommands;
 import com.swervedrivespecialties.exampleswerve.commands.infeed.InfeedSubsystemCommands;
+import com.swervedrivespecialties.exampleswerve.commands.shooter.ShooterSubsystemCommands;
+import com.swervedrivespecialties.exampleswerve.subsystems.Infeed;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -27,11 +31,22 @@ public class HereWeGoAgain extends SequentialCommandGroup {
       DriveSubsystemCommands.getRotateToAngleCommand(Trajectories.steallBallAuton.towardsBallsRotation.toDegrees(), 2),
       new ParallelCommandGroup(
         DriveSubsystemCommands.getFollowTrajectoryCommand(Trajectories.steallBallAuton.toPickupNextTrajectorySupplier),
+        InfeedSubsystemCommands.getRunSingulatorCommand(),
         new SequentialCommandGroup(
           new WaitCommand(.4),
-          InfeedSubsystemCommands.getRunInfeedCommand().withTimeout(3.5)
+          InfeedSubsystemCommands.getRunInfeedCommand().withTimeout(0.6)
+        )        
+        ),
+        new ParallelDeadlineGroup(
+          DriveSubsystemCommands.getRotateToAngleCommand(Trajectories.steallBallAuton.towardsTargetRotation.toDegrees(), 2),
+          InfeedSubsystemCommands.getRunInfeedCommand()),
+        new ParallelRaceGroup(
+          ShooterSubsystemCommands.getRunShooterFromVisionCommand().withTimeout(8),
+          new SequentialCommandGroup(
+            ShooterSubsystemCommands.getWaitUntilCanShootCommand(),
+            InfeedSubsystemCommands.getConveyToShootCommand().withTimeout(3.5)
+          )        
         )
-      )
     );
   }
 }

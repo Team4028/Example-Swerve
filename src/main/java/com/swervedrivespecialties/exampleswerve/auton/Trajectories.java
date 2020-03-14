@@ -41,6 +41,7 @@ public class Trajectories {
         private static final double rad = travelDist - shootPoint.x;
         private static final Rotation2 firstShotRotation = getAngleToPointAt(shootPoint, goalPoint).rotateBy(Rotation2.fromDegrees(-87));
         public static final Rotation2 towardsBallsRotation = Rotation2.fromDegrees(5);
+        public static final Rotation2 towardsTargetRotation = Rotation2.fromDegrees(69);
         private static final double driveForwardDistance = 25;
         
         private static Trajectory toStealBalls;
