@@ -20,11 +20,18 @@ public class Climber extends SubsystemBase{
     VictorSPX climbVictor;
     DoubleSolenoid climbSolenoid = new DoubleSolenoid(2, 3);
 
-    double kClimberYeetVBus = -.65; 
-    double kClimberStandardVBus = -.15;
+    double kClimberYeetVBus = -0.65; 
+    double kClimberStandardVBus = -0.15;
     double kClimberDeadband = .05;
     double kClimberYeetDeadband = .85;
     Value kClimberSolenoidDefault = Value.kReverse;
+    double negativeFastGondolaDeadband = -0.5;
+    double gondolaDeadband = 0.05;
+    double positiveFastGondolaDeadband = 0.5;
+    double negativeSlowGondolaVBus = -0.6;
+    double negativeFastGondolaVBus = -0.9;
+    double positiveSlowGondolaVBus = 0.6;
+    double positiveFastGondolaVBus = 0.9;
 
     VictorSPX _infeedVictor;
     //private TalonSRX _TestTalon;
@@ -46,14 +53,20 @@ public class Climber extends SubsystemBase{
         climbVictor.set(ControlMode.PercentOutput, climbSolenoid.get() != kClimberSolenoidDefault ? getClimbVBus(spd) : 0);
     }
 
-    private double getClimbVBus(double spd){
+    private double getClimbVBus(double spd)
+    {
         spd *= -1;
-        if (spd < kClimberDeadband){
+        if (spd < kClimberDeadband)
+        {
             return 0;
-        } else if (spd < kClimberYeetDeadband) {
+        } 
+        else if (spd < kClimberYeetDeadband) 
+        {
             return kClimberStandardVBus;
-        } else {
-            return kClimberYeetDeadband;
+        } 
+        else 
+        {
+            return kClimberYeetVBus;
         }
     }
 
@@ -69,13 +82,31 @@ public class Climber extends SubsystemBase{
         }
     }
 
-    public void GondolaVbus(){
-        _infeedVictor.set(ControlMode.PercentOutput, 0.6);
+    public void GondolaVbus(double cmd){
+        double motorCmd;
+        if(cmd<=negativeFastGondolaDeadband)
+        {
+            motorCmd=negativeFastGondolaVBus;
+        }
+        else if(cmd<(-1*gondolaDeadband))
+        {
+            motorCmd=negativeSlowGondolaVBus;
+        }
+        else if(Math.abs(cmd)<=gondolaDeadband)
+        {
+            motorCmd=0;
+        }
+        else if(cmd<positiveFastGondolaDeadband)
+        {
+            motorCmd=positiveSlowGondolaVBus;
+        }
+        else
+        {
+            motorCmd=positiveFastGondolaVBus;
+        }
+
+        _infeedVictor.set(ControlMode.PercentOutput, motorCmd);
         //_TestTalon.set(ControlMode.PercentOutput, 0.6);
-    }
-    public void GondolaNegVbus(){
-        _infeedVictor.set(ControlMode.PercentOutput, -0.6);
-        //_TestTalon.set(ControlMode.PercentOutput, -0.6);
     }
     public void GondolaStop(){
         _infeedVictor.set(ControlMode.PercentOutput, 0);
